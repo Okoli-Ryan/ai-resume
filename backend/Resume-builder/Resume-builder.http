@@ -1,0 +1,6 @@
+@Resume_builder_HostAddress = http://localhost:5282
+
+GET {{Resume_builder_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
