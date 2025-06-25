@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  aspnet-app:
+    build:
+      context: ./backend
+    ports:
+      - "5000:8080"
+    depends_on:
+      - ollama
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=development
+      - AppSettings__Jwt__Secret=${Jwt_Secret}
+      - AppSettings__Jwt__Issuer=${Jwt_Issuer}
+      - AppSettings__Jwt__ExpiryMinutes=${Jwt_ExpiryMinutes}
+      - AppSettings__Jwt__Audience=${Jwt_Audience}
+      - AppSettings__GoogleClientID=${GoogleClientID}
+    networks:
+      - ollama-net
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - ollama-net
+    environment:
+      - OLLAMA_MODELS=llama3
+    restart: unless-stopped
+
+volumes:
+  ollama-data:
+
+networks:
+  ollama-net:
