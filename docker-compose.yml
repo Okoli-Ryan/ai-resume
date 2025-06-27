@@ -10,12 +10,12 @@ services:
       - ollama
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ASPNETCORE_ENVIRONMENT=development
-      - AppSettings__Jwt__Secret=${Jwt_Secret}
-      - AppSettings__Jwt__Issuer=${Jwt_Issuer}
-      - AppSettings__Jwt__ExpiryMinutes=${Jwt_ExpiryMinutes}
-      - AppSettings__Jwt__Audience=${Jwt_Audience}
-      - AppSettings__GoogleClientID=${GoogleClientID}
+      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
+      - AppSettings__Jwt__Secret=${JWT_SECRET}
+      - AppSettings__Jwt__Issuer=${JWT_ISSUER}
+      - AppSettings__Jwt__ExpiryMinutes=${JWT_EXPIRY_MINUTES}
+      - AppSettings__Jwt__Audience=${JWT_AUDIENCE}
+      - AppSettings__GoogleClientID=${GOOGLE_CLIENT_ID}
     networks:
       - ollama-net
 

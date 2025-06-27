@@ -3,9 +3,12 @@ using Carter;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.AI;
 using Microsoft.IdentityModel.Tokens;
 using Resume_builder.Common;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Services.AIChatClient;
+using Resume_builder.Infrastructure.Services.AIChatClient.Ollama;
 using Resume_builder.Infrastructure.Services.ClaimService;
 using Resume_builder.Infrastructure.Services.PasswordService;
 using Resume_builder.Infrastructure.Services.TokenService;
@@ -25,14 +28,35 @@ public static class ServiceCollectionExtensions
             .AddValidatorsFromAssembly(typeof(Program).Assembly)
             .AddSwaggerGen()
             .AddCarter()
+            .AddHttpClient()
+            .AddAIChatClient()
             .AddOpenApi();
     }
+
+
+    private static IServiceCollection AddAIChatClient(this IServiceCollection services)
+    {
+        services.AddChatClient(sp =>
+        {
+            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+                .CreateClient(nameof(OllamaChatClient));
+
+            httpClient.BaseAddress = new Uri("http://localhost:9000");
+            httpClient.Timeout = TimeSpan.FromMinutes(5);
+
+            return new OllamaChatClient(httpClient, "llama3");
+        });
+
+        return services;
+    }
+
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IClaimsService, ClaimsService>();
+        services.AddScoped<IAIChatClient>(sp => (IAIChatClient)sp.GetRequiredService<IChatClient>());
 
         return services;
     }

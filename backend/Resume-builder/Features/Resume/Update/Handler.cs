@@ -38,6 +38,7 @@ public class UpdateResumeHandler(
         resume.LinkedinUrl = request.LinkedinUrl;
         resume.GithubUrl = request.GithubUrl;
         resume.PortfolioUrl = request.PortfolioUrl;
+        resume.IsFavourite = request.IsFavourite;
 
 
         db.Resume.Update(resume);

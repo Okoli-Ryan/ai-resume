@@ -1,6 +1,7 @@
 import { BulletPointDto } from './bullet-point';
+import { BaseEntity } from './common';
 
-export interface EducationDto {
+export type EducationDto = {
     schoolName?: string;
     degree?: string;
     fieldOfStudy?: string;
@@ -11,4 +12,4 @@ export interface EducationDto {
     resumeId: string;
     userId: string;
     bulletPoints: BulletPointDto[];
-}
+} & BaseEntity

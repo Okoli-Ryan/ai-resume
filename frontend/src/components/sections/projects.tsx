@@ -1,7 +1,7 @@
 import Row from '@/components/row';
 import Section from '@/components/section';
-import { GlobalStyles } from "@/lib/react-pdf";
-import { TResume } from "@/types/resume";
+import { GlobalStyles } from '@/lib/react-pdf';
+import { TResume } from '@/types/resume';
 import { Link, StyleSheet, Text, View } from '@react-pdf/renderer';
 
 import BulletPoint from '../bullet-point';
@@ -16,7 +16,7 @@ const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 			<Section title="Projects">
 				<View style={styles.experienceList}>
 					{projects.map((project) => (
-						<View style={{ gap: 4 }} key={project.name}>
+						<View style={{ gap: 4 }} key={project.id}>
 							<View>
 								<Row>
 									<Text style={GlobalStyles.bold}>

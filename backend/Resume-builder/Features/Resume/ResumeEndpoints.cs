@@ -2,6 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Resume.Create;
 using Resume_builder.Features.Resume.Duplicate;
+using Resume_builder.Features.Resume.GetMinimalResumesByUserId;
 using Resume_builder.Features.Resume.GetResumesByUserId;
 using Resume_builder.Features.Resume.Update;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -90,6 +91,20 @@ public class ResumeModule : CarterModule
         {
             var handler = new DuplicateResumeHandler(db, claimsService, env);
             var response = await handler.Handle(new DuplicateResumeCommand(resumeId), cancellationToken);
+
+            return response.GetResult();
+        });
+
+
+        endpoint.MapGet("{userId}/minimal", async (
+            string userId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken
+        ) =>
+        {
+            var handler = new GetMinimalResumesByUserIdHandler(db, claimsService);
+            var response = await handler.Handle(userId, cancellationToken);
 
             return response.GetResult();
         });

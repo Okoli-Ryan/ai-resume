@@ -1,17 +1,12 @@
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Resume_builder.Common;
-using Resume_builder.Features.BulletPoint;
 using Resume_builder.Features.BulletPoint.Common;
-using Resume_builder.Features.Education;
 using Resume_builder.Features.Education.Create;
-using Resume_builder.Features.Project;
 using Resume_builder.Features.Project.Create;
 using Resume_builder.Features.Resume.Common;
 using Resume_builder.Features.Resume.Create;
-using Resume_builder.Features.Skills;
 using Resume_builder.Features.Skills.Create;
-using Resume_builder.Features.WorkExperience;
 using Resume_builder.Features.WorkExperience.Create;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Services.ClaimService;
@@ -54,12 +49,13 @@ public class DuplicateResumeHandler(
             TextSummary = resume.TextSummary,
             JobRole = resume.JobRole,
             UserAddress = resume.UserAddress,
+            IsFavourite = false,
             UserPhoneNumber = resume.UserPhoneNumber,
             LinkedinUrl = resume.LinkedinUrl,
             GithubUrl = resume.GithubUrl,
             PortfolioUrl = resume.PortfolioUrl,
             Tags = resume.Tags,
-            UserId = userId,
+            UserId = userId
         };
 
         var resumeCommand = new CreateResumeCommand
@@ -94,8 +90,8 @@ public class DuplicateResumeHandler(
                 EducationId = bp.EducationId
             }).ToList()
         }).ToList();
-        
-        
+
+
         resumeCommand.Projects = (resume.Projects ?? []).Select(x => new CreateProjectCommand
         {
             Name = x.ProjectName,
@@ -109,7 +105,7 @@ public class DuplicateResumeHandler(
                 ProjectId = bp.ProjectId
             }).ToList()
         }).ToList();
-        
+
         resumeCommand.WorkExperience = (resume.WorkExperience ?? []).Select(x => new CreateWorkExperienceCommand
         {
             ResumeId = x.ResumeId,
@@ -128,13 +124,13 @@ public class DuplicateResumeHandler(
                 WorkExperienceId = bp.WorkExperienceId
             }).ToList()
         }).ToList();
-        
-        
+
+
         resumeCommand.Skills = (resume.Skills ?? []).Select(x => new CreateSkillCommand
         {
             Group = x.Group,
             Skills = x.Skills,
-            ResumeId = x.ResumeId,
+            ResumeId = x.ResumeId
         }).ToList();
 
 

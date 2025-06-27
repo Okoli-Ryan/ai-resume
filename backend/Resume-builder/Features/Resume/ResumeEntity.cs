@@ -19,6 +19,8 @@ public class ResumeEntity : BaseEntity
     [MaxLength(2000)] public string? TextSummary { get; set; } = string.Empty;
 
     [MaxLength(100)] public string? JobRole { get; set; } = string.Empty;
+    public bool IsFavourite { get; set; }
+
 
     [MaxLength(200)] public string? UserAddress { get; set; } = string.Empty;
 

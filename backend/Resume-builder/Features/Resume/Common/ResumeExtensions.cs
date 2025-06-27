@@ -28,6 +28,7 @@ public static class ResumeExtensions
             PhoneNumber = resumeEntity.UserPhoneNumber,
             LinkedinUrl = resumeEntity.LinkedinUrl,
             GithubUrl = resumeEntity.GithubUrl,
+            IsFavourite = resumeEntity.IsFavourite,
             PortfolioUrl = resumeEntity.PortfolioUrl,
             Tags = resumeEntity.Tags,
             Id = resumeEntity.Id,
@@ -59,6 +60,7 @@ public static class ResumeExtensions
             UserAddress = resume.Address,
             Tags = resume.Tags,
             UserPhoneNumber = resume.PhoneNumber,
+            IsFavourite = resume.IsFavourite,
             LinkedinUrl = resume.LinkedinUrl,
             GithubUrl = resume.GithubUrl,
             PortfolioUrl = resume.PortfolioUrl,
@@ -73,12 +75,6 @@ public static class ResumeExtensions
     }
 
 
-    public static List<ResumeEntity> ToEntity(this List<ResumeDto> resumes)
-    {
-        return resumes.Select(x => x.ToEntity()).ToList();
-    }
-
-
     public static ResumeEntity CreateResumeEntity(CreateResumeCommand request, string userId)
     {
         var resume = new ResumeEntity
@@ -90,6 +86,7 @@ public static class ResumeExtensions
             UserEmail = request.Email,
             TextSummary = request.Summary,
             JobRole = request.Role,
+            IsFavourite = false,
             UserAddress = request.Address,
             UserPhoneNumber = request.PhoneNumber,
             LinkedinUrl = request.LinkedinUrl,

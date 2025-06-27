@@ -20,6 +20,7 @@ public class ResumeDto : BaseEntity
     public string? GithubUrl { get; set; }
     public string? PortfolioUrl { get; set; }
     public string UserId { get; set; } = string.Empty;
+    public bool IsFavourite { get; set; }
 
     public virtual List<ProjectDto>? Projects { get; set; }
     public virtual List<EducationDto>? Education { get; set; }

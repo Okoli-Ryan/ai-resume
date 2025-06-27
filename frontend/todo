@@ -1,7 +1,5 @@
 LLM update for specific resume sections
-Duplicate feature
 Upload to cloudinary feature, get link
-Optimize query for getting list of resumes on homepage, sort by updatedAt
 Use optimistic update for updating resume
 Homepage query by tags, name
 add userId to skills
@@ -9,3 +7,4 @@ Add loading state to log in button
 Add Credentials login form
 Add proper spinner to "create button"
 Remove draft feature
+Handle empty skill category

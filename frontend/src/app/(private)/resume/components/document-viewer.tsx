@@ -1,12 +1,12 @@
-import { PDFViewer } from "@/components/pdf-viewer";
-import Education from "@/components/sections/education";
-import PersonalInfo from "@/components/sections/personal-info";
-import Projects from "@/components/sections/projects";
-import Skills from "@/components/sections/skills";
-import Summary from "@/components/sections/summary";
-import WorkExperience from "@/components/sections/work-experience";
-import { useResumeStore } from "@/store/resume-store";
-import { Document, Page, StyleSheet, View } from "@react-pdf/renderer";
+import { PDFViewer } from '@/components/pdf-viewer';
+import Education from '@/components/sections/education';
+import PersonalInfo from '@/components/sections/personal-info';
+import Projects from '@/components/sections/projects';
+import Skills from '@/components/sections/skills';
+import Summary from '@/components/sections/summary';
+import WorkExperience from '@/components/sections/work-experience';
+import { useResumeStore } from '@/store/resume-store';
+import { Document, Page, StyleSheet, View } from '@react-pdf/renderer';
 
 const DocumentViewer = () => {
 	const resume = useResumeStore((state) => state.resume)!;
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 
 	sectionContainer: {
 		display: "flex",
-		gap: 8,
+		gap: 6,
 	},
 });
 

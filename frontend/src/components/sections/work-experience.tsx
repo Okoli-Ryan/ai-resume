@@ -1,12 +1,12 @@
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
-import Row from "@/components/row";
-import Section from "@/components/section";
-import { GlobalStyles } from "@/lib/react-pdf";
-import { TResume } from "@/types/resume";
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
+import Row from '@/components/row';
+import Section from '@/components/section';
+import { GlobalStyles } from '@/lib/react-pdf';
+import { TResume } from '@/types/resume';
+import { StyleSheet, Text, View } from '@react-pdf/renderer';
 
-import BulletPoint from "../bullet-point";
+import BulletPoint from '../bullet-point';
 
 const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 	const experiences = resume?.workExperience || [];
@@ -18,7 +18,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 			<Section title="Work Experience">
 				<View style={styles.experienceList}>
 					{experiences.map((experience) => (
-						<View style={{ gap: 4 }} key={experience.companyName + experience.title}>
+						<View style={{ gap: 4 }} key={experience.id}>
 							<View>
 								<Row>
 									<Text style={GlobalStyles.bold}>

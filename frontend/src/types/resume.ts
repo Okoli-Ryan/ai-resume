@@ -1,8 +1,8 @@
 import { BaseEntity } from './common';
-import { EducationDto } from "./education";
-import { ProjectDto } from "./project";
-import { SkillDto } from "./skill";
-import { WorkExperienceDto } from "./work-experience";
+import { EducationDto } from './education';
+import { ProjectDto } from './project';
+import { SkillDto } from './skill';
+import { WorkExperienceDto } from './work-experience';
 
 export type TResume = {
 	userName: string;
@@ -13,6 +13,7 @@ export type TResume = {
 	role: string;
 	address: string;
 	phoneNumber: string;
+    isFavourite: boolean
 	linkedinUrl: string;
 	githubUrl: string;
 	portfolioUrl: string;
