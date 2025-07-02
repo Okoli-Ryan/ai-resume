@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { useResumeStore } from '@/store/resume-store';
 import { TResume } from '@/types/resume';
 
-import PublishModal from '../create/components/publish-modal';
-import Sidebar from '../create/components/sidebar';
+import PublishModal from './publish-modal';
+import Sidebar from './sidebar';
 
 const DocumentViewer = dynamic(() => import("./document-viewer").then((mod) => mod.default), {
 	ssr: false,

@@ -108,7 +108,7 @@ public static class ResumeExtensions
                 Group = x.Group,
                 Skills = x.Skills,
                 ResumeId = resume.Id,
-                UserId = resume.UserId
+                UserId = userId
             };
             return skill;
         }).ToList();

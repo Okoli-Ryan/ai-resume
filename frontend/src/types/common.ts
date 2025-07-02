@@ -1,7 +1,7 @@
 export type BaseEntity = {
 	id: string;
-	createdAt: Date;
-	updatedAt: Date;
+	createdAt: string | Date;
+	updatedAt: string | Date;
 };
 
 export type Response<T> =
@@ -15,3 +15,5 @@ export type Response<T> =
 			message: string;
 			response: null;
 	  };
+
+      export type EnhanceTypes = "Experience" | "Project"

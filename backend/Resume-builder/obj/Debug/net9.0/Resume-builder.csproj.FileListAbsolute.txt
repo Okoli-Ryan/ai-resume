@@ -196,3 +196,7 @@ D:\Vscode\Resume_Builder\backend\Resume-builder\obj\Debug\net9.0\refint\Resume-b
 D:\Vscode\Resume_Builder\backend\Resume-builder\obj\Debug\net9.0\Resume-builder.pdb
 D:\Vscode\Resume_Builder\backend\Resume-builder\obj\Debug\net9.0\Resume-builder.genruntimeconfig.cache
 D:\Vscode\Resume_Builder\backend\Resume-builder\obj\Debug\net9.0\ref\Resume-builder.dll
+D:\Vscode\Resume_Builder\backend\Resume-builder\bin\Debug\net9.0\Microsoft.Extensions.AI.OpenAI.dll
+D:\Vscode\Resume_Builder\backend\Resume-builder\bin\Debug\net9.0\OpenAI.dll
+D:\Vscode\Resume_Builder\backend\Resume-builder\bin\Debug\net9.0\System.ClientModel.dll
+D:\Vscode\Resume_Builder\backend\Resume-builder\bin\Debug\net9.0\System.Memory.Data.dll

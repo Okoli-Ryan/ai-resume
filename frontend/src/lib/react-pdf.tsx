@@ -3,10 +3,10 @@ import { parseDocument } from 'htmlparser2';
 import EducationForm from '@/components/edit-form/education-form/education-form';
 import PersonalInfoForm from '@/components/edit-form/personal-info/personal-info-form';
 import ProjectForm from '@/components/edit-form/projects-form/projects-form';
-import ResumeInfoForm from "@/components/edit-form/resume-info-form/resume-info-form";
-import SkillsForm from "@/components/edit-form/skills-form/skills-form";
+import ResumeInfoForm from '@/components/edit-form/resume-info-form/resume-info-form';
+import SkillsForm from '@/components/edit-form/skills-form/skills-form';
 import WorkExperienceForm from '@/components/edit-form/work-experience-form/work-experience-form';
-import { Link, StyleSheet, Text } from "@react-pdf/renderer";
+import { Link, StyleSheet, Text } from '@react-pdf/renderer';
 
 export const GlobalStyles = StyleSheet.create({
 	link: {
@@ -27,25 +27,6 @@ export const GlobalStyles = StyleSheet.create({
         lineHeight: .8
     }
 });
-
-export const TextConfig = [
-	{
-		regex: /\((.*?)\)\[(.*?)\]/g, // Match link format "(linkText)[link]"
-		fn: (key: string, result: string) => (
-			<Link href={result[2]} key={key} src={result[2]} style={GlobalStyles.link}>
-				{result[1]}
-			</Link>
-		),
-	},
-	{
-		regex: /_(.*?)_/g, // Match italic format "_text_"
-		fn: (key: string, result: string) => <em key={key}>{result[1]}</em>,
-	},
-	{
-		regex: /\*(.*?)\*/g, // Match bold format "*text*"
-		fn: (key: string, result: string) => <strong key={key}>{result[1]}</strong>,
-	},
-];
 
 const renderNode = (node: any, index: number = 0): any => {
 	if (node.type === "text") {

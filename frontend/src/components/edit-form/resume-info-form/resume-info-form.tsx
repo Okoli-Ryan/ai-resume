@@ -1,19 +1,24 @@
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useParams } from 'next/navigation';
+import { useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
-import TagsInputForm from "@/components/tags-input-form";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useResumeStore } from "@/store/resume-store";
-import { TResume } from "@/types/resume";
-import { useMutation } from "@tanstack/react-query";
+import TagsInputForm from '@/components/tags-input-form';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useResumeStore } from '@/store/resume-store';
+import { TResume } from '@/types/resume';
+import { useMutation } from '@tanstack/react-query';
 
-import { updateResumeInfoAction } from "./actions/update-resume-info-action";
+import { updateResumeInfoAction } from './actions/update-resume-info-action';
+import { useResumeContext } from './context/resume-context';
 
 const ResumeInfoForm = () => {
 	const { id } = useParams<{ id: string }>();
+	const jobDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
+	const { additionalInfo, setAdditionalInfo } = useResumeContext();
 	const resume = useResumeStore((state) => state.resume)!;
 	const updateResume = useResumeStore((state) => state.update);
 	const form = useForm<Partial<TResume>>({
@@ -48,7 +53,12 @@ const ResumeInfoForm = () => {
 	});
 
 	const onSubmit = (data: Partial<TResume>) => {
+		const updatedJobDescription = jobDescriptionRef.current?.value || "";
 		updateResumeInfo(data);
+		setAdditionalInfo((prev) => ({
+			...prev,
+			jobDescription: updatedJobDescription,
+		}));
 	};
 
 	return (
@@ -62,6 +72,9 @@ const ResumeInfoForm = () => {
 					{errors.resumeName && <FormMessage>{errors.resumeName.message}</FormMessage>}
 				</FormItem>
 				<TagsInputForm form={form} name={`tags`} label="Tags" placeholder="Enter a tag and press Enter" />
+				<FormControl>
+					<Textarea defaultValue={additionalInfo.jobDescription} ref={jobDescriptionRef} placeholder="Enter Job Description" />
+				</FormControl>
 				<Button loading={isPending} type="submit" className="w-full">
 					Update
 				</Button>

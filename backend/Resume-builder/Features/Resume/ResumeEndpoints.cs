@@ -1,5 +1,6 @@
 using Carter;
 using Resume_builder.Common;
+using Resume_builder.Features.Resume.Common;
 using Resume_builder.Features.Resume.Create;
 using Resume_builder.Features.Resume.Duplicate;
 using Resume_builder.Features.Resume.GetMinimalResumesByUserId;
@@ -14,7 +15,8 @@ public class ResumeModule : CarterModule
 {
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        var endpoint = app.MapGroup("resume").WithTags("Resume").RequireAuthorization();
+        var endpoint = app.MapGroup(ResumeConstants.ResumeMapGroupName).WithTags(ResumeConstants.ResumeMapGroupTag)
+            .RequireAuthorization();
 
         endpoint.MapGet("{resumeId}", async (
             AppDbContext db,

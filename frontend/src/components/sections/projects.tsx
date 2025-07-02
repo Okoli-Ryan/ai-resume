@@ -4,7 +4,7 @@ import { GlobalStyles } from '@/lib/react-pdf';
 import { TResume } from '@/types/resume';
 import { Link, StyleSheet, Text, View } from '@react-pdf/renderer';
 
-import BulletPoint from '../bullet-point';
+import BulletPoint from './bullet-point';
 
 const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 	const projects = resume?.projects || [];

@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Resume_builder.Common;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Services.AIChatClient;
-using Resume_builder.Infrastructure.Services.AIChatClient.Ollama;
+using Resume_builder.Infrastructure.Services.AIChatClient.OpenAI;
 using Resume_builder.Infrastructure.Services.ClaimService;
 using Resume_builder.Infrastructure.Services.PasswordService;
 using Resume_builder.Infrastructure.Services.TokenService;
@@ -29,23 +29,31 @@ public static class ServiceCollectionExtensions
             .AddSwaggerGen()
             .AddCarter()
             .AddHttpClient()
-            .AddAIChatClient()
+            .AddAIChatClient(config)
             .AddOpenApi();
     }
 
 
-    private static IServiceCollection AddAIChatClient(this IServiceCollection services)
+    private static IServiceCollection AddAIChatClient(this IServiceCollection services, IConfiguration config)
     {
-        services.AddChatClient(sp =>
-        {
-            var httpClient = sp.GetRequiredService<IHttpClientFactory>()
-                .CreateClient(nameof(OllamaChatClient));
+        // services.AddChatClient(sp =>
+        // {
+        //     var httpClient = sp.GetRequiredService<IHttpClientFactory>()
+        //         .CreateClient(nameof(OllamaChatClient));
+        //
+        //     httpClient.BaseAddress = new Uri("http://localhost:9000");
+        //     httpClient.Timeout = TimeSpan.FromMinutes(5);
+        //
+        //     return new OllamaChatClient(httpClient, "llama3");
+        // });
+        //
+        // return services;
 
-            httpClient.BaseAddress = new Uri("http://localhost:9000");
-            httpClient.Timeout = TimeSpan.FromMinutes(5);
+        var appSettings = config
+            .GetSection("AppSettings")
+            .Get<AppSettings>()!;
 
-            return new OllamaChatClient(httpClient, "llama3");
-        });
+        services.AddChatClient(new OpenAiChatClient("gpt-4.1-nano", appSettings.OpenAIKey));
 
         return services;
     }

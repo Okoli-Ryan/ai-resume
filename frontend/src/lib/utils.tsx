@@ -1,6 +1,9 @@
 import { ClassValue, clsx } from 'clsx';
+import Link from 'next/link';
+// @ts-expect-error no ts type for this package
+import processString from 'react-process-string';
 import { twMerge } from 'tailwind-merge';
-import { z, ZodError } from "zod";
+import { z, ZodError } from 'zod';
 
 import { Response } from '@/types/common';
 
@@ -108,4 +111,33 @@ export const getColorFromText = (text: string) => {
 		backgroundColor: `hsl(${hue}, 70%, 90%)`,
 		color: `hsl(${hue}, 50%, 30%)`,
 	};
+};
+
+export const TextConfig = [
+	{
+		regex: /\((.*?)\)\[(.*?)\]/g, // Match link format "(linkText)[link]"
+		fn: (key: string, result: string) => (
+			<Link href={result[2]} key={key} style={{ color: "blue", textDecoration: "underline" }}>
+				{result[1]}
+			</Link>
+		),
+	},
+	{
+		regex: /_(.*?)_/g, // Match italic format "_text_"
+		fn: (key: string, result: string) => <em key={key}>{result[1]}</em>,
+	},
+	{
+		regex: /\*(.*?)\*/g, // Match bold format "*text*"
+		fn: (key: string, result: string) => <strong key={key}>{result[1]}</strong>,
+	},
+];
+
+export const processText = (text: string) => {
+	const processor = processString(TextConfig);
+	return processor(text).map((item: string, index: number) => {
+		if (typeof item === "string") {
+			return <span key={index}>{item}</span>;
+		}
+		return item;
+	});
 };

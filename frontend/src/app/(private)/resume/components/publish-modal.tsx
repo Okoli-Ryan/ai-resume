@@ -1,15 +1,17 @@
-import { useRouter } from "nextjs-toploader/app";
-import { useState, useTransition } from "react";
-import { toast } from "sonner";
+import { useRouter } from 'nextjs-toploader/app';
+import { useState, useTransition } from 'react';
+import { toast } from 'sonner';
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Routes } from "@/lib/routes";
-import { useResumeStore } from "@/store/resume-store";
+import { Button } from '@/components/ui/button';
+import {
+	Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Routes } from '@/lib/routes';
+import { useResumeStore } from '@/store/resume-store';
 
-import { createResumeAction } from "../../../(root)/actions/create-resume-action";
+import { createResumeAction } from '../../(root)/actions/create-resume-action';
 
 const PublishModal = () => {
 	const [open, setOpen] = useState(false);

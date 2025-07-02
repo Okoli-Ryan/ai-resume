@@ -1,11 +1,13 @@
 "use server";
 
-import { ActionResponse, isCustomError } from '@/lib/utils';
-import { updateSkillsList, UpdateSkillsListSchema } from '@/services/resume/update-skills-list';
-import { TResume } from '@/types/resume';
+import { ActionResponse, isCustomError } from "@/lib/utils";
+import { updateSkillsList, UpdateSkillsListRequest, UpdateSkillsListSchema } from "@/services/resume/update-skills-list";
+import { TResume } from "@/types/resume";
 
 export async function updateSkillsListAction(payload: TResume["skills"], resumeId: string) {
-	const validation = UpdateSkillsListSchema.safeParse(payload);
+	const payloadDto: UpdateSkillsListRequest = payload.map((skill) => ({ ...skill, resumeId }));
+	const validation = UpdateSkillsListSchema.safeParse(payloadDto);
+
 	if (!validation.success) return ActionResponse.error(validation.error);
 
 	const response = await updateSkillsList(validation.data, resumeId);

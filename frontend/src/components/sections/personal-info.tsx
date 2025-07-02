@@ -48,7 +48,6 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 							<>
 								{" "}
 								<Text>
-									{" "}
 									<Link src={resume?.linkedinUrl} style={styles.personalInfoText}>
 										LinkedIn
 									</Link>{" "}

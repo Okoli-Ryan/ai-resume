@@ -1,22 +1,19 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import ErrorLabel from "@/components/error-label";
-import { ReactQuill } from "@/components/react-quill";
 import { Button } from "@/components/ui/button";
-import { FormControl, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
 
+import SummaryForm from "../summary-form/summary-form";
 import { updatePersonalInfoAction } from "./actions/update-personal-info-action";
-
-const MAX_LENGTH = 1000;
 
 const PersonalInfoForm = () => {
 	const { id } = useParams<{ id: string }>();
@@ -90,31 +87,9 @@ const PersonalInfoForm = () => {
 					<Input id="linkedinUrl" {...register("linkedinUrl")} />
 					<ErrorLabel control={control} name="linkedinUrl" />
 				</div>
-				<Controller
-					name="summary"
-					control={control}
-					render={({ field: { onChange, value } }) => (
-						<FormItem>
-							<Label htmlFor="linkedinUrl">Summary</Label>
-							<FormControl>
-								<ReactQuill
-									theme="snow"
-									value={value}
-									onChange={(v) => {
-										if (!v) return;
-										if (v.replace(/(<([^>]+)>)/gi, "").length <= MAX_LENGTH) {
-											onChange(v);
-										}
-									}}
-								/>
-							</FormControl>
-							<FormMessage />
-							<div className="text-right text-sm text-gray-500">
-								{(value || "").replace(/(<([^>]+)>)/gi, "").length} / {MAX_LENGTH}
-							</div>
-						</FormItem>
-					)}
-				/>
+
+				<SummaryForm form={form} />
+
 				<div>
 					<Label htmlFor="portfolioUrl">Portfolio URL</Label>
 					<Input id="portfolioUrl" {...register("portfolioUrl")} />

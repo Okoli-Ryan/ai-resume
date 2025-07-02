@@ -14,10 +14,10 @@ import { updateProjectListAction } from './actions/update-project-list-action';
 import ProjectsFormItem from './projects-form-item';
 
 export const ProjectForm = () => {
-    const { id } = useParams<{ id: string }>();
+	const { id } = useParams<{ id: string }>();
 	const resume = useResumeStore((state) => state.resume);
-    const updateResume = useResumeStore(state => state.update)
-    const updateResumeDraft = useResumeStore((state) => state.updateDraft);
+	const updateResume = useResumeStore((state) => state.update);
+	const updateResumeDraft = useResumeStore((state) => state.updateDraft);
 	const form = useForm<TResume>({
 		defaultValues: resume ?? undefined,
 	});
@@ -64,14 +64,23 @@ export const ProjectForm = () => {
 					variant="outline"
 					className="tw-w-max"
 					onClick={() => {
-						append({ name: "", link: "", resumeId: "", userId: "", bulletPoints: [] });
+						append({
+							name: "",
+							link: "",
+							resumeId: "",
+							userId: "",
+							bulletPoints: [],
+							createdAt: new Date().toISOString(),
+							updatedAt: new Date().toISOString(),
+							id: "",
+						});
 					}}>
 					Add Project
 				</Button>
 
 				{/* Submit Button */}
 				<Button loading={isPending} type="submit" className="w-full">
-					Save
+					Update
 				</Button>
 			</form>
 		</Form>

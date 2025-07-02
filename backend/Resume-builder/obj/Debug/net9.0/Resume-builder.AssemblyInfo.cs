@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Resume-builder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6684a626c7a75b7dd693aade0045d5c81701bcad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6ea734753d9dcae1be8958e9da29d8ec7237828")]
 [assembly: System.Reflection.AssemblyProductAttribute("Resume-builder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Resume-builder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

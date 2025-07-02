@@ -4,6 +4,7 @@ public class AppSettings
 {
     public JwtSettings Jwt { get; set; } = new();
     public string GoogleClientID { get; set; } = string.Empty;
+    public string OpenAIKey { get; set; } = string.Empty;
 }
 
 public class JwtSettings

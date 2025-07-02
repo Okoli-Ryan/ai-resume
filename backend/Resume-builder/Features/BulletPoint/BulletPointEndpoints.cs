@@ -1,8 +1,7 @@
 using Carter;
 using Resume_builder.Common;
-using Resume_builder.Features.BulletPoint.Enhance_WorkExperience;
+using Resume_builder.Features.BulletPoint.Enhance_List;
 using Resume_builder.Features.BulletPoint.Enhance;
-using Resume_builder.Features.WorkExperience.Enhance;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.ClaimService;
@@ -32,19 +31,17 @@ public class BulletPointEndpoints : ICarterModule
         });
 
 
-        endpoint.MapPost("/enhance/work-experience/{workExperienceId}", async (
-            string workExperienceId,
-            EnhanceWorkExperienceBulletPointAdditionalInfo request,
+        endpoint.MapPost("/enhance-list/{enhanceType}", async (
+            EnhanceTypes enhanceType,
+            EnhanceExperienceBulletPointsRequest command,
             IAIChatClient chatClient,
             IClaimsService claimsService,
-            AppDbContext db,
             CancellationToken cancellationToken
         ) =>
         {
-            var handler = new EnhanceWorkExperienceBulletPointsHandler(chatClient, db, claimsService);
+            var handler = new EnhanceBulletPointsHandler(chatClient, claimsService);
             var response =
-                await handler.Handle(new enhanceExperienceBulletPointsCommand(workExperienceId, request),
-                    cancellationToken);
+                await handler.Handle(new EnhanceExperienceBulletPointsCommand(enhanceType, command), cancellationToken);
 
             return response.GetResult();
         });

@@ -8,8 +8,8 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { TResume } from '@/types/resume';
 
-import { BulletPointsForm } from "../common/bullet-point-form";
-import DateFormItem from "../common/date-form-item";
+import { BulletPointsForm } from '../bullet-point-form/bullet-point-form';
+import DateFormItem from '../common/date-form-item';
 
 type EducationFormItemProps = {
 	form: UseFormReturn<TResume, any, undefined>;

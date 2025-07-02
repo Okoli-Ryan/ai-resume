@@ -1,17 +1,17 @@
 "use client";
 import 'react-quill-new/dist/quill.snow.css';
 
-import { useParams } from "next/navigation";
+import { useParams } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useResumeStore } from '@/store/resume-store';
 import { TResume } from '@/types/resume';
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { updateWorkExperienceListAction } from "./actions/update-work-experience-list-action";
+import { updateWorkExperienceListAction } from './actions/update-work-experience-list-action';
 import WorkExperienceFormItem from './work-experience-form-item';
 
 const WorkExperienceForm = () => {
@@ -76,6 +76,10 @@ const WorkExperienceForm = () => {
 							userId: "",
 							companyLink: "",
 							bulletPoints: [],
+							workType: "",
+							createdAt: new Date().toISOString(),
+							updatedAt: new Date().toISOString(),
+							id: "",
 						});
 					}}>
 					Add Experience

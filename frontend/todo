@@ -1,10 +1,15 @@
-LLM update for specific resume sections
+LLM update for skills
 Upload to cloudinary feature, get link
+Convert to side-by-side view on desktop, sidebar view on mobile
 Use optimistic update for updating resume
 Homepage query by tags, name
-add userId to skills
 Add loading state to log in button
+Add user context option for AI enhancements
 Add Credentials login form
 Add proper spinner to "create button"
 Remove draft feature
 Handle empty skill category
+Create job feature, where job can have 1 resume, tie job desc to resume for additional info
+Be able to generate tags from job
+Add redirect to log in on expired session
+fix fetch failed on google auth stlil entering dashboard section

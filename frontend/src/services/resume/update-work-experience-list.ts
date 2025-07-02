@@ -16,7 +16,7 @@ export const UpdateWorkExperienceListSchema = z.array(
 		title: z.string().optional(),
 		location: z.string().optional(),
 		startDate: z.string().optional(),
-		workType: z.string().optional(),
+		workType: z.string().nullable().optional(),
 		endDate: z.string().optional(),
 		isOngoing: z.boolean().default(false),
 		bulletPoints: z

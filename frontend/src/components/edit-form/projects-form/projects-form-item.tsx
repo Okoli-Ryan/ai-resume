@@ -7,7 +7,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { TResume } from '@/types/resume';
 
-import { BulletPointsForm } from "../common/bullet-point-form";
+import { BulletPointsForm } from '../bullet-point-form/bullet-point-form';
 
 type ProjectsFormItemProps = {
 	form: UseFormReturn<TResume, any, undefined>;
@@ -34,20 +34,6 @@ const ProjectsFormItem = ({ form, index, remove }: ProjectsFormItemProps) => {
 				)}
 			/>
 
-			{/* <FormField
-				control={control}
-				name={`projects.${index}.description`}
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>Description</FormLabel>
-						<FormControl>
-							<Input {...field} />
-						</FormControl>
-						<FormMessage />
-					</FormItem>
-				)}
-			/> */}
-
 			<FormField
 				control={control}
 				name={`projects.${index}.link`}
@@ -67,7 +53,7 @@ const ProjectsFormItem = ({ form, index, remove }: ProjectsFormItemProps) => {
 					<FormLabel>Bullet Points</FormLabel>
 				</div>
 
-				<BulletPointsForm form={form} name={`projects.${index}.bulletPoints`} />
+				<BulletPointsForm enhanceType="Project" form={form} name={`projects.${index}.bulletPoints`} />
 			</div>
 
 			<Button variant="destructive" onClick={() => remove(index)}>

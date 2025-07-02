@@ -23,9 +23,10 @@ public class EnhanceBulletPointRequest
     public string? Tags { get; set; }
 }
 
-public class EnhanceWorkExperienceBulletPointsRequest
+public class EnhanceBulletPointsRequest
 {
     public List<string> BulletPoints { get; set; }
     public string? Role { get; set; }
+    public string? JobDescription { get; set; }
     public string? Tags { get; set; }
 }

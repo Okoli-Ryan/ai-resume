@@ -1,16 +1,16 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams } from 'next/navigation';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { toast } from "sonner";
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useResumeStore } from '@/store/resume-store';
 import { TResume } from '@/types/resume';
-import { useMutation } from "@tanstack/react-query";
+import { useMutation } from '@tanstack/react-query';
 
-import { updateEducationListAction } from "./actions/update-education-list-action";
+import { updateEducationListAction } from './actions/update-education-list-action';
 import EducationFormItem from './education-form-item';
 
 export const EducationForm = () => {
@@ -74,6 +74,9 @@ export const EducationForm = () => {
 							bulletPoints: [],
 							resumeId: "",
 							userId: "",
+							createdAt: new Date().toISOString(),
+							updatedAt: new Date().toISOString(),
+							id: "",
 						});
 					}}>
 					Add Education

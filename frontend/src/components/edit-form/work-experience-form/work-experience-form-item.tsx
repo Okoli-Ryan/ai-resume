@@ -8,12 +8,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
-	Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from '@/components/ui/select';
 import { TResume } from '@/types/resume';
 
-import { BulletPointsForm } from "../common/bullet-point-form";
-import DateFormItem from "../common/date-form-item";
+import { BulletPointsForm } from '../bullet-point-form/bullet-point-form';
+import DateFormItem from '../common/date-form-item';
 
 type WorkExperienceFormItemProps = {
 	form: UseFormReturn<TResume, any, undefined>;
@@ -130,7 +130,7 @@ const WorkExperienceFormItem = ({ form, index, remove }: WorkExperienceFormItemP
 					<FormLabel>Bullet Points</FormLabel>
 				</div>
 
-				<BulletPointsForm form={form} name={`workExperience.${index}.bulletPoints`} />
+				<BulletPointsForm enhanceType="Experience" form={form} name={`workExperience.${index}.bulletPoints`} />
 
 				<Button variant="destructive" onClick={() => remove(index)}>
 					Remove Experience

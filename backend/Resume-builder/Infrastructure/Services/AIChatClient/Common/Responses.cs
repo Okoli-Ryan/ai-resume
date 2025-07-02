@@ -11,10 +11,11 @@ public class AIResponse<T>
 public class ResumeAdditionalInfo
 {
     public string? JobDescription { get; set; }
+    public string? Role { get; set; }
     public string? Tags { get; set; }
 }
 
-public class EnhanceWorkExperienceBulletPointsResponse
+public class EnhanceBulletPointsResponse
 {
     [JsonPropertyName("bulletPoints")] public List<string> BulletPoints { get; set; } = [];
 }
@@ -43,8 +44,8 @@ public class GenerateResumeWorkExperienceResponse
     public string Location { get; set; } = string.Empty;
     public string WorkType { get; set; } = string.Empty;
     public bool IsOngoing { get; set; }
-    public DateTime StartTime { get; set; } = new DateTime();
-    public DateTime EndTime { get; set; } = new DateTime();
+    public DateTime StartTime { get; set; } = new();
+    public DateTime EndTime { get; set; } = new();
     public List<string> BulletPoints { get; set; } = [];
 }
 
@@ -53,4 +54,15 @@ public class GenerateResumeProjectResponse
     public string ProjectName { get; set; } = string.Empty;
     public string ProjectUrl { get; set; } = string.Empty;
     public List<string> BulletPoints { get; set; } = [];
+}
+
+public class EnhanceSummaryResponse
+{
+    public string Summary { get; set; } = string.Empty;
+}
+
+public class EnhanceSkillsResponse
+{
+    public string Category { get; set; } = string.Empty;
+    public List<string> Skills { get; set; } = [];
 }

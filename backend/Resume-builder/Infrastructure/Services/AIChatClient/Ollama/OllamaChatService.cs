@@ -1,7 +1,7 @@
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Schema;
 using Microsoft.Extensions.AI;
+using Resume_builder.Common;
 using Resume_builder.Features.Resume;
 using Resume_builder.Infrastructure.Services.AIChatClient.Common;
 
@@ -12,98 +12,7 @@ public partial class OllamaChatClient
     public async Task<AIResponse<GenerateResumeResponse?>> GenerateResume(ResumeEntity resume,
         ResumeAdditionalInfo? additionalInfo, CancellationToken cancellationToken)
     {
-        var inputPrompt = new StringBuilder();
-
-        if (!string.IsNullOrEmpty(resume.JobRole))
-        {
-            inputPrompt.AppendLine("Job Role:");
-            inputPrompt.AppendLine(resume.JobRole);
-            inputPrompt.AppendLine();
-        }
-
-        if (!string.IsNullOrEmpty(additionalInfo?.JobDescription))
-        {
-            inputPrompt.AppendLine("Job Description:");
-            inputPrompt.AppendLine(additionalInfo.JobDescription);
-            inputPrompt.AppendLine();
-        }
-
-        if (!string.IsNullOrEmpty(additionalInfo?.Tags))
-        {
-            inputPrompt.AppendLine("Tags:");
-            inputPrompt.AppendLine(additionalInfo.Tags);
-            inputPrompt.AppendLine();
-        }
-
-        if (!string.IsNullOrEmpty(resume.TextSummary))
-        {
-            inputPrompt.AppendLine("Summary:");
-            inputPrompt.AppendLine(resume.TextSummary);
-            inputPrompt.AppendLine();
-        }
-
-        if ((resume.WorkExperience ?? []).Count != 0)
-        {
-            inputPrompt.AppendLine("Work Experience:");
-
-            var workExperienceList = resume.WorkExperience ?? [];
-            foreach (var workExperience in workExperienceList)
-            {
-                inputPrompt.AppendLine();
-                inputPrompt.Append($"Company Name: {workExperience.CompanyName};");
-                inputPrompt.Append($"Start Time: {workExperience.StartDate:MMMM yyyy};");
-                inputPrompt.Append(
-                    $"End Time: {(workExperience.IsOngoing ? "Present" : workExperience.EndDate?.ToString("MMMM yyyy"))};");
-                inputPrompt.Append($"Is Ongoing: {workExperience.IsOngoing.ToString()}");
-                inputPrompt.Append($"WorkType: {workExperience.WorkType}");
-                inputPrompt.Append($"CompanyLink: {workExperience.CompanyLink}");
-                inputPrompt.Append($"Location: {workExperience.Location}");
-                inputPrompt.Append($"Job Role: {workExperience.Title}");
-
-                inputPrompt.AppendLine("- Bullet Points:");
-
-                var bulletPoints = workExperience.BulletPoints;
-
-                foreach (var bulletPoint in bulletPoints) inputPrompt.AppendLine(bulletPoint.Text);
-            }
-
-            inputPrompt.AppendLine();
-        }
-
-
-        if ((resume.Projects ?? []).Count != 0)
-        {
-            inputPrompt.AppendLine("Projects:");
-
-            var projectList = resume.Projects ?? [];
-            foreach (var project in projectList)
-            {
-                inputPrompt.AppendLine();
-                inputPrompt.Append($"Project Name: {project.ProjectName};");
-                inputPrompt.Append($"Project URL: {project.ProjectUrl};");
-                
-                inputPrompt.AppendLine("- Bullet Points:");
-
-                var bulletPoints = project.BulletPoints;
-
-                foreach (var bulletPoint in bulletPoints) inputPrompt.AppendLine(bulletPoint.Text);
-            }
-
-            inputPrompt.AppendLine();
-        }
-
-
-        if ((resume.Skills ?? []).Count != 0)
-        {
-            inputPrompt.AppendLine("Skills:");
-            var skillsList = resume.Skills ?? [];
-
-            foreach (var skillItem in skillsList)
-            {
-                inputPrompt.AppendLine($"Category: {skillItem.Group}");
-                inputPrompt.AppendLine(skillItem.Skills);
-            }
-        }
+        var prompt = PromptBuilder.BuildGenerateResumePrompt(resume, additionalInfo);
 
         var payload = new OllamaChatRequest
         {
@@ -112,9 +21,9 @@ public partial class OllamaChatClient
             [
                 new OllamaChatMessage
                 {
-                    Role = ChatRole.System.Value.ToLower(), Content = AIChatConstants.GenerateResumeSystemPrompt
+                    Role = ChatRole.System.Value.ToLower(), Content = SystemPrompts.GenerateResumeSystemPrompt
                 },
-                new OllamaChatMessage { Role = ChatRole.User.Value.ToLower(), Content = inputPrompt.ToString() }
+                new OllamaChatMessage { Role = ChatRole.User.Value.ToLower(), Content = prompt }
             ],
             Stream = false,
             Format = JsonSerializerOptions.Default.GetJsonSchemaAsNode(typeof(GenerateResumeResponse))
@@ -130,20 +39,24 @@ public partial class OllamaChatClient
         };
     }
 
-    public async Task<AIResponse<EnhanceWorkExperienceBulletPointsResponse?>> EnhanceWorkExperienceBulletPoints(
-        EnhanceWorkExperienceBulletPointsRequest request,
+    public async Task<AIResponse<EnhanceSummaryResponse>> EnhanceSummary(string summary,
+        ResumeAdditionalInfo? additionalInfo, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<AIResponse<List<EnhanceSkillsResponse>>> EnhanceSkills(List<string> skills,
+        ResumeAdditionalInfo? additionalInfo, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<AIResponse<EnhanceBulletPointsResponse?>> EnhanceBulletPoints(
+        EnhanceTypes enhanceType,
+        EnhanceBulletPointsRequest request,
         CancellationToken cancellationToken)
     {
-        var inputPrompt = new StringBuilder();
-
-        inputPrompt.AppendLine("Bullet Points:");
-        foreach (var point in request.BulletPoints) inputPrompt.AppendLine($"- {point}");
-
-        if (!string.IsNullOrWhiteSpace(request.Role))
-            inputPrompt.AppendLine($"\nRole: {request.Role}");
-
-        if (!string.IsNullOrWhiteSpace(request.Tags))
-            inputPrompt.AppendLine($"Tags: {request.Tags}");
+        var inputPrompt = PromptBuilder.BuildEnhanceWorkExperienceBulletPointPrompt(request);
 
         var payload = new OllamaChatRequest
         {
@@ -152,21 +65,22 @@ public partial class OllamaChatClient
             [
                 new OllamaChatMessage
                 {
-                    Role = ChatRole.System.Value.ToLower(), Content = AIChatConstants.EnhanceBulletPointListSystemPrompt
+                    Role = ChatRole.System.Value.ToLower(),
+                    Content = SystemPrompts.EnhanceExperienceBulletPointsSystemPrompt
                 },
-                new OllamaChatMessage { Role = ChatRole.User.Value.ToLower(), Content = inputPrompt.ToString() }
+                new OllamaChatMessage { Role = ChatRole.User.Value.ToLower(), Content = inputPrompt }
             ],
             Stream = false,
             Format = JsonSerializerOptions.Default.GetJsonSchemaAsNode(
-                typeof(EnhanceWorkExperienceBulletPointsResponse))
+                typeof(EnhanceBulletPointsResponse))
         };
 
         var response = await GetChatResponse(payload, cancellationToken);
 
-        return new AIResponse<EnhanceWorkExperienceBulletPointsResponse?>
+        return new AIResponse<EnhanceBulletPointsResponse?>
         {
             PromptUsage = response.Usage?.TotalTokenCount,
-            Response = JsonSerializer.Deserialize<EnhanceWorkExperienceBulletPointsResponse>(response.Text)
+            Response = JsonSerializer.Deserialize<EnhanceBulletPointsResponse>(response.Text)
         };
     }
 
@@ -174,15 +88,7 @@ public partial class OllamaChatClient
     public async Task<AIResponse<string>> EnhanceBulletPoint(EnhanceBulletPointRequest request,
         CancellationToken cancellationToken)
     {
-        var inputPrompt = new StringBuilder();
-
-        inputPrompt.AppendLine(request.BulletPoint);
-
-        if (!string.IsNullOrWhiteSpace(request.Role))
-            inputPrompt.AppendLine($"Role: {request.Role}");
-
-        if (!string.IsNullOrWhiteSpace(request.Tags))
-            inputPrompt.AppendLine($"Tags: {request.Tags}");
+        var inputPrompt = PromptBuilder.BuildEnhanceBulletPointPrompt(request);
 
         var payload = new OllamaChatRequest
         {
@@ -191,9 +97,9 @@ public partial class OllamaChatClient
             [
                 new OllamaChatMessage
                 {
-                    Role = ChatRole.System.Value.ToLower(), Content = AIChatConstants.EnhanceBulletPointSystemPrompt
+                    Role = ChatRole.System.Value.ToLower(), Content = SystemPrompts.EnhanceBulletPointSystemPrompt
                 },
-                new OllamaChatMessage { Role = ChatRole.User.Value.ToLower(), Content = inputPrompt.ToString() }
+                new OllamaChatMessage { Role = ChatRole.User.Value.ToLower(), Content = inputPrompt }
             ],
             Stream = false
         };
