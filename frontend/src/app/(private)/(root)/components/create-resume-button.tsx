@@ -12,7 +12,6 @@ import { useResumeStore } from '@/store/resume-store';
 
 const CreateResumeButton = () => {
 	const clearResume = useResumeStore((state) => state.clear);
-	const clearResumeDraft = useResumeStore((state) => state.clearDraft);
 
 	const [isPending, startTransition] = useTransition();
 
@@ -28,7 +27,6 @@ const CreateResumeButton = () => {
 			}
 
 			clearResume();
-			clearResumeDraft();
 			router.push(Routes.editResume(response.data.id));
 		});
 	}

@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
 	serverExternalPackages: ["@react-pdf/renderer"],
 	experimental: {
 		esmExternals: "loose",
+        serverActions: {
+            bodySizeLimit: "2mb",
+        }
 	},
 };
 

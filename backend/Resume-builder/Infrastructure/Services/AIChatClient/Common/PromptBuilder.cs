@@ -59,6 +59,15 @@ public static class PromptBuilder
 
         return inputPrompt.ToString();
     }
+    
+    public static string BuildParseResumePrompt(string rawText)
+    {
+        var inputPrompt = new StringBuilder();
+        inputPrompt.Append("Resume Raw Text: \n");
+        inputPrompt.AppendLine(rawText);
+        
+        return inputPrompt.ToString();
+    }
 
 
     public static string BuildEnhanceWorkExperienceBulletPointPrompt(EnhanceBulletPointsRequest request)

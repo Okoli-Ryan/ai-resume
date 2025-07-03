@@ -6,10 +6,10 @@ Homepage query by tags, name
 Add loading state to log in button
 Add user context option for AI enhancements
 Add Credentials login form
-Add proper spinner to "create button"
-Remove draft feature
 Handle empty skill category
 Create job feature, where job can have 1 resume, tie job desc to resume for additional info
 Be able to generate tags from job
 Add redirect to log in on expired session
+Reduce space between bulletpoints
+Handle removing links from workplace, handle ui if project doesnt have link
 fix fetch failed on google auth stlil entering dashboard section

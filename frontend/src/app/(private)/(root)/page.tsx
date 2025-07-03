@@ -2,13 +2,14 @@ import { Star } from 'lucide-react';
 
 import { auth } from '@/auth';
 import {
-	Table, TableBody, TableCell, TableHead, TableHeader, TableRow
+    Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from '@/components/ui/table';
 import { cn, isCustomError } from '@/lib/utils';
 import { getMinimalResumesByUserId } from '@/services/resume/get-minimal-resume-list';
 
 import CreateResumeButton from './components/create-resume-button';
 import DuplicateResumeButton from './components/duplicate-resume-button';
+import ImportResumeButton from './components/import-resume-button';
 import ResumeTags from './components/resume-tags';
 import ViewResumeButton from './components/view-resume-button';
 
@@ -26,6 +27,7 @@ const Home = async () => {
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 				{/* <ContinueDraftButton /> */}
 				<CreateResumeButton />
+                <ImportResumeButton />
 			</div>
 			<div className="rounded-lg border mt-4">
 				<Table>

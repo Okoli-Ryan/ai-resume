@@ -15,6 +15,24 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export const fileToBase64 = (file: File): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+
+		reader.onload = () => {
+			const result = reader.result as string;
+			// Remove the "data:*/*;base64," prefix
+			const base64 = result.split(",")[1];
+			resolve(base64);
+		};
+
+		reader.onerror = (error) => reject(error);
+
+		reader.readAsDataURL(file);
+	});
+};
+
+
 export class ActionResponse {
 	static success<T>(data: NonNullable<T>, message?: string | undefined): Response<T> {
 		return {

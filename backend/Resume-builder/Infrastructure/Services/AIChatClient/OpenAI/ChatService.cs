@@ -99,4 +99,28 @@ public partial class OpenAiChatClient
             Response = response.Result
         };
     }
+
+    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, CancellationToken cancellationToken)
+    {
+        var inputPrompt = PromptBuilder.BuildParseResumePrompt(rawText);
+        
+        var chatHistory = new List<ChatMessage>();
+
+        chatHistory.Add(new ChatMessage(ChatRole.System, SystemPrompts.ParseResumeSystemPrompt));
+        
+        chatHistory.Add(new ChatMessage(ChatRole.User, inputPrompt));
+        
+        var response = await _chatClient.GetResponseAsync<ParsedResumeResponse>(
+            chatHistory,
+            JsonSerializerOptions.Default,
+            new ChatOptions {Temperature = 0.3f},
+            true,
+            cancellationToken);
+
+        return new AIResponse<ParsedResumeResponse>
+        {
+            PromptUsage = response.Usage?.TotalTokenCount,
+            Response = response.Result
+        };
+    }
 }

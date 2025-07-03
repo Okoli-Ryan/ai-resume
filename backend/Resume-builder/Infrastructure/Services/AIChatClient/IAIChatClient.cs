@@ -22,4 +22,6 @@ public interface IAIChatClient : IChatClient
 
     Task<AIResponse<List<EnhanceSkillsResponse>>> EnhanceSkills(List<string> skills,
         ResumeAdditionalInfo? additionalInfo, CancellationToken cancellationToken);
+    
+    Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, CancellationToken cancellationToken);
 }
