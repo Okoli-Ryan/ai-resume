@@ -30,6 +30,7 @@ public static class ResumeExtensions
             GithubUrl = resumeEntity.GithubUrl,
             IsFavourite = resumeEntity.IsFavourite,
             PortfolioUrl = resumeEntity.PortfolioUrl,
+            Order = resumeEntity.Order,
             Tags = resumeEntity.Tags,
             Id = resumeEntity.Id,
             ActiveStatus = resumeEntity.ActiveStatus,
@@ -63,6 +64,7 @@ public static class ResumeExtensions
             IsFavourite = resume.IsFavourite,
             LinkedinUrl = resume.LinkedinUrl,
             GithubUrl = resume.GithubUrl,
+            Order = resume.Order,
             PortfolioUrl = resume.PortfolioUrl,
             Id = resume.Id,
             ActiveStatus = resume.ActiveStatus,
@@ -91,6 +93,7 @@ public static class ResumeExtensions
             UserPhoneNumber = request.PhoneNumber,
             LinkedinUrl = request.LinkedinUrl,
             GithubUrl = request.GithubUrl,
+            Order = request.Order,
             Tags = request.Tags,
             PortfolioUrl = request.PortfolioUrl,
             UserId = userId

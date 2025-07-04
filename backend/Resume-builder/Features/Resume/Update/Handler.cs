@@ -35,6 +35,7 @@ public class UpdateResumeHandler(
         resume.JobRole = request.Role;
         resume.UserAddress = request.Address;
         resume.UserPhoneNumber = request.PhoneNumber;
+        resume.Order = request.Order;
         resume.LinkedinUrl = request.LinkedinUrl;
         resume.GithubUrl = request.GithubUrl;
         resume.PortfolioUrl = request.PortfolioUrl;

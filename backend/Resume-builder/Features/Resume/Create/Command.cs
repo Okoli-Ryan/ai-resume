@@ -17,6 +17,7 @@ public class CreateResumeCommand
     public string? LinkedinUrl { get; set; }
     public string? GithubUrl { get; set; }
     public string? PortfolioUrl { get; set; }
+    public string? Order { get; set; } = string.Empty;
     public string? Tags { get; set; } = string.Empty;
     public List<CreateEducationCommand>? Education { get; set; }
 

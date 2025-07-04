@@ -14,7 +14,11 @@ using Resume_builder.Infrastructure.Services.ClaimService;
 
 namespace Resume_builder.Features.Resume.GenerateResume;
 
-public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService, IHostEnvironment env, IAIChatClient chatClient)
+public class GenerateResumeHandler(
+    AppDbContext db,
+    IClaimsService claimsService,
+    IHostEnvironment env,
+    IAIChatClient chatClient)
     : IResponseHandler<GenerateResumeCommand, ResumeDto>
 {
     public async Task<Response<ResumeDto>> Handle(GenerateResumeCommand command, CancellationToken cancellationToken)
@@ -51,7 +55,7 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
             return Response<ResumeDto>.Fail(HttpStatusCode.NotFound, "Unable to generate resume");
 
         var newResume = CreateResumeEntity(resume, aiResponse, userId);
-        
+
         await using var transaction =
             env.IsProduction() ? await db.Database.BeginTransactionAsync(cancellationToken) : null;
 
@@ -59,27 +63,26 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
         await db.SaveChangesAsync(cancellationToken);
 
         CreateProjectEntity(newResume, aiResponse, userId);
-        
+
         CreateSkillsEntity(newResume, aiResponse, userId);
-        
+
         CreateWorkExperienceEntity(newResume, aiResponse, userId);
-        
+
         CreateEducationEntity(newResume, resume, userId);
 
         await db.SaveChangesAsync(cancellationToken);
-        
+
         AssignBulletPointsToWorkExperience(aiResponse, resume);
-        
+
         AssignBulletPointsToProject(aiResponse, resume);
-        
+
         AssignBulletPointsToEducation(resume);
 
         await db.SaveChangesAsync(cancellationToken);
-        
-        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
-        
-        return Response<ResumeDto>.Success(newResume.ToDto());
 
+        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
+
+        return Response<ResumeDto>.Success(newResume.ToDto());
     }
 
     private static void CreateEducationEntity(ResumeEntity newResume, ResumeEntity resume, string userId)
@@ -98,7 +101,8 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
         }).ToList();
     }
 
-    private static void CreateWorkExperienceEntity(ResumeEntity newResume, AIResponse<GenerateResumeResponse?> aiResponse, string userId)
+    private static void CreateWorkExperienceEntity(ResumeEntity newResume,
+        AIResponse<GenerateResumeResponse?> aiResponse, string userId)
     {
         newResume.WorkExperience = aiResponse.Response?.WorkExperience.Select(x => new WorkExperienceEntity
         {
@@ -115,29 +119,32 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
         }).ToList();
     }
 
-    private static void CreateSkillsEntity(ResumeEntity newResume, AIResponse<GenerateResumeResponse?> aiResponse, string userId)
+    private static void CreateSkillsEntity(ResumeEntity newResume, AIResponse<GenerateResumeResponse?> aiResponse,
+        string userId)
     {
         newResume.Skills = aiResponse.Response?.Skills.Select(x => new SkillEntity
         {
             Group = x.Category,
             Skills = x.Skills,
             UserId = userId,
-            ResumeId = newResume.Id,
+            ResumeId = newResume.Id
         }).ToList();
     }
 
-    private static void CreateProjectEntity(ResumeEntity newResume, AIResponse<GenerateResumeResponse?> aiResponse, string userId)
+    private static void CreateProjectEntity(ResumeEntity newResume, AIResponse<GenerateResumeResponse?> aiResponse,
+        string userId)
     {
         newResume.Projects = aiResponse.Response?.Projects.Select(x => new ProjectEntity
         {
             ProjectName = x.ProjectName,
             ProjectUrl = x.ProjectUrl,
             ResumeId = newResume.Id,
-            UserId = userId,
+            UserId = userId
         }).ToList();
     }
 
-    private static ResumeEntity CreateResumeEntity(ResumeEntity resume, AIResponse<GenerateResumeResponse?> aiResponse, string userId)
+    private static ResumeEntity CreateResumeEntity(ResumeEntity resume, AIResponse<GenerateResumeResponse?> aiResponse,
+        string userId)
     {
         var newResume = new ResumeEntity
         {
@@ -149,6 +156,7 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
             IsFavourite = resume.IsFavourite,
             UserAddress = resume.UserAddress,
             UserPhoneNumber = resume.UserPhoneNumber,
+            Order = resume.Order,
             LinkedinUrl = resume.LinkedinUrl,
             GithubUrl = resume.GithubUrl,
             PortfolioUrl = resume.PortfolioUrl,
@@ -158,18 +166,17 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
         return newResume;
     }
 
-    private static void CreateSkillsEntity(AIResponse<GenerateResumeResponse?> aiResponse, ResumeEntity newResume, string userId)
+    private static void CreateSkillsEntity(AIResponse<GenerateResumeResponse?> aiResponse, ResumeEntity newResume,
+        string userId)
     {
         foreach (var skillCategory in aiResponse.Response.Skills)
-        {
             newResume.Skills = aiResponse.Response.Skills.Select(x => new SkillEntity
             {
                 Group = skillCategory.Category,
                 Skills = skillCategory.Skills,
                 UserId = userId,
-                ResumeId = newResume.Id,
+                ResumeId = newResume.Id
             }).ToList();
-        }
     }
 
     private static void AssignBulletPointsToEducation(ResumeEntity resume)
@@ -204,7 +211,8 @@ public class GenerateResumeHandler(AppDbContext db, IClaimsService claimsService
         }
     }
 
-    private static void AssignBulletPointsToWorkExperience(AIResponse<GenerateResumeResponse?> aiResponse, ResumeEntity resume)
+    private static void AssignBulletPointsToWorkExperience(AIResponse<GenerateResumeResponse?> aiResponse,
+        ResumeEntity resume)
     {
         foreach (var (work, index) in (aiResponse.Response?.WorkExperience ?? []).Select((value, i) => (value, i)))
         foreach (var (bulletPoint, bpIndex) in work.BulletPoints.Select((value, i) => (value, i)))

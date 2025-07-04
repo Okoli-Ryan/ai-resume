@@ -27,7 +27,7 @@ const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 
 							{/* Bullets */}
 							{project.bulletPoints.length > 0 && (
-								<View style={{ marginTop: 6 }}>
+								<View style={{ marginTop: 4 }}>
 									{project.bulletPoints.map((bulletPoint, index) => (
 										<BulletPoint text={bulletPoint.text} key={index} />
 									))}

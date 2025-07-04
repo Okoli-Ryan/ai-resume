@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddConfig(config)
-            .AddPersistence()
+            .AddPersistence(config)
             .AddServices()
             .AddAuth(config)
             .AddHttpContextAccessor()
@@ -29,26 +29,13 @@ public static class ServiceCollectionExtensions
             .AddSwaggerGen()
             .AddCarter()
             .AddHttpClient()
-            .AddAIChatClient(config)
+            .AddAiChatClient(config)
             .AddOpenApi();
     }
 
 
-    private static IServiceCollection AddAIChatClient(this IServiceCollection services, IConfiguration config)
+    private static IServiceCollection AddAiChatClient(this IServiceCollection services, IConfiguration config)
     {
-        // services.AddChatClient(sp =>
-        // {
-        //     var httpClient = sp.GetRequiredService<IHttpClientFactory>()
-        //         .CreateClient(nameof(OllamaChatClient));
-        //
-        //     httpClient.BaseAddress = new Uri("http://localhost:9000");
-        //     httpClient.Timeout = TimeSpan.FromMinutes(5);
-        //
-        //     return new OllamaChatClient(httpClient, "llama3");
-        // });
-        //
-        // return services;
-
         var appSettings = config
             .GetSection("AppSettings")
             .Get<AppSettings>()!;
@@ -78,9 +65,20 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    private static IServiceCollection AddPersistence(this IServiceCollection services)
+    private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration config)
     {
-        services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("LocalTestDb"); });
+        var appSettings = config
+            .GetSection("AppSettings")
+            .Get<AppSettings>()!;
+
+        var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
+        if (isDevelopment)
+
+            services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("LocalTestDb"); });
+        else
+
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(appSettings.DbConnectionString));
 
         return services;
     }

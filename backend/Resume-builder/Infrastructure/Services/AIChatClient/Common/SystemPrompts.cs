@@ -143,15 +143,15 @@ public static class SystemPrompts
                                                   - education: An array of entries. Each entry should include:
                                                     - startDate (set to iso string)
                                                     - endDate (if isOngoing is true, set to any date, must be iso string)
-                                                    - bulletPoints: an array of achievements or responsibilities.
+                                                    - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
                                                   - experience: An array of entries. Each entry should include:
                                                     - startDate (set to iso string)
                                                     - endDate (if isOngoing is true, set to any date, must be iso string)
-                                                    - bulletPoints: an array of achievements or responsibilities.
+                                                    - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
                                                   - projects: An array of entries. Each entry should include:
                                                     - startDate (set to iso string)
                                                     - endDate (if isOngoing is true, set to any date, must be iso string)
-                                                    - bulletPoints: an array of achievements or responsibilities.
+                                                    - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
                                                   - skills: A categorized group of skills eg category: Frontend, skills: [HTML, CSS, JavaScript]...
 
                                                   Output only a valid JSON object matching this schema. Do not include explanations, markdown, or commentary.

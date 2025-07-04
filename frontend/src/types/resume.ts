@@ -11,6 +11,7 @@ export type TResume = {
 	tags?: string;
 	summary: string;
 	role: string;
+    order: string
 	address: string;
 	phoneNumber: string;
     isFavourite: boolean

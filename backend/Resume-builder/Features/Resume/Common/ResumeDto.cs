@@ -19,6 +19,7 @@ public class ResumeDto : BaseEntity
     public string? LinkedinUrl { get; set; }
     public string? GithubUrl { get; set; }
     public string? PortfolioUrl { get; set; }
+    public string? Order { get; set; } = string.Empty;
     public string UserId { get; set; } = string.Empty;
     public bool IsFavourite { get; set; }
 
