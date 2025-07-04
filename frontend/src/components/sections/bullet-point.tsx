@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 	bulletPoint: {
 		display: "flex",
 		flexDirection: "row",
-		gap: 6,
+		gap: 4,
 		marginTop: -4,
 	},
 	bullet: {

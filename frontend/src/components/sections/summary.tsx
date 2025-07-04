@@ -6,7 +6,7 @@ import { View } from "@react-pdf/renderer";
 const Summary = ({ resume }: { resume: Partial<TResume> }) => {
 	const summary = resume.summary;
 
-	if (!summary) return null;
+	if (!summary || summary === "<p></p>") return null;
 
 	return (
 		<View>

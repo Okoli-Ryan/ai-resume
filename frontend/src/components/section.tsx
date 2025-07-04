@@ -16,7 +16,7 @@ const Section = ({ title, children }: SectionProps) => {
 
 const styles = StyleSheet.create({
 	section: {
-		marginTop: 8,
+		marginTop: 4,
 	},
 	sectionTitle: {
 		fontSize: 10,

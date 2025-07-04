@@ -79,3 +79,7 @@ body {
 		@apply bg-background text-foreground;
 	}
 }
+
+.drag-ghost {
+  @apply opacity-40 bg-gray-100;
+}
