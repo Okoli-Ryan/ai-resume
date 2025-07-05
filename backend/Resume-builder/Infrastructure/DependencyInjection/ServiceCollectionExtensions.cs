@@ -73,10 +73,10 @@ public static class ServiceCollectionExtensions
 
         var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
 
-        if (isDevelopment)
-
-            services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("LocalTestDb"); });
-        else
+        // if (isDevelopment)
+        //
+        //     services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("LocalTestDb"); });
+        // else
 
             services.AddDbContext<AppDbContext>(options => options.UseNpgsql(appSettings.DbConnectionString));
 
