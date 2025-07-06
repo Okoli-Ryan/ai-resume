@@ -1,17 +1,18 @@
-﻿# Use ASP.NET Core runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview AS base
-WORKDIR /app
-EXPOSE 8080
+﻿# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /source
 
-# Build app
-FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
-WORKDIR /src
-COPY . .
+COPY *.sln .
+COPY Resume-builder/*.csproj ./Resume-builder/
 RUN dotnet restore
-RUN dotnet publish -c Release -o /app/publish
 
-# Final runtime container
-FROM base AS final
+COPY ./Resume-builder/. ./Resume-builder/
+WORKDIR /source/Resume-builder
+RUN dotnet publish -c release -o /app 
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /app ./
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "Resume-builder.dll"]

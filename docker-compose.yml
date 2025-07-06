@@ -8,14 +8,31 @@ services:
       - "5000:8080"
     depends_on:
       - ollama
+      - postgres
     environment:
       - ASPNETCORE_URLS=http://+:8080
-      - ASPNETCORE_ENVIRONMENT=${ENVIRONMENT}
+      - ASPNETCORE_ENVIRONMENT=Development
       - AppSettings__Jwt__Secret=${JWT_SECRET}
       - AppSettings__Jwt__Issuer=${JWT_ISSUER}
       - AppSettings__Jwt__ExpiryMinutes=${JWT_EXPIRY_MINUTES}
       - AppSettings__Jwt__Audience=${JWT_AUDIENCE}
       - AppSettings__GoogleClientID=${GOOGLE_CLIENT_ID}
+      - AppSettings__DbConnectionString=Host=postgres;Port=5432;Database=resume_db;Username=postgres;Password=postgres
+    networks:
+      - ollama-net
+
+  postgres:
+    image: postgres:15
+    container_name: resume-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: resume_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
     networks:
       - ollama-net
 
@@ -33,6 +50,7 @@ services:
 
 volumes:
   ollama-data:
+  pg-data:
 
 networks:
   ollama-net:
