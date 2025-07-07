@@ -10,6 +10,8 @@ COPY ./Resume-builder/. ./Resume-builder/
 WORKDIR /source/Resume-builder
 RUN dotnet publish -c release -o /app 
 
+ENV ASPNETCORE_URLS=http://+:8080
+
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
