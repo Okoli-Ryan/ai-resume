@@ -22,23 +22,20 @@ public class TokenService : ITokenService
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(JwtRegisteredClaimNames.Email, email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new(JwtRegisteredClaimNames.Sub, userId),
+            new(JwtRegisteredClaimNames.Email, email),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        if (roles != null)
-        {
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-        }
+        if (roles != null) claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         var credentials = new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _appSettings.Jwt.Issuer,
-            audience: _appSettings.Jwt.Audience,
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_appSettings.Jwt.ExpiryMinutes),
+            _appSettings.Jwt.Issuer,
+            _appSettings.Jwt.Audience,
+            claims,
+            expires: DateTime.UtcNow.AddDays(1),
             signingCredentials: credentials
         );
 
