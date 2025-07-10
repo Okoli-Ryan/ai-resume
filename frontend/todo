@@ -1,8 +1,16 @@
+########Critical######
+rearrange workexperience, projects, education, bulletpoints
+certificate section
+Mobile view
+hide/show sections
+
+#######Future#######
 LLM update for skills
 Upload to cloudinary feature, get link
 Convert to side-by-side view on desktop, sidebar view on mobile
 Use optimistic update for updating resume
 Homepage query by tags, name
+delete resume feature
 Add loading state to log in button
 Add user context option for AI enhancements
 Add Credentials login form

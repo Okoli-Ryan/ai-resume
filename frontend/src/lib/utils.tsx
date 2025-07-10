@@ -32,6 +32,8 @@ export const fileToBase64 = (file: File): Promise<string> => {
 	});
 };
 
+export const isValidLink = (link: string) => link.startsWith("http://") || link.startsWith("https://");
+
 
 export class ActionResponse {
 	static success<T>(data: NonNullable<T>, message?: string | undefined): Response<T> {

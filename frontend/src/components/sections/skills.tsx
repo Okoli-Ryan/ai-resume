@@ -9,7 +9,7 @@ const Skills = ({ resume }: { resume: Partial<TResume> }) => {
 	if (skillList.length === 0) return null;
 
 	return (
-		<View>
+		<View wrap={false}>
 			<Section title="Skills">
 				<View style={styles.container}>
 					{skillList.map((skill) => (

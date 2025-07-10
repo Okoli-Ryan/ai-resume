@@ -18,7 +18,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 			<Section title="Work Experience">
 				<View style={styles.experienceList}>
 					{experiences.map((experience) => (
-						<View style={{ gap: 4 }} key={experience.id}>
+						<View style={{ gap: 4 }} key={experience.id} wrap={false}>
 							<View>
 								<Row>
 									<Text style={GlobalStyles.bold}>
@@ -56,7 +56,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 const styles = StyleSheet.create({
 	experienceList: {
 		display: "flex",
-		gap: 16,
+		gap: 4,
 	},
 });
 
