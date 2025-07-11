@@ -83,3 +83,29 @@ body {
 .drag-ghost {
   @apply opacity-40 bg-gray-100;
 }
+
+.drag-chosen {
+  background-color: #dbeafe !important;
+}
+
+.drag-drag {
+  background-color: #bfdbfe !important;
+}
+
+@keyframes shake-anim {
+  0% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.01) rotate(-0.2deg); }
+  40% { transform: scale(1.01) rotate(0.2deg); }
+  60% { transform: scale(1.01) rotate(-0.1deg); }
+  80% { transform: scale(1.01) rotate(0.1deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+/* 
+.shake {
+  animation: shake-anim 0.8s ease-in-out;
+} */
+
+/* Subtle breathing effect for draggable items */
+.shake {
+  animation: shake-anim 2s ease-in-out infinite;
+}

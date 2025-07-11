@@ -1,13 +1,14 @@
 "use client";
 
-import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
+import { UseFieldArrayRemove, UseFormReturn } from "react-hook-form";
 
-import { Button } from '@/components/ui/button';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { TResume } from '@/types/resume';
+import { Button } from "@/components/ui/button";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { TResume } from "@/types/resume";
 
-import { BulletPointsForm } from '../bullet-point-form/bullet-point-form';
+import { Card, CardContent } from "@/components/ui/card";
+import { BulletPointsForm } from "../bullet-point-form/bullet-point-form";
 
 type ProjectsFormItemProps = {
 	form: UseFormReturn<TResume, any, undefined>;
@@ -19,47 +20,40 @@ const ProjectsFormItem = ({ form, index, remove }: ProjectsFormItemProps) => {
 	const { control } = form;
 
 	return (
-		<div className="space-y-4">
-			<FormField
-				control={control}
-				name={`projects.${index}.name`}
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>Project Name</FormLabel>
-						<FormControl>
-							<Input {...field} />
-						</FormControl>
-						<FormMessage />
-					</FormItem>
-				)}
-			/>
-
-			<FormField
-				control={control}
-				name={`projects.${index}.link`}
-				render={({ field }) => (
-					<FormItem>
-						<FormLabel>Link</FormLabel>
-						<FormControl>
-							<Input {...field} />
-						</FormControl>
-						<FormMessage />
-					</FormItem>
-				)}
-			/>
-
-			<div>
-				<div className="flex justify-between items-center mb-2">
-					<FormLabel>Bullet Points</FormLabel>
-				</div>
-
+		<Card>
+			<CardContent className="py-4 flex flex-col gap-4">
+				<FormField
+					control={control}
+					name={`projects.${index}.name`}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Project Name</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={control}
+					name={`projects.${index}.link`}
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Link</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 				<BulletPointsForm enhanceType="Project" form={form} name={`projects.${index}.bulletPoints`} />
-			</div>
-
-			<Button variant="destructive" onClick={() => remove(index)}>
-				Remove Project
-			</Button>
-		</div>
+				<Button variant="destructive" onClick={() => remove(index)}>
+					Remove Project
+				</Button>
+			</CardContent>
+		</Card>
 	);
 };
 

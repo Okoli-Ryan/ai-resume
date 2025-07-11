@@ -1,15 +1,15 @@
 "use client";
 
-import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
+import { UseFieldArrayRemove, UseFormReturn } from "react-hook-form";
 
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { TResume } from '@/types/resume';
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { TResume } from "@/types/resume";
 
-import { BulletPointsForm } from '../bullet-point-form/bullet-point-form';
-import DateFormItem from '../common/date-form-item';
+import { BulletPointsForm } from "../bullet-point-form/bullet-point-form";
+import DateFormItem from "../common/date-form-item";
 
 type EducationFormItemProps = {
 	form: UseFormReturn<TResume, any, undefined>;
@@ -23,7 +23,7 @@ const EducationFormItem = ({ index, remove, form }: EducationFormItemProps) => {
 	const isOngoing = watch(`education.${index}.isOngoing`);
 
 	return (
-		<div className="space-y-4 px-2">
+		<div className="space-y-4">
 			<FormField
 				control={control}
 				name={`education.${index}.schoolName`}
@@ -97,13 +97,7 @@ const EducationFormItem = ({ index, remove, form }: EducationFormItemProps) => {
 
 			<DateFormItem disabled={isOngoing} name={`education.${index}.endDate`} control={control} label="End Date" />
 
-			<div>
-				<div className="flex justify-between items-center mb-2">
-					<FormLabel>Bullet Points</FormLabel>
-				</div>
-
-				<BulletPointsForm form={form} name={`education.${index}.bulletPoints`} />
-			</div>
+			<BulletPointsForm form={form} name={`education.${index}.bulletPoints`} />
 
 			<Button variant="destructive" onClick={() => remove(index)}>
 				Remove Education

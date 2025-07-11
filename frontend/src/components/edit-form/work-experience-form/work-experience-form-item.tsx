@@ -125,11 +125,6 @@ const WorkExperienceFormItem = ({ form, index, remove }: WorkExperienceFormItemP
 					)}
 				/>
 
-				{/* Bullet Points Section */}
-				<div className="flex justify-between items-center">
-					<FormLabel>Bullet Points</FormLabel>
-				</div>
-
 				<BulletPointsForm enhanceType="Experience" form={form} name={`workExperience.${index}.bulletPoints`} />
 
 				<Button variant="destructive" onClick={() => remove(index)}>
