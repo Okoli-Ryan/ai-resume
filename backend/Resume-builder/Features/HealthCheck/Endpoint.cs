@@ -6,6 +6,6 @@ public class Endpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("health-check", () => Results.Ok());
+        app.MapMethods("/health-check", new[] { "GET", "HEAD" }, () => Results.Ok());
     }
 }
