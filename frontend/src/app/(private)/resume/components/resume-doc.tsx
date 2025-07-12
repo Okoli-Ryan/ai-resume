@@ -7,7 +7,6 @@ import { useResumeStore } from '@/store/resume-store';
 import { TResume } from '@/types/resume';
 
 import PublishModal from './publish-modal';
-import Sidebar from './sidebar';
 
 const DocumentViewer = dynamic(() => import("./document-viewer").then((mod) => mod.default), {
 	ssr: false,
@@ -33,15 +32,11 @@ const ResumeDoc = ({ resume: initialResume }: { resume?: TResume }) => {
 
 	if (!isLoaded) return null;
 
-	// const inCreateModeAndHasDraftId = !isEdit && !!resumeDraft?.id;
-	// const inEditModeAndHasNoDraftId = isEdit && !resumeDraft?.id;
-
 	return (
 		<div className="w-screen">
 			<DocumentViewer />
 			{/* <RestoreModal defaultOpen={inCreateModeAndHasDraftId || inEditModeAndHasNoDraftId} /> */}
 			<PublishModal />
-			<Sidebar />
 		</div>
 	);
 };

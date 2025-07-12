@@ -1,4 +1,4 @@
-import { PDFViewer } from "@/components/pdf-viewer";
+import { BlobProvider } from "@/components/pdf-viewer";
 import Education from "@/components/sections/education";
 import PersonalInfo from "@/components/sections/personal-info";
 import Projects from "@/components/sections/projects";
@@ -8,10 +8,11 @@ import WorkExperience from "@/components/sections/work-experience";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
 import { Document, Font, Page, StyleSheet, View } from "@react-pdf/renderer";
+import Sidebar from "./sidebar";
 
-Font.registerHyphenationCallback(word => [word]);
+Font.registerHyphenationCallback((word) => [word]);
 
-const DocumentViewer = () => {
+const MyPDFDocument = () => {
 	const resume = useResumeStore((state) => state.resume)!;
 
 	const order = resume.order ? resume.order.split(",") : DEFAULT_RESUME_ORDER;
@@ -25,20 +26,35 @@ const DocumentViewer = () => {
 	};
 
 	return (
-		<PDFViewer className="h-[100dvh] mt-[1.5rem]" width={"100%"} key={Date.now()} showToolbar={false}>
-			<Document>
-				<Page size="A4" style={styles.page}>
-					<PersonalInfo resume={resume} />
-					<View style={styles.sectionContainer}>
-						{order.map((sectionKey) => (
-							<View key={sectionKey}>{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}</View>
-						))}
-					</View>
-				</Page>
-			</Document>
-		</PDFViewer>
+		// <PDFViewer className="h-[100dvh] mt-[1.5rem]" width={"100%"} key={Date.now()} showToolbar={false}>
+		<Document>
+			<Page size="A4" style={styles.page}>
+				<PersonalInfo resume={resume} />
+				<View style={styles.sectionContainer}>
+					{order.map((sectionKey) => (
+						<View key={sectionKey}>{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}</View>
+					))}
+				</View>
+			</Page>
+		</Document>
+		// </PDFViewer>
 	);
 };
+
+export const DocumentViewer = () => (
+	<BlobProvider document={<MyPDFDocument />}>
+		{({ url, loading }) =>
+			loading ? (
+				<p>Loading PDF...</p>
+			) : (
+				<>
+					<iframe src={url!} style={{ width: "100%", height: "100vh" }} frameBorder="0" />
+					<Sidebar />
+				</>
+			)
+		}
+	</BlobProvider>
+);
 
 // <PDFDownloadLink
 // 	key={Date.now()} // Changes every rerender.

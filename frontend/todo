@@ -1,4 +1,5 @@
 ########Critical######
+fix fetch failed on google auth stlil entering dashboard section
 certificate section
 Mobile view
 hide/show sections
@@ -20,4 +21,3 @@ Be able to generate tags from job
 Add redirect to log in on expired session
 Reduce space between bulletpoints
 Handle removing links from workplace, handle ui if project doesnt have link
-fix fetch failed on google auth stlil entering dashboard section
