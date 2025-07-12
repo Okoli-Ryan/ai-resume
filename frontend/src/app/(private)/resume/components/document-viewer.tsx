@@ -8,7 +8,7 @@ import WorkExperience from "@/components/sections/work-experience";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
 import { Document, Font, Page, StyleSheet, View } from "@react-pdf/renderer";
-import Sidebar from "./sidebar";
+import PdfCanvasViewer from "./pdf-canvas";
 
 Font.registerHyphenationCallback((word) => [word]);
 
@@ -43,16 +43,10 @@ const MyPDFDocument = () => {
 
 export const DocumentViewer = () => (
 	<BlobProvider document={<MyPDFDocument />}>
-		{({ url, loading }) =>
-			loading ? (
-				<p>Loading PDF...</p>
-			) : (
-				<>
-					<iframe src={url!} style={{ width: "100%", height: "100vh" }} frameBorder="0" />
-					<Sidebar />
-				</>
-			)
-		}
+		{({ url, loading }) => {
+			if (loading || !url) return <p>Loading PDF...</p>;
+			return <PdfCanvasViewer url={url} />;
+		}}
 	</BlobProvider>
 );
 
