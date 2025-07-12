@@ -1,12 +1,11 @@
-import { ChevronDown, PanelRight } from 'lucide-react';
+import { ChevronDown, PanelRight } from "lucide-react";
 
-import { ResumeProvider } from '@/components/edit-form/resume-info-form/context/resume-context';
-import { Button } from '@/components/ui/button';
-import {
-	Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger
-} from '@/components/ui/sheet';
-import { ResumeFormSections } from '@/lib/react-pdf';
-import { Accordion, AccordionItem } from '@szhsin/react-accordion';
+import { ResumeProvider } from "@/components/edit-form/resume-info-form/context/resume-context";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ResumeFormSections } from "@/lib/react-pdf";
+import { Accordion, AccordionItem } from "@szhsin/react-accordion";
+import { memo } from "react";
 
 const Sidebar = () => {
 	return (
@@ -48,4 +47,4 @@ const Sidebar = () => {
 	);
 };
 
-export default Sidebar;
+export default memo(Sidebar);

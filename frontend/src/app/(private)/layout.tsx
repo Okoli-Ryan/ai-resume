@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { signOutAction } from "../(auth)/sign-in/actions/auth-action";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-    const session = useSession();
-    return (
+	const session = useSession();
+	return (
 		<div>
 			<nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-gray-950/90 tw-mb-4">
 				<div className="w-full max-w-7xl mx-auto px-4">

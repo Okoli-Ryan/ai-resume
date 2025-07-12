@@ -1,14 +1,23 @@
 "use client";
 
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
-import { useResumeStore } from '@/store/resume-store';
-import { TResume } from '@/types/resume';
+import { useResumeStore } from "@/store/resume-store";
+import { TResume } from "@/types/resume";
+import { BrowserView, MobileView } from "react-device-detect";
 
-import PublishModal from './publish-modal';
+import Sidebar from "./sidebar";
 
 const DocumentViewer = dynamic(() => import("./document-viewer").then((mod) => mod.default), {
+	ssr: false,
+	loading: () => (
+		<div className="flex items-center justify-center h-96">
+			<p>Loading PDF viewer...</p>
+		</div>
+	),
+});
+const MobileDocumentViewer = dynamic(() => import("./document-viewer").then((mod) => mod.MobileDocumentViewer), {
 	ssr: false,
 	loading: () => (
 		<div className="flex items-center justify-center h-96">
@@ -34,9 +43,13 @@ const ResumeDoc = ({ resume: initialResume }: { resume?: TResume }) => {
 
 	return (
 		<div className="w-screen">
-			<DocumentViewer />
-			{/* <RestoreModal defaultOpen={inCreateModeAndHasDraftId || inEditModeAndHasNoDraftId} /> */}
-			<PublishModal />
+			<BrowserView>
+				<DocumentViewer />
+			</BrowserView>
+			<MobileView>
+				<MobileDocumentViewer />
+			</MobileView>
+			<Sidebar />
 		</div>
 	);
 };

@@ -1,67 +1,76 @@
-'use client';
+"use client";
 
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
-import 'pdfjs-dist/build/pdf.worker.mjs';
-import { useEffect, useRef } from 'react';
+import { getDocument, GlobalWorkerOptions, PDFPageProxy } from "pdfjs-dist";
+import "pdfjs-dist/build/pdf.worker.mjs";
+import { useEffect, useRef, useState } from "react";
+GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.mjs", import.meta.url).toString();
 
 type Props = {
-  url: string;
+	url: string;
 };
 
 export default function PdfCanvasViewer({ url }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+	const [numPages, setNumPages] = useState(0);
+	const canvasRefs = useRef<HTMLCanvasElement[]>([]);
+	const pdfInstance = useRef<any>(null);
 
-  useEffect(() => {
-    GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/build/pdf.worker.min.mjs',
-      import.meta.url
-    ).toString();
-  }, []);
+	useEffect(() => {
+		let isCancelled = false;
 
-  useEffect(() => {
-    let isCancelled = false;
-    let renderTask: ReturnType<ReturnType<typeof getDocument>['promise']['then']> | null = null;
+		const loadPDF = async () => {
+			try {
+				const pdf = await getDocument(url).promise;
+				if (isCancelled) return;
 
-    const renderPdf = async () => {
-      try {
-        const pdf = await getDocument(url).promise;
-        if (isCancelled) return;
+				pdfInstance.current = pdf;
+				setNumPages(pdf.numPages);
+			} catch (err) {
+				console.error("Error loading PDF:", err);
+			}
+		};
 
-        const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 1.5 });
+		loadPDF();
 
-        const canvas = canvasRef.current;
-        if (!canvas) return;
+		return () => {
+			isCancelled = true;
+		};
+	}, [url]);
 
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+	useEffect(() => {
+		if (!pdfInstance.current || canvasRefs.current.length !== numPages) return;
 
-        // Wait for previous render to finish
-        // @ts-expect-error 123
-        renderTask = page.render({
-          canvasContext: context!,
-          viewport,
-        });
-        // @ts-expect-error 123
+		const renderPages = async () => {
+			for (let i = 1; i <= numPages; i++) {
+				const page: PDFPageProxy = await pdfInstance.current.getPage(i);
+				const viewport = page.getViewport({ scale: 1.5 });
 
-        await renderTask.promise;
-      } catch (err) {
-        if (!isCancelled) console.error('Error rendering PDF:', err);
-      }
-    };
+				const canvas = canvasRefs.current[i - 1];
+				if (!canvas) continue;
 
-    renderPdf();
+				const context = canvas.getContext("2d");
+				if (!context) continue;
 
-    return () => {
-      isCancelled = true;
-      if (renderTask) {
-                // @ts-expect-error 123
+				canvas.width = viewport.width;
+				canvas.height = viewport.height;
 
-        renderTask.cancel?.();
-      }
-    };
-  }, [url]);
+				await page.render({ canvasContext: context, viewport }).promise;
+			}
+		};
 
-  return <canvas ref={canvasRef} style={{ width: '100%', height: 'auto' }} />;
+		renderPages();
+	}, [numPages]);
+
+	return (
+		<div>
+			{Array.from({ length: numPages }, (_, i) => (
+				<canvas
+					key={i}
+					ref={(el) => {
+						if (el) canvasRefs.current[i] = el;
+					}}
+					style={{ width: "100%", marginBottom: "1rem" }}
+				/>
+			))}
+		</div>
+	);
 }

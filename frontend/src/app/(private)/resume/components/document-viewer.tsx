@@ -8,6 +8,8 @@ import WorkExperience from "@/components/sections/work-experience";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
 import { Document, Font, Page, StyleSheet, View } from "@react-pdf/renderer";
+
+import DownloadModal from "./download-modal";
 import PdfCanvasViewer from "./pdf-canvas";
 
 Font.registerHyphenationCallback((word) => [word]);
@@ -27,7 +29,7 @@ const MyPDFDocument = () => {
 
 	return (
 		// <PDFViewer className="h-[100dvh] mt-[1.5rem]" width={"100%"} key={Date.now()} showToolbar={false}>
-		<Document>
+		<Document onRender={({}) => {}}>
 			<Page size="A4" style={styles.page}>
 				<PersonalInfo resume={resume} />
 				<View style={styles.sectionContainer}>
@@ -41,13 +43,36 @@ const MyPDFDocument = () => {
 	);
 };
 
+export const MobileDocumentViewer = () => {
+	return (
+		<BlobProvider document={<MyPDFDocument />}>
+			{({ url, loading }) => {
+				if (loading || !url) return <p>Loading PDF...</p>;
+				return (
+					<>
+						<DownloadModal url={url} />
+						<PdfCanvasViewer url={url} />;
+					</>
+				);
+			}}
+		</BlobProvider>
+	);
+};
+
 export const DocumentViewer = () => (
-	<BlobProvider document={<MyPDFDocument />}>
-		{({ url, loading }) => {
-			if (loading || !url) return <p>Loading PDF...</p>;
-			return <PdfCanvasViewer url={url} />;
-		}}
-	</BlobProvider>
+	<>
+		<BlobProvider document={<MyPDFDocument />}>
+			{({ url, loading }) => {
+				if (loading || !url) return <p>Loading PDF...</p>;
+				return (
+					<>
+						<DownloadModal url={url} />
+						<iframe src={url} className="h-[100dvh] mt-[1.5rem]" width={"100%"} height={"100%"} frameBorder="0" scrolling="no"></iframe>
+					</>
+				);
+			}}
+		</BlobProvider>
+	</>
 );
 
 // <PDFDownloadLink
