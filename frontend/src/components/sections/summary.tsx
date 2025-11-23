@@ -1,5 +1,8 @@
+"use client";
+
 import Section from "./section";
 import { TResume } from "@/types/resume";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const Summary = ({ resume }: { resume: Partial<TResume> }) => {
 	const summary = resume.summary;
@@ -9,7 +12,7 @@ const Summary = ({ resume }: { resume: Partial<TResume> }) => {
 	return (
 		<div>
 			<Section title="Summary">
-				<div className="font-times text-[10px] leading-tight" dangerouslySetInnerHTML={{ __html: summary }} />
+				<div className="font-times text-[10px] leading-tight" dangerouslySetInnerHTML={{ __html: sanitizeHtml(summary) }} />
 			</Section>
 		</div>
 	);

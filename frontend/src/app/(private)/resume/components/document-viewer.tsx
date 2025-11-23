@@ -13,7 +13,23 @@ import { usePDF } from "react-to-pdf";
 import DownloadModal from "./download-modal";
 
 const ResumeDocument = () => {
-	const resume = useResumeStore((state) => state.resume)!;
+	const resume = useResumeStore((state) => state.resume);
+	
+	if (!resume) {
+		return (
+			<div className="bg-white font-times text-[10px] leading-tight flex items-center justify-center"
+				style={{
+					width: '210mm',
+					minHeight: '297mm',
+					padding: '48px 64px 16px 64px',
+					margin: '0 auto',
+				}}
+			>
+				<p className="text-base text-gray-500">No resume data available</p>
+			</div>
+		);
+	}
+	
 	const order = resume.order ? resume.order.split(",") : DEFAULT_RESUME_ORDER;
 
 	const sectionComponents: Record<(typeof DEFAULT_RESUME_ORDER)[number], React.ReactNode> = {
