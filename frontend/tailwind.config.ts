@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			times: ['Times New Roman', 'Times', 'serif'],
+  		},
   		colors: {
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',

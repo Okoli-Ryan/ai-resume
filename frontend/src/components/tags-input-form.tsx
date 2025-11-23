@@ -8,7 +8,7 @@ import { Input } from './ui/input';
 import Tag from './ui/tag';
 
 type TagFormProps = {
-	form: UseFormReturn<Partial<TResume>, any, undefined>; // react-hook-form instance
+	form: UseFormReturn<Partial<TResume>, any, Partial<TResume>>; // react-hook-form instance
 	name: Path<TResume>;
 	label: string;
 	placeholder: string;

@@ -14,7 +14,7 @@ import { BulletPointsForm } from "../bullet-point-form/bullet-point-form";
 import DateFormItem from "../common/date-form-item";
 
 type WorkExperienceFormItemProps = {
-	form: UseFormReturn<TResume, any, undefined>;
+	form: UseFormReturn<TResume, any, TResume>;
 	index: number;
 	remove: UseFieldArrayRemove;
 };

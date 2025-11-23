@@ -18,7 +18,7 @@ import { useResumeContext } from "../resume-info-form/context/resume-context";
 import { enhanceBulletpointListAction } from "./actions/enhance-bullet-point-list-action";
 
 interface BulletPointsFormProps<T extends FieldValues> {
-	form: UseFormReturn<T, ArrayPath<T>, undefined>;
+	form: UseFormReturn<T, ArrayPath<T>, T>;
 	name: ArrayPath<T>;
 	enhanceType?: EnhanceTypes;
 }

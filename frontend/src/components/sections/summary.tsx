@@ -1,7 +1,8 @@
-import Section from '@/components/section';
-import { HtmlToPdfText } from '@/lib/react-pdf';
+"use client";
+
+import Section from "./section";
 import { TResume } from "@/types/resume";
-import { View } from "@react-pdf/renderer";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 const Summary = ({ resume }: { resume: Partial<TResume> }) => {
 	const summary = resume.summary;
@@ -9,11 +10,11 @@ const Summary = ({ resume }: { resume: Partial<TResume> }) => {
 	if (!summary || summary === "<p></p>") return null;
 
 	return (
-		<View>
+		<div>
 			<Section title="Summary">
-				<HtmlToPdfText html={summary} />
+				<div className="font-times text-[10px] leading-tight" dangerouslySetInnerHTML={{ __html: sanitizeHtml(summary) }} />
 			</Section>
-		</View>
+		</div>
 	);
 };
 

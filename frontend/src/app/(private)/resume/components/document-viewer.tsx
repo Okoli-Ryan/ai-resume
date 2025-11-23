@@ -1,26 +1,37 @@
+"use client";
+
 import PersonalInfo from "@/components/sections/personal-info";
 import Summary from "@/components/sections/summary";
 import WorkExperience from "@/components/sections/work-experience";
-import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
-import { useResumeStore } from "@/store/resume-store";
-import { Document, Font, Page, StyleSheet, usePDF, View } from "@react-pdf/renderer";
-import { BrowserView, MobileView } from "react-device-detect";
-
-import DownloadModal from "./download-modal";
-import PdfCanvasViewer from "./pdf-canvas";
-
 import Education from "@/components/sections/education";
 import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
-import { useEffect } from "react";
-import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
+import { useResumeStore } from "@/store/resume-store";
+import { useCallback } from "react";
+import { pdf } from '@react-pdf/renderer';
+import PDFResumeDocument from '@/components/pdf-sections/pdf-resume-document';
 
-Font.registerHyphenationCallback((word) => [word]);
+import DownloadModal from "./download-modal";
 
-const MyPDFDocument = () => {
-	const resume = useResumeStore((state) => state.resume)!;
-
+const ResumeDocument = () => {
+	const resume = useResumeStore((state) => state.resume);
+	
+	if (!resume) {
+		return (
+			<div className="bg-white font-times text-[10px] leading-tight flex items-center justify-center"
+				style={{
+					width: '210mm',
+					minHeight: '297mm',
+					padding: '48px 64px 16px 64px',
+					margin: '0 auto',
+				}}
+			>
+				<p className="text-base text-gray-500">No resume data available</p>
+			</div>
+		);
+	}
+	
 	const order = resume.order ? resume.order.split(",") : DEFAULT_RESUME_ORDER;
 
 	const sectionComponents: Record<(typeof DEFAULT_RESUME_ORDER)[number], React.ReactNode> = {
@@ -32,64 +43,66 @@ const MyPDFDocument = () => {
 	};
 
 	return (
-		<Document>
-			<Page size="A4" style={styles.page}>
-				<PersonalInfo resume={resume} />
-				<View style={styles.sectionContainer}>
-					{order.map((sectionKey, index) => (
-						<View style={{marginTop: index === 0 ? 0 : 4}} key={sectionKey}>{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}</View>
-					))}
-				</View>
-			</Page>
-		</Document>
+		<div 
+			className="bg-white font-times text-[10px] leading-tight"
+			style={{
+				width: '210mm',
+				minHeight: '297mm',
+				padding: '48px 64px 16px 64px',
+				margin: '0 auto',
+				boxSizing: 'border-box',
+			}}
+		>
+			<PersonalInfo resume={resume} />
+			<div className="flex flex-col gap-[3px]">
+				{order.map((sectionKey, index) => (
+					<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey} className="page-break-inside-avoid">
+						{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}
+					</div>
+				))}
+			</div>
+		</div>
 	);
 };
 
 export const DocumentViewer = () => {
-	const [instance, update] = usePDF({ document: <MyPDFDocument /> });
-	const lastUpdate = useResumeStore((state) => state.lastUpdated);
-
-	useEffect(() => {
-		update(<MyPDFDocument />);
-	}, [lastUpdate]);
-
-	if (!instance.url || instance.loading) return <p>Loading PDF...</p>;
-
-	const url = instance.url;
+	const resume = useResumeStore((state) => state.resume);
+	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
+	
+	const toPDF = useCallback(async () => {
+		if (!resume) {
+			console.error('No resume data available');
+			return;
+		}
+		
+		try {
+			// Generate PDF using react-pdf/renderer
+			const blob = await pdf(<PDFResumeDocument resume={resume} />).toBlob();
+			
+			// Create download link
+			const url = URL.createObjectURL(blob);
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = filename;
+			link.click();
+			
+			// Clean up
+			URL.revokeObjectURL(url);
+		} catch (error) {
+			console.error('Error generating PDF:', error);
+		}
+	}, [filename, resume]);
 
 	return (
 		<>
-			<DownloadModal url={url} />
-			<BrowserView>
-				<iframe src={url} className="h-[100dvh] mt-[1.5rem]" width={"100%"} height={"100%"} frameBorder="0" scrolling="no"></iframe>
-			</BrowserView>
-			<MobileView>
-				<PdfCanvasViewer url={url} />
-			</MobileView>
+			<DownloadModal toPDF={toPDF} />
+			<div className="overflow-auto h-[100dvh] mt-[1.5rem] bg-gray-100">
+				<div className="resume-document">
+					<ResumeDocument />
+				</div>
+			</div>
 		</>
 	);
 };
-
-// <PDFDownloadLink
-// 	key={Date.now()} // Changes every rerender.
-// 	document={<MyDocument />}
-// 	fileName="My lovely PDF">
-// 	Download PDF
-// </PDFDownloadLink>
-const styles = StyleSheet.create({
-	page: {
-		fontFamily: "Times-Roman",
-		fontSize: 10,
-		paddingHorizontal: 64,
-		paddingTop: 48,
-		paddingBottom: 16,
-	},
-
-	sectionContainer: {
-		display: "flex",
-        flexDirection: "column",
-		gap: 3,
-	},
-});
 
 export default DocumentViewer;

@@ -12,7 +12,7 @@ import { enhanceSummaryAction } from "./actions/enhance-summary-action";
 
 const MAX_LENGTH = 1000;
 
-const SummaryForm = ({ form }: { form: UseFormReturn<Partial<TResume>, any, undefined> }) => {
+const SummaryForm = ({ form }: { form: UseFormReturn<Partial<TResume>, any, Partial<TResume>> }) => {
 	const { additionalInfo } = useResumeContext();
 
 	const { getValues, setValue, control } = form;

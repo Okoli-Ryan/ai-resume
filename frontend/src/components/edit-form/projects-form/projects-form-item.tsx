@@ -11,7 +11,7 @@ import FormLayout from "@/app/layouts/form-layout";
 import { BulletPointsForm } from "../bullet-point-form/bullet-point-form";
 
 type ProjectsFormItemProps = {
-	form: UseFormReturn<TResume, any, undefined>;
+	form: UseFormReturn<TResume, any, TResume>;
 	index: number;
 	remove: UseFieldArrayRemove;
 };
