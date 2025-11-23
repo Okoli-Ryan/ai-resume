@@ -13,8 +13,8 @@ const PDFEducation = ({ resume }: { resume: Partial<TResume> }) => {
 	return (
 		<PDFSection title="Education">
 			<View>
-				{educationList.map((education, index) => (
-					<View key={education.id} style={index === 0 ? { marginBottom: 6 } : styles.itemContainer}>
+				{educationList.map((education) => (
+					<View key={education.id} style={styles.itemContainer}>
 						<View style={styles.row}>
 							<Text style={styles.companyName}>{education.schoolName}</Text>
 							<Text style={styles.italic}>

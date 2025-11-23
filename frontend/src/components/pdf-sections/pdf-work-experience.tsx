@@ -13,8 +13,8 @@ const PDFWorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 	return (
 		<PDFSection title="Work Experience">
 			<View>
-				{experiences.map((experience, index) => (
-					<View key={experience.id} style={index === 0 ? { marginBottom: 6 } : styles.itemContainer}>
+				{experiences.map((experience) => (
+					<View key={experience.id} style={styles.itemContainer}>
 						<View style={styles.row}>
 							<Text style={styles.companyName}>{experience.companyName}</Text>
 							<Text style={styles.italic}>{experience.location}</Text>

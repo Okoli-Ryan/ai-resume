@@ -13,8 +13,8 @@ const PDFProjects = ({ resume }: { resume: Partial<TResume> }) => {
 	return (
 		<PDFSection title="Projects">
 			<View>
-				{projects.map((project, index) => (
-					<View key={project.id} style={index === 0 ? { marginBottom: 6 } : styles.itemContainer}>
+				{projects.map((project) => (
+					<View key={project.id} style={styles.itemContainer}>
 						<View style={styles.row}>
 							{project.link && isValidLink(project.link) ? (
 								<Link src={project.link} style={styles.projectLink}>
