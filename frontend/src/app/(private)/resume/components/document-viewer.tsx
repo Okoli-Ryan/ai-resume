@@ -8,7 +8,7 @@ import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
-import { useRef, useCallback } from "react";
+import { useCallback } from "react";
 import html2pdf from "html2pdf.js";
 
 import DownloadModal from "./download-modal";
@@ -67,36 +67,46 @@ const ResumeDocument = () => {
 export const DocumentViewer = () => {
 	const resume = useResumeStore((state) => state.resume);
 	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
-	const targetRef = useRef<HTMLDivElement>(null);
 	
 	const toPDF = useCallback(() => {
-		if (!targetRef.current) return;
+		const element = document.querySelector('.resume-document');
+		if (!element) return;
 		
 		const opt = {
 			margin: 0,
 			filename: filename,
-			image: { type: 'jpeg', quality: 0.98 },
+			image: { type: 'jpeg', quality: 1.0 },
 			html2canvas: { 
-				scale: 2,
+				scale: 4,
 				useCORS: true,
 				letterRendering: true,
+				scrollY: 0,
+				scrollX: 0,
+				windowWidth: element.scrollWidth,
+				windowHeight: element.scrollHeight,
 			},
 			jsPDF: { 
 				unit: 'mm', 
 				format: 'a4', 
 				orientation: 'portrait',
+				compress: false,
 			},
-			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+			pagebreak: { 
+				mode: ['avoid-all', 'css', 'legacy'],
+				before: '.page-break-before',
+				after: '.page-break-after',
+				avoid: '.page-break-inside-avoid'
+			}
 		};
 		
-		html2pdf().set(opt).from(targetRef.current).save();
+		html2pdf().set(opt).from(element).save();
 	}, [filename]);
 
 	return (
 		<>
 			<DownloadModal toPDF={toPDF} />
 			<div className="overflow-auto h-[100dvh] mt-[1.5rem] bg-gray-100">
-				<div ref={targetRef}>
+				<div className="resume-document">
 					<ResumeDocument />
 				</div>
 			</div>
