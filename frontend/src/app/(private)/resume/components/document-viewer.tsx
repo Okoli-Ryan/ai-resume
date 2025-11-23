@@ -49,7 +49,9 @@ export const DocumentViewer = () => {
 	const lastUpdate = useResumeStore((state) => state.lastUpdated);
 
 	// Memoize the document to prevent unnecessary recreations
-	// Include lastUpdate to ensure the document is recreated when the store updates
+	// We intentionally include lastUpdate as a dependency even though it's not used in the function.
+	// This ensures the document is recreated when the store updates, even if the resume reference doesn't change.
+	// This is necessary for nested updates (e.g., adding/updating items in arrays like work experience).
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const document = useMemo(() => <MyPDFDocument resume={resume} />, [resume, lastUpdate]);
 
