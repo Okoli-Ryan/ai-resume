@@ -1,11 +1,7 @@
 import { format } from "date-fns";
-
-import Row from "@/components/row";
-import Section from "@/components/section";
-import { GlobalStyles } from "@/lib/react-pdf";
+import Row from "./row";
+import Section from "./section";
 import { TResume } from "@/types/resume";
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
-
 import BulletPoint from "./bullet-point";
 
 const Education = ({ resume }: { resume: Partial<TResume> }) => {
@@ -14,50 +10,42 @@ const Education = ({ resume }: { resume: Partial<TResume> }) => {
 	if (educationList.length === 0) return null;
 
 	return (
-		<View>
+		<div>
 			<Section title="Education">
-				<View style={styles.experienceList}>
+				<div className="flex flex-col gap-1">
 					{educationList.map((education) => (
-						<View style={{ gap: 3, display: "flex", flexDirection: "column" }}  key={education.id} wrap={false}>
-							<View>
+						<div className="flex flex-col gap-[3px] break-inside-avoid" key={education.id}>
+							<div>
 								<Row>
-									<Text style={GlobalStyles.bold}>
-										<Text style={GlobalStyles.uppercase}>{education.schoolName}</Text>{" "}
-									</Text>
-									<Text style={GlobalStyles.italic}>
+									<span className="font-bold font-times text-[10px]">
+										<span className="uppercase">{education.schoolName}</span>{" "}
+									</span>
+									<span className="italic font-times text-[10px]">
 										{format(new Date(education.startDate as string), "MMM yyyy")} -{" "}
 										{education.isOngoing ? "Present" : format(new Date(education.endDate as string), "MMM yyyy")}
-									</Text>
+									</span>
 								</Row>
 								<Row>
-									<Text style={GlobalStyles.italic}>
+									<span className="italic font-times text-[10px]">
 										{education.degree} {education.fieldOfStudy ? `in ${education.fieldOfStudy}` : ""}
-									</Text>
-									<Text style={GlobalStyles.italic}>{education.location}</Text>
+									</span>
+									<span className="italic font-times text-[10px]">{education.location}</span>
 								</Row>
-							</View>
+							</div>
 
 							{education.bulletPoints.length > 0 && (
-								<View style={{ marginTop: 4, display: "flex", flexDirection: "column",}}>
+								<div className="mt-1 flex flex-col">
 									{education.bulletPoints.map((bulletPoint, index) => (
 										<BulletPoint text={bulletPoint.text} key={index} />
 									))}
-								</View>
+								</div>
 							)}
-						</View>
+						</div>
 					))}
-				</View>
+				</div>
 			</Section>
-		</View>
+		</div>
 	);
 };
-
-const styles = StyleSheet.create({
-	experienceList: {
-		display: "flex",
-		flexDirection: "column",
-		gap: 4,
-	},
-});
 
 export default Education;

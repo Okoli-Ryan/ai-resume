@@ -1,11 +1,7 @@
 import { format } from "date-fns";
-
-import Row from "@/components/row";
-import Section from "@/components/section";
-import { GlobalStyles } from "@/lib/react-pdf";
+import Row from "./row";
+import Section from "./section";
 import { TResume } from "@/types/resume";
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
-
 import BulletPoint from "./bullet-point";
 
 const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
@@ -14,51 +10,42 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 	if (experiences.length === 0) return null;
 
 	return (
-		<View>
+		<div>
 			<Section title="Work Experience">
-				<View style={styles.experienceList}>
+				<div className="flex flex-col gap-1">
 					{experiences.map((experience) => (
-						<View style={{ gap: 3, display: "flex", flexDirection: "column" }} key={experience.id} wrap={false}>
-							<View>
+						<div className="flex flex-col gap-[3px] break-inside-avoid" key={experience.id}>
+							<div>
 								<Row>
-									<Text style={GlobalStyles.bold}>
-										<Text style={GlobalStyles.uppercase}>{experience.companyName}</Text>{" "}
-									</Text>
-									<Text style={GlobalStyles.italic}>{experience.location}</Text>
+									<span className="font-bold font-times text-[10px]">
+										<span className="uppercase">{experience.companyName}</span>{" "}
+									</span>
+									<span className="italic font-times text-[10px]">{experience.location}</span>
 								</Row>
 								<Row>
-									<Text style={GlobalStyles.italic}>
-										{experience.title} {experience.workType && <Text>({experience.workType})</Text>}
-									</Text>
-									<Text style={GlobalStyles.italic}>
+									<span className="italic font-times text-[10px]">
+										{experience.title} {experience.workType && <span>({experience.workType})</span>}
+									</span>
+									<span className="italic font-times text-[10px]">
 										{format(new Date(experience.startDate as string), "MMM yyyy")} -{" "}
 										{experience.isOngoing ? "Present" : format(new Date(experience.endDate as string), "MMM yyyy")}
-									</Text>
+									</span>
 								</Row>
-							</View>
+							</div>
 
-							{/* Bullets */}
 							{experience.bulletPoints.length > 0 && (
-								<View style={{ marginTop: 2, display: "flex", flexDirection: "column",}}>
+								<div className="mt-[2px] flex flex-col">
 									{experience.bulletPoints.map((bulletPoint, index) => (
 										<BulletPoint text={bulletPoint.text} key={index} />
 									))}
-								</View>
+								</div>
 							)}
-						</View>
+						</div>
 					))}
-				</View>
+				</div>
 			</Section>
-		</View>
+		</div>
 	);
 };
-
-const styles = StyleSheet.create({
-	experienceList: {
-		display: "flex",
-        flexDirection: "column",
-		gap: 4,
-	},
-});
 
 export default WorkExperience;

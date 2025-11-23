@@ -1,7 +1,5 @@
-import Section from "@/components/section";
-import { GlobalStyles } from "@/lib/react-pdf";
+import Section from "./section";
 import { TResume } from "@/types/resume";
-import { StyleSheet, Text, View } from "@react-pdf/renderer";
 
 const Skills = ({ resume }: { resume: Partial<TResume> }) => {
 	const skillList = resume?.skills || [];
@@ -9,29 +7,18 @@ const Skills = ({ resume }: { resume: Partial<TResume> }) => {
 	if (skillList.length === 0) return null;
 
 	return (
-		<>
-        <View></View>
-			<View wrap={false}>
-				<Section title="Skills">
-					<View style={styles.container}>
-						{skillList.map((skill) => (
-							<Text key={skill.id} style={GlobalStyles.roman}>
-								<Text style={{ ...GlobalStyles.uppercase, ...GlobalStyles.bold }}>{skill.category}:</Text> {skill.skills.split(",").join(", ")}
-							</Text>
-						))}
-					</View>
-				</Section>
-			</View>
-		</>
+		<div className="break-inside-avoid">
+			<Section title="Skills">
+				<div className="flex flex-col gap-1">
+					{skillList.map((skill) => (
+						<div key={skill.id} className="font-times text-[10px] leading-tight">
+							<span className="uppercase font-bold">{skill.category}:</span> {skill.skills.split(",").join(", ")}
+						</div>
+					))}
+				</div>
+			</Section>
+		</div>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		display: "flex",
-		flexDirection: "column",
-		gap: 4,
-	},
-});
 
 export default Skills;

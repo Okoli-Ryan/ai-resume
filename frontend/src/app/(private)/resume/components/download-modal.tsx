@@ -1,46 +1,33 @@
+"use client";
+
 import { useState } from "react";
+import { usePDF } from "react-to-pdf";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useResumeStore } from "@/store/resume-store";
 import { Download } from "lucide-react";
 
-const DownloadModal = ({ url }: { url: string }) => {
+const DownloadModal = ({ targetRef }: { targetRef: React.RefObject<HTMLDivElement> }) => {
 	const [open, setOpen] = useState(false);
 	const resume = useResumeStore((state) => state.resume);
-
+	
 	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
 
-	// const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-	// 	e.preventDefault();
-	// 	const formData = new FormData(e.currentTarget);
-	// 	const name = formData.get("name") as string;
+	const { toPDF } = usePDF({
+		targetRef,
+		filename,
+		page: { 
+			format: 'A4',
+			margin: 0,
+		}
+	});
 
-	// 	if (!name?.trim()) return;
+	const handleDownload = () => {
+		toPDF();
+		setOpen(false);
+	};
 
-	// 	const currentResumeState = useResumeStore.getState().resume;
-
-	// 	if (!currentResumeState) {
-	// 		toast.error("Please create your resume first");
-	// 		return;
-	// 	}
-
-	// 	startTransition(async () => {
-	// 		currentResumeState.resumeName = name;
-
-	// 		const response = await createResumeAction(currentResumeState);
-
-	// 		if (!response.success) {
-	// 			toast.error(response.message);
-	// 			return;
-	// 		}
-
-	// 		setOpen(false);
-	// 		toast.success("Resume published successfully");
-	// 		clearResumeDraft();
-	// 		router.replace(Routes.editResume(response.data.id));
-	// 	});
-	// };
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
@@ -53,11 +40,11 @@ const DownloadModal = ({ url }: { url: string }) => {
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Get Resume</DialogTitle>
-					<DialogDescription>Download as PDF or Get a link</DialogDescription>
+					<DialogDescription>Download as PDF</DialogDescription>
 				</DialogHeader>
-				<a href={url} download={filename}>
-					<Button type="button">Download as PDF</Button>
-				</a>
+				<Button type="button" onClick={handleDownload}>
+					Download as PDF
+				</Button>
 			</DialogContent>
 		</Dialog>
 	);

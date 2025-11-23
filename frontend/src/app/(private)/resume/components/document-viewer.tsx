@@ -1,26 +1,19 @@
+"use client";
+
 import PersonalInfo from "@/components/sections/personal-info";
 import Summary from "@/components/sections/summary";
 import WorkExperience from "@/components/sections/work-experience";
-import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
-import { useResumeStore } from "@/store/resume-store";
-import { Document, Font, Page, StyleSheet, usePDF, View } from "@react-pdf/renderer";
-import { BrowserView, MobileView } from "react-device-detect";
-
-import DownloadModal from "./download-modal";
-import PdfCanvasViewer from "./pdf-canvas";
-
 import Education from "@/components/sections/education";
 import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
-import { useEffect } from "react";
-import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
+import { useResumeStore } from "@/store/resume-store";
+import { useRef } from "react";
 
-Font.registerHyphenationCallback((word) => [word]);
+import DownloadModal from "./download-modal";
 
-const MyPDFDocument = () => {
+const ResumeDocument = () => {
 	const resume = useResumeStore((state) => state.resume)!;
-
 	const order = resume.order ? resume.order.split(",") : DEFAULT_RESUME_ORDER;
 
 	const sectionComponents: Record<(typeof DEFAULT_RESUME_ORDER)[number], React.ReactNode> = {
@@ -32,64 +25,40 @@ const MyPDFDocument = () => {
 	};
 
 	return (
-		<Document>
-			<Page size="A4" style={styles.page}>
-				<PersonalInfo resume={resume} />
-				<View style={styles.sectionContainer}>
-					{order.map((sectionKey, index) => (
-						<View style={{marginTop: index === 0 ? 0 : 4}} key={sectionKey}>{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}</View>
-					))}
-				</View>
-			</Page>
-		</Document>
+		<div 
+			className="bg-white font-times text-[10px] leading-tight"
+			style={{
+				width: '210mm',
+				minHeight: '297mm',
+				padding: '48px 64px 16px 64px',
+				margin: '0 auto',
+			}}
+		>
+			<PersonalInfo resume={resume} />
+			<div className="flex flex-col gap-[3px]">
+				{order.map((sectionKey, index) => (
+					<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey}>
+						{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}
+					</div>
+				))}
+			</div>
+		</div>
 	);
 };
 
 export const DocumentViewer = () => {
-	const [instance, update] = usePDF({ document: <MyPDFDocument /> });
-	const lastUpdate = useResumeStore((state) => state.lastUpdated);
-
-	useEffect(() => {
-		update(<MyPDFDocument />);
-	}, [lastUpdate]);
-
-	if (!instance.url || instance.loading) return <p>Loading PDF...</p>;
-
-	const url = instance.url;
+	const targetRef = useRef<HTMLDivElement>(null);
 
 	return (
 		<>
-			<DownloadModal url={url} />
-			<BrowserView>
-				<iframe src={url} className="h-[100dvh] mt-[1.5rem]" width={"100%"} height={"100%"} frameBorder="0" scrolling="no"></iframe>
-			</BrowserView>
-			<MobileView>
-				<PdfCanvasViewer url={url} />
-			</MobileView>
+			<DownloadModal targetRef={targetRef} />
+			<div className="overflow-auto h-[100dvh] mt-[1.5rem] bg-gray-100">
+				<div ref={targetRef}>
+					<ResumeDocument />
+				</div>
+			</div>
 		</>
 	);
 };
-
-// <PDFDownloadLink
-// 	key={Date.now()} // Changes every rerender.
-// 	document={<MyDocument />}
-// 	fileName="My lovely PDF">
-// 	Download PDF
-// </PDFDownloadLink>
-const styles = StyleSheet.create({
-	page: {
-		fontFamily: "Times-Roman",
-		fontSize: 10,
-		paddingHorizontal: 64,
-		paddingTop: 48,
-		paddingBottom: 16,
-	},
-
-	sectionContainer: {
-		display: "flex",
-        flexDirection: "column",
-		gap: 3,
-	},
-});
 
 export default DocumentViewer;

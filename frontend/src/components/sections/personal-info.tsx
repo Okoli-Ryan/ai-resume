@@ -1,111 +1,67 @@
 import { TResume } from "@/types/resume";
-import { Link, StyleSheet, Text, View } from "@react-pdf/renderer";
 
 const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 	return (
-		<View>
-			<>
-				<Text style={[styles.headerText, { fontFamily: "Times-Bold" }]}>
-					{resume?.userName} {resume?.role ? `- ${resume?.role}` : ""}
-				</Text>
-				<View style={styles.personalInfo}>
-					<Text>
-						{resume?.address ? (
-							<>
-								<Text style={styles.personalInfoText}>{resume?.address}</Text> |
-							</>
-						) : (
-							""
-						)}
-
-						{resume?.phoneNumber ? (
-							<>
-								<Text>
-									{" "}
-									<Link src={`tel:${resume?.phoneNumber}`} style={styles.personalInfoText}>
-										{resume?.phoneNumber}
-									</Link>{" "}
-								</Text>
-								|
-							</>
-						) : (
-							""
-						)}
-						{resume?.email ? (
-							<>
-								<Text>
-									{" "}
-									<Link src={`mailto:${resume?.email}`} style={styles.personalInfoText}>
-										{resume?.email}
-									</Link>{" "}
-								</Text>
-								|
-							</>
-						) : (
-							""
-						)}
-						{resume?.linkedinUrl ? (
-							<>
-								{" "}
-								<Text>
-									<Link src={resume?.linkedinUrl} style={styles.personalInfoText}>
-										LinkedIn
-									</Link>{" "}
-								</Text>
-								|
-							</>
-						) : (
-							""
-						)}
-						{resume?.githubUrl ? (
-							<>
-								<Text>
-									{" "}
-									<Link src={resume?.githubUrl} style={styles.personalInfoText}>
-										Github
-									</Link>{" "}
-								</Text>
-								|
-							</>
-						) : (
-							""
-						)}
-						{resume?.portfolioUrl ? (
-							<>
-								<Text>
-									{" "}
-									<Link src={resume?.portfolioUrl} style={styles.personalInfoText}>
-										Portfolio
-									</Link>{" "}
-								</Text>
-								|
-							</>
-						) : (
-							""
-						)}
-					</Text>
-				</View>
-			</>
-		</View>
+		<div>
+			<h1 className="text-[18px] text-center font-bold font-times">
+				{resume?.userName} {resume?.role ? `- ${resume?.role}` : ""}
+			</h1>
+			<div className="flex justify-center text-center pt-2 font-times text-[10px]">
+				<div>
+					{resume?.address && (
+						<>
+							<span>{resume?.address}</span> |
+						</>
+					)}
+					{resume?.phoneNumber && (
+						<>
+							{" "}
+							<a href={`tel:${resume?.phoneNumber}`} className="text-inherit">
+								{resume?.phoneNumber}
+							</a>{" "}
+							|
+						</>
+					)}
+					{resume?.email && (
+						<>
+							{" "}
+							<a href={`mailto:${resume?.email}`} className="text-inherit">
+								{resume?.email}
+							</a>{" "}
+							|
+						</>
+					)}
+					{resume?.linkedinUrl && (
+						<>
+							{" "}
+							<a href={resume?.linkedinUrl} className="text-inherit">
+								LinkedIn
+							</a>{" "}
+							|
+						</>
+					)}
+					{resume?.githubUrl && (
+						<>
+							{" "}
+							<a href={resume?.githubUrl} className="text-inherit">
+								Github
+							</a>{" "}
+							|
+						</>
+					)}
+					{resume?.portfolioUrl && (
+						<>
+							{" "}
+							<a href={resume?.portfolioUrl} className="text-inherit">
+								Portfolio
+							</a>{" "}
+							|
+						</>
+					)}
+				</div>
+			</div>
+		</div>
 	);
 };
-
-const styles = StyleSheet.create({
-	personalInfo: {
-		justifyContent: "center",
-		textAlign: "center",
-		paddingTop: 8,
-		fontFamily: "Times-Roman",
-	},
-	personalInfoText: {
-		fontFamily: "Times-Roman",
-	},
-	headerText: {
-		fontFamily: "Times-Roman",
-		fontSize: 18,
-		textAlign: "center",
-		fontWeight: 700,
-	},
-});
 
 export default PersonalInfo;

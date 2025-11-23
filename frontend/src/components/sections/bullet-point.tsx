@@ -1,29 +1,10 @@
-import { HtmlToPdfText } from "@/lib/react-pdf";
-import { StyleSheet, View } from "@react-pdf/renderer";
-
 const BulletPoint = ({ text }: { text: string }) => {
 	return (
-		<View wrap={false} style={styles.bulletPoint}>
-			<View style={styles.bullet}></View>
-			<HtmlToPdfText html={text} />
-		</View>
+		<div className="flex flex-row gap-1 break-inside-avoid">
+			<div className="w-1 h-1 rounded-full relative top-[4px] bg-black flex-shrink-0"></div>
+			<div className="font-times text-[10px] leading-tight" dangerouslySetInnerHTML={{ __html: text }} />
+		</div>
 	);
 };
-
-const styles = StyleSheet.create({
-	bulletPoint: {
-		display: "flex",
-		flexDirection: "row",
-		gap: 4,
-	},
-	bullet: {
-		width: 4,
-		height: 4,
-		borderRadius: 99999,
-		position: "relative",
-		top: 4,
-		backgroundColor: "black",
-	},
-});
 
 export default BulletPoint;
