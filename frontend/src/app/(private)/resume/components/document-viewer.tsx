@@ -70,12 +70,15 @@ export const DocumentViewer = () => {
 	
 	const toPDF = useCallback(() => {
 		const element = document.querySelector('.resume-document');
-		if (!element) return;
+		if (!element) {
+			console.error('Resume document element not found');
+			return;
+		}
 		
 		const opt = {
 			margin: 0,
 			filename: filename,
-			image: { type: 'jpeg', quality: 1.0 },
+			image: { type: 'png', quality: 1.0 },
 			html2canvas: { 
 				scale: 4,
 				useCORS: true,
