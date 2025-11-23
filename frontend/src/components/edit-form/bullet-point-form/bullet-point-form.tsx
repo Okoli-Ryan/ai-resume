@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { FormLabel } from "@/components/ui/form";
 import { EnhanceTypes } from "@/types/common";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
-import { ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { useResumeContext } from "../resume-info-form/context/resume-context";
 import { enhanceBulletpointListAction } from "./actions/enhance-bullet-point-list-action";
@@ -78,12 +78,12 @@ export function BulletPointsForm<T extends FieldValues>({ form, name, enhanceTyp
 				contentProps={{ className: "transition-all duration-200 ease-in-out" }}
 				header={
 					<>
-						<FormLabel className="cursor-pointer">Toggle Bullet Points</FormLabel>
+						<FormLabel className="cursor-pointer">Bullet Points</FormLabel>
 						<ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
 					</>
 				}>
 				<div className="space-y-4 mt-4">
-					<div className="grid grid-cols-2 gap-3">
+					<div className="grid md:grid-cols-2 gap-3">
 						{enhanceType && (
 							<Button loading={isPending} variant="outline" type="button" onClick={enhanceBulletPoints} className="w-full">
 								Generate With AI
@@ -91,7 +91,8 @@ export function BulletPointsForm<T extends FieldValues>({ form, name, enhanceTyp
 						)}
 						{bulletPointsList.length > 1 && (
 							<Button disabled={isPending} variant="outline" type="button" onClick={() => setInSortMode(!inSortMode)} className="w-full">
-								Toggle Sort Mode
+								Sort
+                                <ArrowUpDown/>
 							</Button>
 						)}
 						<Button variant="secondary" type="button" disabled={isPending} onClick={handlePrepend} className="w-full">

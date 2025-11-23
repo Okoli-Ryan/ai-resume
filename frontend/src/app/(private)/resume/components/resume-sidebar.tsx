@@ -7,7 +7,7 @@ import { ResumeFormSections } from "@/lib/react-pdf";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import { memo } from "react";
 
-const Sidebar = () => {
+const ResumeSidebar = () => {
 	return (
 		<ResumeProvider>
 			<Sheet>
@@ -16,7 +16,7 @@ const Sidebar = () => {
 						<PanelRight />
 					</Button>
 				</SheetTrigger>
-				<SheetContent className="md:max-w-[600px]">
+				<SheetContent className="w-[calc(100vw-1.5rem)] md:max-w-[600px]">
 					<SheetHeader>
 						<SheetTitle>Update details</SheetTitle>
 						<SheetDescription>Make changes to your resume here. Click save when you&apos;re done.</SheetDescription>
@@ -32,7 +32,7 @@ const Sidebar = () => {
 									key={ResumeForm.displayName}
 									header={
 										<>
-											<h2 className="text-base font-semibold">{ResumeForm.displayName}</h2>
+											<h2 className="text-sm md:text-base font-semibold">{ResumeForm.displayName}</h2>
 											<ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
 										</>
 									}>
@@ -47,4 +47,4 @@ const Sidebar = () => {
 	);
 };
 
-export default memo(Sidebar);
+export default memo(ResumeSidebar);

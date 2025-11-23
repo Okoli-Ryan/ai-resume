@@ -9,7 +9,7 @@ const ResumeTags = ({ tags }: { tags: string | undefined }) => {
 		.filter(Boolean);
 
 	return (
-		<div className="flex flex-wrap gap-1 max-w-[12rem]">
+		<div className="flex flex-wrap gap-1 max-w-80">
 			{tagList.map((tag, index) => {
 				const colors = getColorFromText(tag);
 				return (

@@ -1,17 +1,10 @@
-import { Star } from 'lucide-react';
+import { auth } from "@/auth";
+import { isCustomError } from "@/lib/utils";
+import { getMinimalResumesByUserId } from "@/services/resume/get-minimal-resume-list";
 
-import { auth } from '@/auth';
-import {
-    Table, TableBody, TableCell, TableHead, TableHeader, TableRow
-} from '@/components/ui/table';
-import { cn, isCustomError } from '@/lib/utils';
-import { getMinimalResumesByUserId } from '@/services/resume/get-minimal-resume-list';
-
-import CreateResumeButton from './components/create-resume-button';
-import DuplicateResumeButton from './components/duplicate-resume-button';
-import ImportResumeButton from './components/import-resume-button';
-import ResumeTags from './components/resume-tags';
-import ViewResumeButton from './components/view-resume-button';
+import CreateResumeButton from "./components/create-resume-button";
+import ImportResumeButton from "./components/import-resume-button";
+import ResumeTable from "./components/resume-table";
 
 const Home = async () => {
 	const session = await auth();
@@ -22,14 +15,19 @@ const Home = async () => {
 	if (isCustomError(resumes)) return <div className="text-red-500">Error loading resumes: {resumes.message}</div>;
 
 	return (
-		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-3xl font-bold mb-6">Resumes</h1>
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-				{/* <ContinueDraftButton /> */}
-				<CreateResumeButton />
-                <ImportResumeButton />
+		<div className="w-full px-4 sm:px-6 lg:px-8 py-8 ">
+			<div className="mb-8">
+				<h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+				<p className="text-gray-600">Manage your resumes and create professional CVs</p>
 			</div>
-			<div className="rounded-lg border mt-4">
+			<div className="flex flex-col sm:flex-row gap-4 mb-8">
+				<CreateResumeButton />
+				<ImportResumeButton />
+			</div>
+			<div className="w-full overflow-x-auto">
+				<ResumeTable resumes={resumes} isLoading={false} />
+			</div>
+			{/* <div className="rounded-lg border mt-4">
 				<Table>
 					<TableHeader>
 						<TableRow>
@@ -64,7 +62,7 @@ const Home = async () => {
 						))}
 					</TableBody>
 				</Table>
-			</div>
+			</div> */}
 		</div>
 	);
 };

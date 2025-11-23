@@ -12,7 +12,7 @@ import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
 
-import { Card, CardContent } from "@/components/ui/card";
+import FormLayout from "@/app/layouts/form-layout";
 import SummaryForm from "../summary-form/summary-form";
 import { updatePersonalInfoAction } from "./actions/update-personal-info-action";
 
@@ -60,61 +60,59 @@ const PersonalInfoForm = () => {
 	};
 
 	return (
-		<Card>
-			<CardContent className="py-4 flex flex-col gap-4">
-				<FormProvider {...form}>
-					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-						<div>
-							<Label htmlFor="name">Name</Label>
-							<Input id="name" {...register("userName")} />
-							<ErrorLabel control={control} name="userName" />
-						</div>
+		<FormLayout>
+			<FormProvider {...form}>
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+					<div>
+						<Label htmlFor="name">Name</Label>
+						<Input id="name" {...register("userName")} />
+						<ErrorLabel control={control} name="userName" />
+					</div>
 
-						<div>
-							<Label htmlFor="email">Email</Label>
-							<Input id="email" type="email" {...register("email")} />
-							<ErrorLabel control={control} name="email" />
-						</div>
-						<div>
-							<Label htmlFor="phoneNumber">Phone Number</Label>
-							<Input id="phoneNumber" {...register("phoneNumber")} />
-							<ErrorLabel control={control} name="phoneNumber" />
-						</div>
-						<div>
-							<Label htmlFor="githubUrl">GitHub URL</Label>
-							<Input id="githubUrl" {...register("githubUrl")} />
-							<ErrorLabel control={control} name="githubUrl" />
-						</div>
-						<div>
-							<Label htmlFor="linkedinUrl">LinkedIn URL</Label>
-							<Input id="linkedinUrl" {...register("linkedinUrl")} />
-							<ErrorLabel control={control} name="linkedinUrl" />
-						</div>
+					<div>
+						<Label htmlFor="email">Email</Label>
+						<Input id="email" type="email" {...register("email")} />
+						<ErrorLabel control={control} name="email" />
+					</div>
+					<div>
+						<Label htmlFor="phoneNumber">Phone Number</Label>
+						<Input id="phoneNumber" {...register("phoneNumber")} />
+						<ErrorLabel control={control} name="phoneNumber" />
+					</div>
+					<div>
+						<Label htmlFor="githubUrl">GitHub URL</Label>
+						<Input id="githubUrl" {...register("githubUrl")} />
+						<ErrorLabel control={control} name="githubUrl" />
+					</div>
+					<div>
+						<Label htmlFor="linkedinUrl">LinkedIn URL</Label>
+						<Input id="linkedinUrl" {...register("linkedinUrl")} />
+						<ErrorLabel control={control} name="linkedinUrl" />
+					</div>
 
-						<SummaryForm form={form} />
+					<SummaryForm form={form} />
 
-						<div>
-							<Label htmlFor="portfolioUrl">Portfolio URL</Label>
-							<Input id="portfolioUrl" {...register("portfolioUrl")} />
-							<ErrorLabel control={control} name="portfolioUrl" />
-						</div>
-						<div>
-							<Label htmlFor="location">Location</Label>
-							<Input id="location" {...register("address")} />
-							<ErrorLabel control={control} name="address" />
-						</div>
-						<div>
-							<Label htmlFor="role">Role</Label>
-							<Input id="role" {...register("role")} />
-							<ErrorLabel control={control} name="role" />
-						</div>
-						<Button type="submit" className="w-full" disabled={isPending}>
-							{isPending ? "Submitting..." : "Update"}
-						</Button>
-					</form>
-				</FormProvider>
-			</CardContent>
-		</Card>
+					<div>
+						<Label htmlFor="portfolioUrl">Portfolio URL</Label>
+						<Input id="portfolioUrl" {...register("portfolioUrl")} />
+						<ErrorLabel control={control} name="portfolioUrl" />
+					</div>
+					<div>
+						<Label htmlFor="location">Location</Label>
+						<Input id="location" {...register("address")} />
+						<ErrorLabel control={control} name="address" />
+					</div>
+					<div>
+						<Label htmlFor="role">Role</Label>
+						<Input id="role" {...register("role")} />
+						<ErrorLabel control={control} name="role" />
+					</div>
+					<Button type="submit" className="w-full" disabled={isPending}>
+						{isPending ? "Submitting..." : "Update"}
+					</Button>
+				</form>
+			</FormProvider>
+		</FormLayout>
 	);
 };
 

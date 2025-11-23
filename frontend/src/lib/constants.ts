@@ -7,3 +7,4 @@ export const ErrorMessage = {
 };
 
 export const DEFAULT_RESUME_ORDER = ["summary", "workExperience", "education", "projects", "skills"] as const;
+

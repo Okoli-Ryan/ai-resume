@@ -6,6 +6,7 @@ import { TResume } from '@/types/resume';
 export type TResumeStore = {
 	resume: Partial<TResume> | null;
 	resumeDraft: Partial<TResume> | null;
+    lastUpdated: number;
 	update: (resume: Partial<TResume>) => void;
 	updateDraft: (resume: Partial<TResume> | null) => void;
 	clear: () => void;
@@ -18,9 +19,11 @@ export const useResumeStore = create<TResumeStore>()(
 			(set) => ({
 				resume: null,
 				resumeDraft: null,
+                lastUpdated: Date.now(),
 				update: (resume) =>
 					set((state) => ({
 						resume: { ...state.resume, ...resume },
+                        lastUpdated: Date.now(),
 					})),
 				updateDraft: (resume) =>
 					set((state) => ({

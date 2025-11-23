@@ -2,37 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-	font-family: "Sora", Helvetica, sans-serif;
-}
-
 @layer base {
+    
+    * {
+        font-family: "Sora", Helvetica, sans-serif;
+    }
+
+	body {
+		@apply bg-background text-foreground;
+	}
+
 	:root {
-		--background: 0 0% 100%;
-		--foreground: 0 0% 3.9%;
-		--card: 0 0% 100%;
-		--card-foreground: 0 0% 3.9%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 0 0% 3.9%;
-		--primary: 0 0% 9%;
-		--primary-foreground: 0 0% 98%;
-		--secondary: 0 0% 96.1%;
-		--secondary-foreground: 0 0% 9%;
-		--muted: 0 0% 96.1%;
-		--muted-foreground: 0 0% 45.1%;
-		--accent: 0 0% 96.1%;
-		--accent-foreground: 0 0% 9%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 0 0% 89.8%;
-		--input: 0 0% 89.8%;
-		--ring: 0 0% 3.9%;
-		--chart-1: 12 76% 61%;
-		--chart-2: 173 58% 39%;
-		--chart-3: 197 37% 24%;
-		--chart-4: 43 74% 66%;
-		--chart-5: 27 87% 67%;
+		--background: hsl(0 0% 100%);
+		--foreground: hsl(0 0% 3.9%);
+		--card: hsl(0 0% 100%);
+		--card-foreground: hsl(0 0% 3.9%);
+		--popover: hsl(0 0% 100%);
+		--popover-foreground: hsl(0 0% 3.9%);
+		--primary: hsl(207, 90%, 54%);
+		--primary-foreground: hsl(210, 40%, 98%);
+		--secondary: hsl(210, 40%, 96%);
+		--secondary-foreground: hsl(222, 84%, 4.9%);
+		--accent: hsl(210, 40%, 96%);
+		--accent-foreground: hsl(222, 84%, 4.9%);
+		--destructive: hsl(0, 84.2%, 60.2%);
+		--destructive-foreground: hsl(60, 9.1%, 97.8%);
+		--ring: hsl(207, 90%, 54%);
 		--radius: 0.5rem;
+		--muted: hsl(0, 0%, 96.1%);
+		--muted-foreground: hsl(0, 0%, 45.1%);
+		--border: hsl(0, 0%, 89.8%);
+		--input: hsl(0, 0%, 89.8%);
+		--ring: hsl(0, 0%, 3.9%);
+		--chart-1: hsl(12, 76%, 61%);
+		--chart-2: hsl(173, 58%, 39%);
+		--chart-3: hsl(197, 37%, 24%);
+		--chart-4: hsl(43, 74%, 66%);
+		--chart-5: hsl(27, 87%, 67%);
 	}
 	.dark {
 		--background: 0 0% 3.9%;
@@ -62,43 +68,37 @@ body {
 	}
 }
 
-@layer base {
-	* {
-		@apply border-border;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
-}
-
-@layer base {
-	* {
-		@apply border-border outline-ring/50;
-	}
-	body {
-		@apply bg-background text-foreground;
-	}
-}
-
 .drag-ghost {
-  @apply opacity-40 bg-gray-100;
+	@apply opacity-40 bg-gray-100;
 }
 
 .drag-chosen {
-  background-color: #dbeafe !important;
+	background-color: #dbeafe !important;
 }
 
 .drag-drag {
-  background-color: #bfdbfe !important;
+	background-color: #bfdbfe !important;
 }
 
 @keyframes shake-anim {
-  0% { transform: scale(1) rotate(0deg); }
-  20% { transform: scale(1.01) rotate(-0.2deg); }
-  40% { transform: scale(1.01) rotate(0.2deg); }
-  60% { transform: scale(1.01) rotate(-0.1deg); }
-  80% { transform: scale(1.01) rotate(0.1deg); }
-  100% { transform: scale(1) rotate(0deg); }
+	0% {
+		transform: scale(1) rotate(0deg);
+	}
+	20% {
+		transform: scale(1.01) rotate(-0.2deg);
+	}
+	40% {
+		transform: scale(1.01) rotate(0.2deg);
+	}
+	60% {
+		transform: scale(1.01) rotate(-0.1deg);
+	}
+	80% {
+		transform: scale(1.01) rotate(0.1deg);
+	}
+	100% {
+		transform: scale(1) rotate(0deg);
+	}
 }
 /* 
 .shake {
@@ -107,5 +107,5 @@ body {
 
 /* Subtle breathing effect for draggable items */
 .shake {
-  animation: shake-anim 2s ease-in-out infinite;
+	animation: shake-anim 2s ease-in-out infinite;
 }

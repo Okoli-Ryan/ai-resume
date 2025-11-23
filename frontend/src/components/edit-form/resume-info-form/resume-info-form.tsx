@@ -12,7 +12,7 @@ import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
 
-import { Card, CardContent } from "@/components/ui/card";
+import FormLayout from "@/app/layouts/form-layout";
 import { updateResumeInfoAction } from "./actions/update-resume-info-action";
 import { useResumeContext } from "./context/resume-context";
 
@@ -63,28 +63,26 @@ const ResumeInfoForm = () => {
 	};
 
 	return (
-		<Card>
-			<CardContent className="py-4 flex flex-col gap-4">
-				<Form {...form}>
-					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-						<FormItem>
-							<FormLabel>Resume Name</FormLabel>
-							<FormControl>
-								<Input {...register("resumeName")} />
-							</FormControl>
-							{errors.resumeName && <FormMessage>{errors.resumeName.message}</FormMessage>}
-						</FormItem>
-						<TagsInputForm form={form} name={`tags`} label="Tags" placeholder="Enter a tag and press Enter" />
+		<FormLayout>
+			<Form {...form}>
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+					<FormItem>
+						<FormLabel>Resume Name</FormLabel>
 						<FormControl>
-							<Textarea defaultValue={additionalInfo.jobDescription} ref={jobDescriptionRef} placeholder="Enter Job Description" />
+							<Input {...register("resumeName")} />
 						</FormControl>
-						<Button loading={isPending} type="submit" className="w-full">
-							Update
-						</Button>
-					</form>
-				</Form>
-			</CardContent>
-		</Card>
+						{errors.resumeName && <FormMessage>{errors.resumeName.message}</FormMessage>}
+					</FormItem>
+					<TagsInputForm form={form} name={`tags`} label="Tags" placeholder="Enter a tag and press Enter" />
+					<FormControl>
+						<Textarea defaultValue={additionalInfo.jobDescription} ref={jobDescriptionRef} placeholder="Enter Job Description" />
+					</FormControl>
+					<Button loading={isPending} type="submit" className="w-full">
+						Update
+					</Button>
+				</form>
+			</Form>
+		</FormLayout>
 	);
 };
 

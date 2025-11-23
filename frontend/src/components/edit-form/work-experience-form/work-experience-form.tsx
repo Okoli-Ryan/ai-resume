@@ -12,7 +12,7 @@ import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
-import { GripVertical } from "lucide-react";
+import { ArrowUpDown, GripVertical } from "lucide-react";
 import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { updateWorkExperienceListAction } from "./actions/update-work-experience-list-action";
@@ -61,10 +61,11 @@ const WorkExperienceForm = () => {
 	return (
 		<Form {...form}>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-				<div className="grid grid-cols-2 gap-3">
+				<div className="grid md:grid-cols-2 gap-3">
 					{workExperienceList.length > 1 && (
 						<Button disabled={isPending} variant="outline" type="button" onClick={() => setInSortMode(!inSortMode)} className="w-full">
-							Toggle Sort Mode
+							Sort
+							<ArrowUpDown />
 						</Button>
 					)}
 				</div>
@@ -78,7 +79,7 @@ const WorkExperienceForm = () => {
 						delay={2}
 						className="space-y-3">
 						{workExperienceList.map((field) => (
-                                    <div key={field.id} className={cn("bg-white p-2 border rounded-md flex items-center justify-between", inSortMode && "shake")}>
+							<div key={field.id} className={cn("bg-white p-2 border rounded-md flex items-center justify-between", inSortMode && "shake")}>
 								<span className="capitalize text-sm">{field.companyName}</span>
 								<GripVertical className="text-sm drag-handle cursor-grab text-gray-500" />
 							</div>

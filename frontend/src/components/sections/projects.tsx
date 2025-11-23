@@ -13,11 +13,11 @@ const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 	if (projects.length === 0) return null;
 
 	return (
-		<View wrap={false}>
+		<View>
 			<Section title="Projects">
 				<View style={styles.experienceList}>
-					{projects.map((project) => (
-						<View style={{ gap: 4 }} key={project.id} wrap={false}>
+					{projects.map((project, index) => (
+						<View style={{ display: "flex", flexDirection: "column", marginTop: index === 0 ? 0 : 4 }} key={project.id} wrap={false}>
 							<View>
 								<Row>
 									<Text style={GlobalStyles.bold}>
@@ -26,7 +26,7 @@ const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 												{project.name}
 											</Link>
 										) : (
-											<Text style={GlobalStyles.bold}>{project.name}</Text>
+											<Text style={[GlobalStyles.bold, GlobalStyles.uppercase]}>{project.name}</Text>
 										)}
 									</Text>
 								</Row>
@@ -34,7 +34,7 @@ const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 
 							{/* Bullets */}
 							{project.bulletPoints.length > 0 && (
-								<View style={{ marginTop: 4 }}>
+								<View style={{ marginTop: 4, display: "flex", flexDirection: "column",}}>
 									{project.bulletPoints.map((bulletPoint, index) => (
 										<BulletPoint text={bulletPoint.text} key={index} />
 									))}
@@ -51,7 +51,8 @@ const Projects = ({ resume }: { resume: Partial<TResume> }) => {
 const styles = StyleSheet.create({
 	experienceList: {
 		display: "flex",
-		gap: 4,
+		flexDirection: "column",
+		gap: 6,
 	},
 });
 export default Projects;

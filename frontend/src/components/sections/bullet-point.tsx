@@ -3,7 +3,7 @@ import { StyleSheet, View } from "@react-pdf/renderer";
 
 const BulletPoint = ({ text }: { text: string }) => {
 	return (
-		<View style={styles.bulletPoint}>
+		<View wrap={false} style={styles.bulletPoint}>
 			<View style={styles.bullet}></View>
 			<HtmlToPdfText html={text} />
 		</View>
@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		gap: 4,
-		marginTop: -4,
 	},
 	bullet: {
 		width: 4,

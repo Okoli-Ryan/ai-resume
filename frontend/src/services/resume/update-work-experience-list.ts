@@ -12,9 +12,9 @@ export const updateWorkExperienceList = async (payload: UpdateWorkExperienceList
 export const UpdateWorkExperienceListSchema = z.array(
 	z.object({
 		companyName: z.string().optional(),
-		companyLink: z.string().optional(),
+		companyLink: z.string().nullable().optional(),
 		title: z.string().optional(),
-		location: z.string().optional(),
+		location: z.string().nullable().optional(),
 		startDate: z.string().optional(),
 		workType: z.string().nullable().optional(),
 		endDate: z.string().optional(),

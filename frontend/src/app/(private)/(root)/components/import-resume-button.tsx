@@ -1,6 +1,6 @@
 "use client";
 
-import { LoaderCircle } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useRouter } from "nextjs-toploader/app";
 import { ChangeEvent, useTransition } from "react";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ const ImportResumeButton = () => {
 
 		const file = files[0];
 
-        const fileBase64 = await fileToBase64(file);
+		const fileBase64 = await fileToBase64(file);
 
 		startTransition(async () => {
 			const response = await importResumeAction(fileBase64);
@@ -39,22 +39,13 @@ const ImportResumeButton = () => {
 	};
 
 	return (
-		<div className="relative group">
-			<div className="h-40 bg-gray-200 rounded-lg flex items-center justify-center p-4">
-				<label className="cursor-pointer relative">
-					{isPending ? (
-						<Button disabled variant="ghost" className="pointer-events-none">
-							<LoaderCircle className="h-5 w-5 animate-spin" />
-						</Button>
-					) : (
-						<Button asChild variant="ghost">
-							<span>Import Resume</span>
-						</Button>
-					)}
-					<Input type="file" accept="application/pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-				</label>
-			</div>
-		</div>
+		<label className="cursor-pointer relative">
+			<Button loading={isPending} variant="outline" className="flex-1 sm:flex-initial font-medium py-3 px-6 shadow-sm">
+				<Upload className="w-4 h-4 mr-2" />
+				Import Resume
+			</Button>
+			<Input type="file" accept="application/pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+		</label>
 	);
 };
 

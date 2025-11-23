@@ -35,7 +35,7 @@ const Tag = ({ onRemove, onUpdate, value }: TagProps) => {
 	};
 
 	return (
-		<div ref={wrapperRef} className="bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 text-sm font-medium flex items-center gap-2 mt-2">
+		<div ref={wrapperRef} className="bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1 text-xs md:text-sm font-medium flex items-center gap-2 mt-2">
 			{isEditing ? (
 				<Input
 					value={inputValue}

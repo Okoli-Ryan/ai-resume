@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		textAlign: "center",
 		paddingTop: 8,
-		marginBottom: 4,
 		fontFamily: "Times-Roman",
 	},
 	personalInfoText: {

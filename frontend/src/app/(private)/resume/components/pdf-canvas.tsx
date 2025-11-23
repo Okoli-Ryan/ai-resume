@@ -1,5 +1,6 @@
 "use client";
 
+import { useResumeStore } from "@/store/resume-store";
 import { getDocument, GlobalWorkerOptions, PDFPageProxy } from "pdfjs-dist";
 import "pdfjs-dist/build/pdf.worker.mjs";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +14,7 @@ export default function PdfCanvasViewer({ url }: Props) {
 	const [numPages, setNumPages] = useState(0);
 	const canvasRefs = useRef<HTMLCanvasElement[]>([]);
 	const pdfInstance = useRef<any>(null);
+    const lastUpdated = useResumeStore(state => state.lastUpdated)
 
 	useEffect(() => {
 		let isCancelled = false;
@@ -34,7 +36,7 @@ export default function PdfCanvasViewer({ url }: Props) {
 		return () => {
 			isCancelled = true;
 		};
-	}, [url]);
+	}, [url, lastUpdated]);
 
 	useEffect(() => {
 		if (!pdfInstance.current || canvasRefs.current.length !== numPages) return;
@@ -58,10 +60,10 @@ export default function PdfCanvasViewer({ url }: Props) {
 		};
 
 		renderPages();
-	}, [numPages]);
+	}, [numPages, lastUpdated]);
 
 	return (
-		<div>
+		<div key={lastUpdated}>
 			{Array.from({ length: numPages }, (_, i) => (
 				<canvas
 					key={i}

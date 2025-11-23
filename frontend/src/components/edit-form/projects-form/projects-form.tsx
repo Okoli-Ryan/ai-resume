@@ -11,7 +11,7 @@ import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
-import { GripVertical } from "lucide-react";
+import { ArrowUpDown, GripVertical } from "lucide-react";
 import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { updateProjectListAction } from "./actions/update-project-list-action";
@@ -60,10 +60,11 @@ export const ProjectForm = () => {
 	return (
 		<Form {...form}>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-				<div className="grid grid-cols-2 gap-3">
+				<div className="grid md:grid-cols-2 gap-3">
 					{projectsList.length > 1 && (
 						<Button disabled={isPending} variant="outline" type="button" onClick={() => setInSortMode(!inSortMode)} className="w-full">
-							Toggle Sort Mode
+							Sort
+							<ArrowUpDown />
 						</Button>
 					)}
 				</div>

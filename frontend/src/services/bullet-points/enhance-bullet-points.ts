@@ -13,9 +13,10 @@ export const EnhanceBulletPointListSchema = z.object({
 	bulletPoints: z.array(z.string().min(1, { message: "All bullet points must have a value" })),
 	additionalInfo: z
 		.object({
-			jobDescription: z.string().optional(),
-			role: z.string().optional(),
-			tags: z.string().optional(),
+			jobDescription: z.string().nullable().optional(),
+			role: z.string().nullable().optional(),
+			tags: z.string().nullable().optional(),
 		})
+        .nullable()
 		.optional(),
 });

@@ -1,12 +1,12 @@
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
-import Row from '@/components/row';
-import Section from '@/components/section';
-import { GlobalStyles } from '@/lib/react-pdf';
-import { TResume } from '@/types/resume';
-import { StyleSheet, Text, View } from '@react-pdf/renderer';
+import Row from "@/components/row";
+import Section from "@/components/section";
+import { GlobalStyles } from "@/lib/react-pdf";
+import { TResume } from "@/types/resume";
+import { StyleSheet, Text, View } from "@react-pdf/renderer";
 
-import BulletPoint from './bullet-point';
+import BulletPoint from "./bullet-point";
 
 const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 	const experiences = resume?.workExperience || [];
@@ -18,7 +18,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 			<Section title="Work Experience">
 				<View style={styles.experienceList}>
 					{experiences.map((experience) => (
-						<View style={{ gap: 4 }} key={experience.id} wrap={false}>
+						<View style={{ gap: 3, display: "flex", flexDirection: "column" }} key={experience.id} wrap={false}>
 							<View>
 								<Row>
 									<Text style={GlobalStyles.bold}>
@@ -39,7 +39,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 
 							{/* Bullets */}
 							{experience.bulletPoints.length > 0 && (
-								<View style={{ marginTop: 6 }}>
+								<View style={{ marginTop: 2, display: "flex", flexDirection: "column",}}>
 									{experience.bulletPoints.map((bulletPoint, index) => (
 										<BulletPoint text={bulletPoint.text} key={index} />
 									))}
@@ -56,6 +56,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 const styles = StyleSheet.create({
 	experienceList: {
 		display: "flex",
+        flexDirection: "column",
 		gap: 4,
 	},
 });

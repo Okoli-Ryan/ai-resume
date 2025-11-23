@@ -1,15 +1,15 @@
-import { ClassValue, clsx } from 'clsx';
-import Link from 'next/link';
+import { ClassValue, clsx } from "clsx";
+import Link from "next/link";
 // @ts-expect-error no ts type for this package
-import processString from 'react-process-string';
-import { twMerge } from 'tailwind-merge';
-import { z, ZodError } from 'zod';
+import processString from "react-process-string";
+import { twMerge } from "tailwind-merge";
+import { z, ZodError } from "zod";
 
-import { Response } from '@/types/common';
+import { Response } from "@/types/common";
 
 // import { Link } from "@react-pdf/renderer";
-import { ErrorMessage } from './constants';
-import { Routes } from './routes';
+import { ErrorMessage } from "./constants";
+import { Routes } from "./routes";
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -33,7 +33,6 @@ export const fileToBase64 = (file: File): Promise<string> => {
 };
 
 export const isValidLink = (link: string) => link.startsWith("http://") || link.startsWith("https://");
-
 
 export class ActionResponse {
 	static success<T>(data: NonNullable<T>, message?: string | undefined): Response<T> {
@@ -160,4 +159,17 @@ export const processText = (text: string) => {
 		}
 		return item;
 	});
+};
+
+export const getRelativeTime = (date: Date | string) => {
+	const dateObj = typeof date === "string" ? new Date(date) : date;
+	const now = new Date();
+	const diffInHours = Math.floor((now.getTime() - dateObj.getTime()) / (1000 * 60 * 60));
+
+	if (diffInHours < 1) return "Just now";
+	if (diffInHours < 24) return `${diffInHours} hours ago`;
+	if (diffInHours < 48) return "1 day ago";
+	if (diffInHours < 168) return `${Math.floor(diffInHours / 24)} days ago`;
+	if (diffInHours < 336) return `${Math.floor(diffInHours / 168)} weeks ago`;
+	return date.toString();
 };
