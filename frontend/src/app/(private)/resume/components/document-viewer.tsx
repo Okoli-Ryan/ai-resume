@@ -8,7 +8,8 @@ import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
-import { usePDF } from "react-to-pdf";
+import { useRef, useCallback } from "react";
+import html2pdf from "html2pdf.js";
 
 import DownloadModal from "./download-modal";
 
@@ -48,12 +49,13 @@ const ResumeDocument = () => {
 				minHeight: '297mm',
 				padding: '48px 64px 16px 64px',
 				margin: '0 auto',
+				boxSizing: 'border-box',
 			}}
 		>
 			<PersonalInfo resume={resume} />
 			<div className="flex flex-col gap-[3px]">
 				{order.map((sectionKey, index) => (
-					<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey}>
+					<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey} className="page-break-inside-avoid">
 						{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}
 					</div>
 				))}
@@ -65,14 +67,30 @@ const ResumeDocument = () => {
 export const DocumentViewer = () => {
 	const resume = useResumeStore((state) => state.resume);
 	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
+	const targetRef = useRef<HTMLDivElement>(null);
 	
-	const { targetRef, toPDF } = usePDF({
-		filename,
-		page: { 
-			format: 'A4',
+	const toPDF = useCallback(() => {
+		if (!targetRef.current) return;
+		
+		const opt = {
 			margin: 0,
-		}
-	});
+			filename: filename,
+			image: { type: 'jpeg', quality: 0.98 },
+			html2canvas: { 
+				scale: 2,
+				useCORS: true,
+				letterRendering: true,
+			},
+			jsPDF: { 
+				unit: 'mm', 
+				format: 'a4', 
+				orientation: 'portrait',
+			},
+			pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+		};
+		
+		html2pdf().set(opt).from(targetRef.current).save();
+	}, [filename]);
 
 	return (
 		<>
