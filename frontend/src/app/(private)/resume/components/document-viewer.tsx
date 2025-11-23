@@ -12,15 +12,14 @@ import PdfCanvasViewer from "./pdf-canvas";
 import Education from "@/components/sections/education";
 import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { pdfjs } from "react-pdf";
+import { TResume } from "@/types/resume";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 Font.registerHyphenationCallback((word) => [word]);
 
-const MyPDFDocument = () => {
-	const resume = useResumeStore((state) => state.resume)!;
-
+const MyPDFDocument = ({ resume }: { resume: Partial<TResume> }) => {
 	const order = resume.order ? resume.order.split(",") : DEFAULT_RESUME_ORDER;
 
 	const sectionComponents: Record<(typeof DEFAULT_RESUME_ORDER)[number], React.ReactNode> = {
@@ -46,12 +45,18 @@ const MyPDFDocument = () => {
 };
 
 export const DocumentViewer = () => {
-	const [instance, update] = usePDF({ document: <MyPDFDocument /> });
+	const resume = useResumeStore((state) => state.resume)!;
 	const lastUpdate = useResumeStore((state) => state.lastUpdated);
 
+	// Memoize the document to prevent unnecessary recreations
+	// Include lastUpdate to ensure the document is recreated when the store updates
+	const document = useMemo(() => <MyPDFDocument resume={resume} />, [resume, lastUpdate]);
+
+	const [instance, update] = usePDF({ document });
+
 	useEffect(() => {
-		update(<MyPDFDocument />);
-	}, [lastUpdate]);
+		update(document);
+	}, [document, update]);
 
 	if (!instance.url || instance.loading) return <p>Loading PDF...</p>;
 
