@@ -1,27 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { usePDF } from "react-to-pdf";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useResumeStore } from "@/store/resume-store";
 import { Download } from "lucide-react";
 
-const DownloadModal = ({ targetRef }: { targetRef: React.RefObject<HTMLDivElement> }) => {
+const DownloadModal = ({ toPDF }: { toPDF: () => void }) => {
 	const [open, setOpen] = useState(false);
-	const resume = useResumeStore((state) => state.resume);
-	
-	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
-
-	const { toPDF } = usePDF({
-		targetRef,
-		filename,
-		page: { 
-			format: 'A4',
-			margin: 0,
-		}
-	});
 
 	const handleDownload = () => {
 		toPDF();

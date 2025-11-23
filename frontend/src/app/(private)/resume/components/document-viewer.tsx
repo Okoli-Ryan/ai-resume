@@ -8,7 +8,7 @@ import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
-import { useRef } from "react";
+import { usePDF } from "react-to-pdf";
 
 import DownloadModal from "./download-modal";
 
@@ -47,11 +47,20 @@ const ResumeDocument = () => {
 };
 
 export const DocumentViewer = () => {
-	const targetRef = useRef<HTMLDivElement>(null);
+	const resume = useResumeStore((state) => state.resume);
+	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
+	
+	const { targetRef, toPDF } = usePDF({
+		filename,
+		page: { 
+			format: 'A4',
+			margin: 0,
+		}
+	});
 
 	return (
 		<>
-			<DownloadModal targetRef={targetRef} />
+			<DownloadModal toPDF={toPDF} />
 			<div className="overflow-auto h-[100dvh] mt-[1.5rem] bg-gray-100">
 				<div ref={targetRef}>
 					<ResumeDocument />
