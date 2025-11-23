@@ -50,6 +50,7 @@ export const DocumentViewer = () => {
 
 	// Memoize the document to prevent unnecessary recreations
 	// Include lastUpdate to ensure the document is recreated when the store updates
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const document = useMemo(() => <MyPDFDocument resume={resume} />, [resume, lastUpdate]);
 
 	const [instance, update] = usePDF({ document });
