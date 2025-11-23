@@ -16,12 +16,8 @@ export const htmlToText = (html: string): string => {
 		return text.replace(/\s+/g, ' ').trim();
 	}
 	
-	// Server-side fallback: simple tag removal without entity decoding
-	// This is safe because the content won't have entities on the server
-	let text = html.replace(/<[^>]*>/g, '');
-	
-	// Trim and remove excessive whitespace
-	text = text.replace(/\s+/g, ' ').trim();
-	
-	return text;
+	// Server-side fallback: Return empty string to avoid potential issues
+	// PDF generation happens client-side only, so this path should rarely be hit
+	// If needed in the future, use a proper server-safe HTML parser library
+	return '';
 };
