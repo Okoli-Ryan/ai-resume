@@ -8,7 +8,8 @@ import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
-import { usePDF } from "react-to-pdf";
+import { useCallback } from "react";
+import html2pdf from "html2pdf.js";
 
 import DownloadModal from "./download-modal";
 
@@ -48,12 +49,13 @@ const ResumeDocument = () => {
 				minHeight: '297mm',
 				padding: '48px 64px 16px 64px',
 				margin: '0 auto',
+				boxSizing: 'border-box',
 			}}
 		>
 			<PersonalInfo resume={resume} />
 			<div className="flex flex-col gap-[3px]">
 				{order.map((sectionKey, index) => (
-					<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey}>
+					<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey} className="page-break-inside-avoid">
 						{sectionComponents[sectionKey as (typeof DEFAULT_RESUME_ORDER)[number]]}
 					</div>
 				))}
@@ -66,19 +68,48 @@ export const DocumentViewer = () => {
 	const resume = useResumeStore((state) => state.resume);
 	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
 	
-	const { targetRef, toPDF } = usePDF({
-		filename,
-		page: { 
-			format: 'A4',
-			margin: 0,
+	const toPDF = useCallback(() => {
+		const element = document.querySelector('.resume-document');
+		if (!element) {
+			console.error('Resume document element not found');
+			return;
 		}
-	});
+		
+		const opt = {
+			margin: 0,
+			filename: filename,
+			image: { type: 'png', quality: 1.0 },
+			html2canvas: { 
+				scale: 4,
+				useCORS: true,
+				letterRendering: true,
+				scrollY: 0,
+				scrollX: 0,
+				windowWidth: element.scrollWidth,
+				windowHeight: element.scrollHeight,
+			},
+			jsPDF: { 
+				unit: 'mm', 
+				format: 'a4', 
+				orientation: 'portrait',
+				compress: false,
+			},
+			pagebreak: { 
+				mode: ['avoid-all', 'css', 'legacy'],
+				before: '.page-break-before',
+				after: '.page-break-after',
+				avoid: '.page-break-inside-avoid'
+			}
+		};
+		
+		html2pdf().set(opt).from(element).save();
+	}, [filename]);
 
 	return (
 		<>
 			<DownloadModal toPDF={toPDF} />
 			<div className="overflow-auto h-[100dvh] mt-[1.5rem] bg-gray-100">
-				<div ref={targetRef}>
+				<div className="resume-document">
 					<ResumeDocument />
 				</div>
 			</div>
