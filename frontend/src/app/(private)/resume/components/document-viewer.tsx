@@ -21,6 +21,8 @@ const A4_HEIGHT_MM = 297;
 const PADDING_TOP_PX = 48;
 const PADDING_BOTTOM_PX = 16;
 const PADDING_HORIZONTAL_PX = 64;
+const SECTION_MARGIN_TOP_PX = 4;
+const PAGINATION_CALCULATION_DELAY_MS = 50;
 
 // Convert mm to pixels at 96 DPI
 const MM_TO_PX = 96 / 25.4;
@@ -93,7 +95,7 @@ const ResumeDocument = () => {
 			sectionElements.forEach((sectionEl, index) => {
 				const sectionKey = order[index];
 				const sectionHeight = sectionEl.getBoundingClientRect().height;
-				const marginTop = index === 0 ? 0 : 4;
+				const marginTop = index === 0 ? 0 : SECTION_MARGIN_TOP_PX;
 				const totalHeight = sectionHeight + marginTop;
 
 				// Check if adding this section would exceed page height
@@ -110,7 +112,7 @@ const ResumeDocument = () => {
 
 				// Add section to current page
 				currentPageElements.push(
-					<div style={{ marginTop: currentPageElements.length === 0 ? 0 : 4 }} key={sectionKey} className="page-break-inside-avoid">
+					<div style={{ marginTop: currentPageElements.length === 0 ? 0 : SECTION_MARGIN_TOP_PX }} key={sectionKey} className="page-break-inside-avoid">
 						{getSectionComponent(sectionKey, resume)}
 					</div>
 				);
@@ -138,7 +140,7 @@ const ResumeDocument = () => {
 			requestAnimationFrame(() => {
 				calculatePagination();
 			});
-		}, 50);
+		}, PAGINATION_CALCULATION_DELAY_MS);
 
 		return () => clearTimeout(timeoutId);
 	}, [lastUpdated, calculatePagination]);
@@ -176,7 +178,7 @@ const ResumeDocument = () => {
 				<PersonalInfo resume={resume} />
 				<div className="flex flex-col gap-[3px]">
 					{order.map((sectionKey, index) => (
-						<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey} className="page-break-inside-avoid">
+						<div style={{ marginTop: index === 0 ? 0 : SECTION_MARGIN_TOP_PX }} key={sectionKey} className="page-break-inside-avoid">
 							{getSectionComponent(sectionKey, resume)}
 						</div>
 					))}
@@ -214,7 +216,7 @@ const ResumeDocument = () => {
 						<PersonalInfo resume={resume} />
 						<div className="flex flex-col gap-[3px]">
 							{order.map((sectionKey, index) => (
-								<div style={{ marginTop: index === 0 ? 0 : 4 }} key={sectionKey} className="page-break-inside-avoid">
+								<div style={{ marginTop: index === 0 ? 0 : SECTION_MARGIN_TOP_PX }} key={sectionKey} className="page-break-inside-avoid">
 									{getSectionComponent(sectionKey, resume)}
 								</div>
 							))}
