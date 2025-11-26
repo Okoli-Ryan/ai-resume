@@ -2,16 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { SessionProvider } from "next-auth/react";
-import { Sora } from "next/font/google";
 import { Toaster } from "sonner";
 
 import TopLoader from "@/components/top-loader";
 import ReactQueryProvider from "@/providers/query-provider";
-
-const sora = Sora({
-	variable: "--font-sora",
-	subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -25,7 +19,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${sora.variable} antialiased`}>
+			<body className="antialiased">
 				<TopLoader />
 				<Toaster />
 				<SessionProvider>
