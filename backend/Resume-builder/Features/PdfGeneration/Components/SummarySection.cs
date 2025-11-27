@@ -21,7 +21,7 @@ public class SummarySection : IComponent
             return;
 
         // Strip HTML tags from summary
-        var plainSummary = StripHtmlTags(summary);
+        var plainSummary = HtmlUtils.StripHtmlTags(summary);
 
         container.Column(column =>
         {
@@ -31,13 +31,5 @@ public class SummarySection : IComponent
                 .FontSize(10)
                 .LineHeight(1.3f);
         });
-    }
-
-    private static string StripHtmlTags(string html)
-    {
-        if (string.IsNullOrEmpty(html))
-            return string.Empty;
-
-        return System.Text.RegularExpressions.Regex.Replace(html, "<[^>]*>", "").Trim();
     }
 }

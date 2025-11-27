@@ -45,7 +45,7 @@ public class PersonalInfoSection : IComponent
                 contactItems.Add("LinkedIn");
 
             if (!string.IsNullOrEmpty(_resume.GithubUrl))
-                contactItems.Add("Github");
+                contactItems.Add("GitHub");
 
             if (!string.IsNullOrEmpty(_resume.PortfolioUrl))
                 contactItems.Add("Portfolio");

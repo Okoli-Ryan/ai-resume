@@ -9,7 +9,7 @@ public class BulletPoint : IComponent
 
     public BulletPoint(string text)
     {
-        _text = StripHtmlTags(text);
+        _text = HtmlUtils.StripHtmlTags(text);
     }
 
     public void Compose(IContainer container)
@@ -25,14 +25,5 @@ public class BulletPoint : IComponent
                 .FontSize(10)
                 .LineHeight(1.3f);
         });
-    }
-
-    private static string StripHtmlTags(string html)
-    {
-        if (string.IsNullOrEmpty(html))
-            return string.Empty;
-
-        // Simple HTML tag removal
-        return System.Text.RegularExpressions.Regex.Replace(html, "<[^>]*>", "").Trim();
     }
 }
