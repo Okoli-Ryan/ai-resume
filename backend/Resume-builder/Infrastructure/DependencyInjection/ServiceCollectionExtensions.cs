@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.AI;
 using Microsoft.IdentityModel.Tokens;
 using Resume_builder.Common;
+using Resume_builder.Features.PdfGeneration;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.AIChatClient.OpenAI;
@@ -52,6 +53,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IClaimsService, ClaimsService>();
         services.AddScoped<IAIChatClient>(sp => (IAIChatClient)sp.GetRequiredService<IChatClient>());
+        services.AddSingleton<IPdfGenerationService, PdfGenerationService>();
 
         return services;
     }
