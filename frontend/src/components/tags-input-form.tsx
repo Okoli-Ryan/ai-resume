@@ -7,21 +7,21 @@ import { FormLabel } from './ui/form';
 import { Input } from './ui/input';
 import Tag from './ui/tag';
 
-type TagFormProps = {
-	form: UseFormReturn<Partial<TResume>, any, Partial<TResume>>; // react-hook-form instance
-	name: Path<TResume>;
+type TagFormProps<T = TResume> = {
+	form: UseFormReturn<Partial<T>, any, Partial<T>>; // react-hook-form instance
+	name: Path<Partial<T>>;
 	label: string;
 	placeholder: string;
 };
 
-const TagsInputForm = ({ form, name, label , placeholder}: TagFormProps) => {
+const TagsInputForm = <T,>({ form, name, label, placeholder }: TagFormProps<T>) => {
 	const { setValue, getValues, register } = form;
 	const [tags, setTags] = useState<string[]>([]);
 	const [input, setInput] = useState("");
 
 	// Initialize from form value (comma-separated string)
 	useEffect(() => {
-		const existing = getValues(name) as string;
+		const existing = getValues(name) as unknown as string;
 		if (existing) {
 			setTags(
 				existing
@@ -34,6 +34,7 @@ const TagsInputForm = ({ form, name, label , placeholder}: TagFormProps) => {
 
 	// Update form value when tags change
 	useEffect(() => {
+		// @ts-expect-error Type casting issue
 		setValue(name, tags.join(","));
 	}, [tags, name, setValue]);
 
@@ -65,7 +66,7 @@ const TagsInputForm = ({ form, name, label , placeholder}: TagFormProps) => {
 				value={input}
 				onChange={(e) => setInput(e.target.value)}
 				onKeyDown={(e) => {
-                    if (e.key === ",") {
+					if (e.key === ",") {
 						e.preventDefault();
 						return;
 					}

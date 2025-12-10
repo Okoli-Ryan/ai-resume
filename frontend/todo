@@ -22,3 +22,4 @@ Be able to generate tags from job
 Add redirect to log in on expired session
 Reduce space between bulletpoints
 Handle removing links from workplace, handle ui if project doesnt have link
+Generate tags from job description during "resume import"

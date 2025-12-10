@@ -31,7 +31,7 @@ public class SkillsSection : IComponent
                     .Select(s => s.Trim())
                     .Where(s => !string.IsNullOrEmpty(s));
 
-                column.Item().PaddingBottom(4).Text(text =>
+                column.Item().PreventPageBreak().PaddingBottom(4).Text(text =>
                 {
                     text.Span(skill.Category.ToUpper() + ": ")
                         .FontSize(10)

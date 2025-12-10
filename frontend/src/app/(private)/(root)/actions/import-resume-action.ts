@@ -1,9 +1,9 @@
 "use server";
 
 import { ActionResponse, isCustomError } from "@/lib/utils";
-import { importResume } from "@/services/resume/import-resume";
+import { ImportResumeRequest, importResume } from "@/services/resume/import-resume";
 
-export async function importResumeAction(payload: string) {
+export async function importResumeAction(payload: ImportResumeRequest) {
 	const response = await importResume(payload);
 	if (isCustomError(response)) return ActionResponse.error(response);
 

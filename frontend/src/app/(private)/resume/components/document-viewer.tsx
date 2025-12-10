@@ -9,29 +9,29 @@ import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
 import { useCallback } from "react";
-import { pdf } from '@react-pdf/renderer';
-import PDFResumeDocument from '@/components/pdf-sections/pdf-resume-document';
+import { useParams } from "next/navigation";
+import { downloadPDF } from "@/lib/utils";
 
 import DownloadModal from "./download-modal";
 
 const ResumeDocument = () => {
 	const resume = useResumeStore((state) => state.resume);
-	
+
 	if (!resume) {
 		return (
-			<div className="bg-white font-times text-[10px] leading-tight flex items-center justify-center"
+			<div
+				className="bg-white font-times text-[10px] leading-tight flex items-center justify-center"
 				style={{
-					width: '210mm',
-					minHeight: '297mm',
-					padding: '48px 64px 16px 64px',
-					margin: '0 auto',
-				}}
-			>
+					width: "210mm",
+					minHeight: "297mm",
+					padding: "48px 64px 16px 64px",
+					margin: "0 auto",
+				}}>
 				<p className="text-base text-gray-500">No resume data available</p>
 			</div>
 		);
 	}
-	
+
 	const order = resume.order ? resume.order.split(",") : DEFAULT_RESUME_ORDER;
 
 	const sectionComponents: Record<(typeof DEFAULT_RESUME_ORDER)[number], React.ReactNode> = {
@@ -43,16 +43,15 @@ const ResumeDocument = () => {
 	};
 
 	return (
-		<div 
+		<div
 			className="bg-white font-times text-[10px] leading-tight"
 			style={{
-				width: '210mm',
-				minHeight: '297mm',
-				padding: '48px 64px 16px 64px',
-				margin: '0 auto',
-				boxSizing: 'border-box',
-			}}
-		>
+				width: "210mm",
+				minHeight: "297mm",
+				padding: "48px 64px 16px 64px",
+				margin: "0 auto",
+				boxSizing: "border-box",
+			}}>
 			<PersonalInfo resume={resume} />
 			<div className="flex flex-col gap-[3px]">
 				{order.map((sectionKey, index) => (
@@ -67,31 +66,22 @@ const ResumeDocument = () => {
 
 export const DocumentViewer = () => {
 	const resume = useResumeStore((state) => state.resume);
+	const params = useParams();
+	const resumeId = params.id as string;
 	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
-	
+
 	const toPDF = useCallback(async () => {
-		if (!resume) {
-			console.error('No resume data available');
+		if (!resumeId) {
+			console.error("No resume ID available");
 			return;
 		}
-		
+
 		try {
-			// Generate PDF using react-pdf/renderer
-			const blob = await pdf(<PDFResumeDocument resume={resume} />).toBlob();
-			
-			// Create download link
-			const url = URL.createObjectURL(blob);
-			const link = document.createElement('a');
-			link.href = url;
-			link.download = filename;
-			link.click();
-			
-			// Clean up
-			URL.revokeObjectURL(url);
+			await downloadPDF(resumeId, filename);
 		} catch (error) {
-			console.error('Error generating PDF:', error);
+			console.error("Error downloading PDF:", error);
 		}
-	}, [filename, resume]);
+	}, [filename, resumeId]);
 
 	return (
 		<>

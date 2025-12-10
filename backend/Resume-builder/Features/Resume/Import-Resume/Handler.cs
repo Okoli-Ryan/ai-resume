@@ -38,7 +38,7 @@ public class ImportResumeHandler(
             return Response<ResumeDto>.Fail(HttpStatusCode.BadRequest, "Unable to parse resume.");
         }
 
-        var response = await chatClient.ParseResume(rawText, cancellationToken);
+        var response = await chatClient.ParseResume(rawText, command.additionalInfo, cancellationToken);
 
         if (response.Response is null)
             return Response<ResumeDto>.Fail(HttpStatusCode.NotFound, "Unable to parse resume.");

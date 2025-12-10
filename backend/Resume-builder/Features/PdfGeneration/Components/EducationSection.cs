@@ -20,13 +20,13 @@ public class EducationSection : IComponent
         if (educationList == null || educationList.Count == 0)
             return;
 
-        container.Column(column =>
+        container.PreventPageBreak().Column(column =>
         {
             column.Item().Component(new SectionHeader("Education"));
 
             foreach (var education in educationList)
             {
-                column.Item().PaddingBottom(6).Column(eduColumn =>
+                column.Item().PreventPageBreak().PaddingBottom(6).Column(eduColumn =>
                 {
                     // School Name and Date row
                     eduColumn.Item().Row(row =>

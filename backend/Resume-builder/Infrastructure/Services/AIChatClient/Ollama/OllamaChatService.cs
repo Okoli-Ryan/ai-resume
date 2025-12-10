@@ -51,10 +51,10 @@ public partial class OllamaChatClient
         throw new NotImplementedException();
     }
 
-    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, CancellationToken cancellationToken)
+    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, ResumeAdditionalInfo additionalInfo,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();        
-        
+        throw new NotImplementedException();
     }
 
     public async Task<AIResponse<EnhanceBulletPointsResponse?>> EnhanceBulletPoints(

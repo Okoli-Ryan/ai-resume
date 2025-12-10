@@ -52,9 +52,22 @@ public partial class OpenAiChatClient
     public async Task<AIResponse<GenerateResumeResponse?>> GenerateResume(ResumeEntity resume,
         ResumeAdditionalInfo? additionalInfo, CancellationToken cancellationToken)
     {
-        var prompt = PromptBuilder.BuildGenerateResumePrompt(resume, additionalInfo);
+        var inputPrompt = PromptBuilder.BuildGenerateResumePrompt(resume, additionalInfo);
 
-        throw new NotImplementedException();
+        var chatHistory = new List<ChatMessage>();
+
+        chatHistory.Add(new ChatMessage(ChatRole.System, SystemPrompts.GenerateResumeSystemPrompt));
+
+        chatHistory.Add(new ChatMessage(ChatRole.User, inputPrompt));
+
+        var response = await _chatClient.GetResponseAsync<GenerateResumeResponse>(chatHistory,
+            JsonSerializerOptions.Default, null, true, cancellationToken);
+
+        return new AIResponse<GenerateResumeResponse>
+        {
+            PromptUsage = response.Usage?.TotalTokenCount,
+            Response = response.Result
+        };
     }
 
     public async Task<AIResponse<EnhanceSummaryResponse>> EnhanceSummary(string summary,
@@ -100,20 +113,21 @@ public partial class OpenAiChatClient
         };
     }
 
-    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, CancellationToken cancellationToken)
+    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, ResumeAdditionalInfo additionalInfo,
+        CancellationToken cancellationToken)
     {
-        var inputPrompt = PromptBuilder.BuildParseResumePrompt(rawText);
-        
+        var inputPrompt = PromptBuilder.BuildParseResumePrompt(rawText, additionalInfo);
+
         var chatHistory = new List<ChatMessage>();
 
         chatHistory.Add(new ChatMessage(ChatRole.System, SystemPrompts.ParseResumeSystemPrompt));
-        
+
         chatHistory.Add(new ChatMessage(ChatRole.User, inputPrompt));
-        
+
         var response = await _chatClient.GetResponseAsync<ParsedResumeResponse>(
             chatHistory,
             JsonSerializerOptions.Default,
-            new ChatOptions {Temperature = 0.3f},
+            new ChatOptions { Temperature = 0.3f },
             true,
             cancellationToken);
 

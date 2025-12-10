@@ -16,12 +16,22 @@ public class BulletPoint : IComponent
     {
         container.Row(row =>
         {
-            row.ConstantItem(8).PaddingTop(3).Column(col =>
-            {
-                col.Item().Width(3).Height(3).Background("#000000");
-            });
+            // Bullet container (aligned correctly)
+            row.ConstantItem(10) // width of bullet area
+                .AlignCenter() // aligns bullet with text top
+                .Height(10) // gives enough height to center
+                .Element(bullet =>
+                {
+                    bullet.AlignCenter().AlignMiddle()
+                        .Width(4).Height(4)
+                        .Background("#000000")
+                        .CornerRadius(50);
+                });
 
-            row.RelativeItem().Text(_text)
+            // Text
+            row.RelativeItem()
+                .AlignTop() // aligns with bullet
+                .Text(_text)
                 .FontSize(10)
                 .LineHeight(1.3f);
         });

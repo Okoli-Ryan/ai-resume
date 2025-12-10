@@ -26,7 +26,7 @@ public class WorkExperienceSection : IComponent
 
             foreach (var experience in experiences)
             {
-                column.Item().PaddingBottom(6).Column(expColumn =>
+                column.Item().PreventPageBreak().PaddingBottom(6).Column(expColumn =>
                 {
                     // Company Name and Location row
                     expColumn.Item().Row(row =>
@@ -66,7 +66,7 @@ public class WorkExperienceSection : IComponent
                         {
                             foreach (var bulletPoint in experience.BulletPoints)
                             {
-                                bpColumn.Item().PaddingBottom(2).Component(new BulletPoint(bulletPoint.Text));
+                                bpColumn.Item().PaddingTop(2).Component(new BulletPoint(bulletPoint.Text));
                             }
                         });
                     }

@@ -2,12 +2,14 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Resume_builder.Features.Resume.Common;
+using System.Collections.Generic;
 
 namespace Resume_builder.Features.PdfGeneration.Components;
 
 public class PersonalInfoSection : IComponent
 {
     private readonly ResumeDto _resume;
+    private static readonly string HyperlinkColor = Colors.Blue.Darken4; // Bright blue
 
     public PersonalInfoSection(ResumeDto resume)
     {
@@ -30,34 +32,82 @@ public class PersonalInfoSection : IComponent
                 .Bold();
 
             // Contact Information
-            var contactItems = new List<string>();
+            var contactElements = new List<Action<TextDescriptor>>();
 
             if (!string.IsNullOrEmpty(_resume.Address))
-                contactItems.Add(_resume.Address);
+            {
+                var address = _resume.Address;
+                contactElements.Add(txt =>
+                {
+                    txt.Span(address)
+                       .FontSize(10);
+                });
+            }
 
             if (!string.IsNullOrEmpty(_resume.PhoneNumber))
-                contactItems.Add(_resume.PhoneNumber);
+            {
+                var phone = _resume.PhoneNumber;
+                var phoneHref = $"tel:{phone}";
+                contactElements.Add(txt =>
+                {
+                    txt.Hyperlink(phone, phoneHref)
+                        .FontSize(10)
+                        .FontColor(HyperlinkColor);
+                });
+            }
 
             if (!string.IsNullOrEmpty(_resume.Email))
-                contactItems.Add(_resume.Email);
+            {
+                var email = _resume.Email;
+                contactElements.Add(txt =>
+                {
+                    txt.Hyperlink(email, $"mailto:{email}")
+                        .FontSize(10)
+                        .FontColor(HyperlinkColor);
+                });
+            }
 
             if (!string.IsNullOrEmpty(_resume.LinkedinUrl))
-                contactItems.Add("LinkedIn");
+            {
+                var url = _resume.LinkedinUrl;
+                contactElements.Add(txt =>
+                {
+                    txt.Hyperlink("Linkedin", url)
+                        .FontSize(10)
+                        .FontColor(HyperlinkColor);
+                });
+            }
 
             if (!string.IsNullOrEmpty(_resume.GithubUrl))
-                contactItems.Add("GitHub");
+            {
+                var url = _resume.GithubUrl;
+                contactElements.Add(txt =>
+                {
+                    txt.Hyperlink("Github", url)
+                        .FontSize(10)
+                        .FontColor(HyperlinkColor);
+                });
+            }
 
             if (!string.IsNullOrEmpty(_resume.PortfolioUrl))
-                contactItems.Add("Portfolio");
+            {
+                var url = _resume.PortfolioUrl;
+                contactElements.Add(txt =>
+                {
+                    txt.Hyperlink("Portfolio", url)
+                        .FontSize(10)
+                        .FontColor(HyperlinkColor);
+                });
+            }
 
-            if (contactItems.Any())
+            if (contactElements.Any())
             {
                 column.Item().PaddingTop(8).AlignCenter().Text(text =>
                 {
-                    for (int i = 0; i < contactItems.Count; i++)
+                    for (int i = 0; i < contactElements.Count; i++)
                     {
-                        text.Span(contactItems[i]).FontSize(10);
-                        if (i < contactItems.Count - 1)
+                        contactElements[i](text);
+                        if (i < contactElements.Count - 1)
                         {
                             text.Span(" | ").FontSize(10);
                         }

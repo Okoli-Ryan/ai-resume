@@ -54,7 +54,7 @@ public class ResumeDocument : IDocument
                     var component = GetSectionComponent(sectionKey);
                     if (component != null)
                     {
-                        column.Item().Component(component);
+                        column.Item().PaddingBottom(8).Component(component);
                     }
                 }
             });

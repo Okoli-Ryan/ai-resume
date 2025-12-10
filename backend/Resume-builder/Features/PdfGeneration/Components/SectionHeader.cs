@@ -1,4 +1,5 @@
 using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace Resume_builder.Features.PdfGeneration.Components;
@@ -16,11 +17,24 @@ public class SectionHeader : IComponent
     {
         container.Column(column =>
         {
-            column.Item().PaddingTop(8).Text(_title.ToUpper())
-                .FontSize(10)
-                .Bold();
+            column.Item().Decoration(decoration =>
+            {
+                decoration.Header()
+                    .Text(_title.ToUpper())
+                    .FontSize(10)
+                    .Bold();
 
-            column.Item().PaddingBottom(6).BorderBottom(1).BorderColor("#000000");
+                decoration.Content().Element(e =>
+                {
+                    e.ExtendHorizontal()
+                        .BorderBottom(1)
+                        .BorderColor(Colors.Black)
+                        .PaddingBottom(2);
+                });
+
+            });  
+            
+            column.Item().PaddingTop(4);
         });
     }
 }

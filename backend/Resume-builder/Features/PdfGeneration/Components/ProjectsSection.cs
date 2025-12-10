@@ -20,13 +20,13 @@ public class ProjectsSection : IComponent
         if (projects == null || projects.Count == 0)
             return;
 
-        container.Column(column =>
+        container.PreventPageBreak().Column(column =>
         {
             column.Item().Component(new SectionHeader("Projects"));
 
             foreach (var project in projects)
             {
-                column.Item().PaddingBottom(6).Column(projColumn =>
+                column.Item().PreventPageBreak().PaddingBottom(6).Column(projColumn =>
                 {
                     // Project Name row (with optional link styling)
                     projColumn.Item().Row(row =>
