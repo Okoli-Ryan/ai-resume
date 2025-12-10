@@ -1,14 +1,36 @@
 import NextAuth, { NextAuthConfig } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
+import Credentials from "next-auth/providers/credentials";
 import Google from 'next-auth/providers/google';
 
 import { Routes } from './lib/routes';
 import { isCustomError } from './lib/utils';
 import { googleSignIn } from './services/auth/google-signin';
+import { signin, SigninSchema } from "./services/auth/signin";
 import { User } from './types/user';
 
 export const authConfig = {
-	providers: [Google],
+	providers: [
+		Google,
+		Credentials({
+			credentials: {
+				email: { label: "Email", type: "email" },
+				password: { label: "Password", type: "password" },
+			},
+			async authorize(credentials) {
+				const validation = SigninSchema.safeParse(credentials);
+				if (!validation.success) return null;
+
+				const response = await signin(validation.data);
+				if (isCustomError(response)) return null;
+
+				return {
+					accessToken: response.token,
+					user: response.user,
+				} as any;
+			},
+		}),
+	],
 	callbacks: {
 		jwt: async ({ user, account, token }) => {
 			if (account && user) {
@@ -31,7 +53,7 @@ export const authConfig = {
 				return { ...token, authToken: response.accessToken, user: response.user, id: response.user.id } as JWT;
 			}
 
-            return token;
+			return token;
 		},
 		session({ session, token }) {
 			return {

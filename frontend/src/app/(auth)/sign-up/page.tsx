@@ -1,34 +1,35 @@
 "use client";
 
-import { signinWithEmailPasswordAction } from "./actions/signin-action";
+import { signupWithEmailPasswordAction } from "./actions/signup-action";
+import { signinWithGoogle } from "../actions/google-signin-action";
 import ErrorLabel from "@/components/error-label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Routes } from "@/lib/routes";
-import { SigninRequest } from "@/services/auth/signin";
+import { SignupRequest } from "@/services/auth/signup";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { signinWithGoogle } from "../actions/google-signin-action";
 
-const Signin = () => {
+const Signup = () => {
 	const router = useRouter();
-	const form = useForm<SigninRequest>({
+	const form = useForm<SignupRequest>({
 		defaultValues: {
 			email: "",
+			name: "",
 			password: "",
 		},
 	});
 
 	const { register, handleSubmit, control } = form;
 
-	const { mutate: signin, isPending } = useMutation({
-		mutationKey: ["signin"],
-		mutationFn: async (data: SigninRequest) => {
-			const response = await signinWithEmailPasswordAction(data);
+	const { mutate: signup, isPending } = useMutation({
+		mutationKey: ["signup"],
+		mutationFn: async (data: SignupRequest) => {
+			const response = await signupWithEmailPasswordAction(data);
 
 			if (!response.success) throw new Error(response.message);
 
@@ -42,29 +43,50 @@ const Signin = () => {
 		},
 	});
 
-	const onSubmit = (data: SigninRequest) => {
-		signin(data);
+	const onSubmit = (data: SignupRequest) => {
+		signup(data);
 	};
 
 	return (
 		<div className="mx-auto max-w-sm space-y-6">
 			<div className="space-y-2 text-center">
-				<h1 className="text-3xl font-bold">Login</h1>
-				<p className="text-gray-500 dark:text-gray-400">Enter your credentials to login to your account</p>
+				<h1 className="text-3xl font-bold">Sign Up</h1>
+				<p className="text-gray-500 dark:text-gray-400">
+					Create an account to get started
+				</p>
 			</div>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 				<div className="space-y-2">
+					<Label htmlFor="name">Full Name</Label>
+					<Input
+						id="name"
+						type="text"
+						placeholder="John Doe"
+						{...register("name")}
+					/>
+					<ErrorLabel control={control} name="name" />
+				</div>
+				<div className="space-y-2">
 					<Label htmlFor="email">Email</Label>
-					<Input id="email" type="email" placeholder="m@example.com" {...register("email")} />
+					<Input
+						id="email"
+						type="email"
+						placeholder="m@example.com"
+						{...register("email")}
+					/>
 					<ErrorLabel control={control} name="email" />
 				</div>
 				<div className="space-y-2">
 					<Label htmlFor="password">Password</Label>
-					<Input id="password" type="password" {...register("password")} />
+					<Input
+						id="password"
+						type="password"
+						{...register("password")}
+					/>
 					<ErrorLabel control={control} name="password" />
 				</div>
-				<Button loading={isPending} type="submit" className="w-full">
-					Login
+				<Button type="submit" className="w-full" loading={isPending}>
+					Sign up
 				</Button>
 			</form>
 			<div className="relative">
@@ -72,7 +94,9 @@ const Signin = () => {
 					<span className="w-full border-t" />
 				</div>
 				<div className="relative flex justify-center text-xs uppercase">
-					<span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+					<span className="bg-background px-2 text-muted-foreground">
+						Or continue with
+					</span>
 				</div>
 			</div>
 			<form action={signinWithGoogle}>
@@ -81,13 +105,13 @@ const Signin = () => {
 				</Button>
 			</form>
 			<p className="text-center text-sm text-gray-500">
-				Don&apos;t have an account?{" "}
-				<Link href={Routes.signUp} className="font-medium text-primary hover:underline">
-					Sign up
+				Already have an account?{" "}
+				<Link href={Routes.signIn} className="font-medium text-primary hover:underline">
+					Sign in
 				</Link>
 			</p>
 		</div>
 	);
 };
 
-export default Signin;
+export default Signup;
