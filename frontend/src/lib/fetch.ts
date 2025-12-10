@@ -11,7 +11,7 @@ export type ExtendedRequestInit = RequestInit & {
 	hasAuthorization?: boolean;
 	isFormdata?: boolean;
 	hasCustomResponse?: boolean;
-	responseFormat?: "json" | "text";
+	responseFormat?: "json" | "text" | "blob";
 };
 
 class FetchClient {
@@ -80,6 +80,7 @@ class FetchClient {
 			}
 
 			if (options.responseFormat === "text") return response.text() as Response;
+			if (options.responseFormat === "blob") return response.blob() as Response;
 
 			const data: Response = await response.json();
 

@@ -173,3 +173,27 @@ export const getRelativeTime = (date: Date | string) => {
 	if (diffInHours < 336) return `${Math.floor(diffInHours / 168)} weeks ago`;
 	return date.toString();
 };
+
+export const downloadPDF = async (resumeId: string, filename: string) => {
+	const { getResumePDFAction } = await import("@/app/actions/get-resume-pdf-action");
+
+	const response = await getResumePDFAction(resumeId);
+
+	if (!response.success || !response.data) {
+		console.error("Failed to fetch PDF:", response.message);
+		return;
+	}
+
+	// Ensure data is a Blob
+	const blob = response.data instanceof Blob ? response.data : new Blob([response.data]);
+
+	// Create download link
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement("a");
+	link.href = url;
+	link.download = filename;
+	link.click();
+
+	// Clean up
+	URL.revokeObjectURL(url);
+};

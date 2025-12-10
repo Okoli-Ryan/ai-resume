@@ -59,13 +59,35 @@ public static class PromptBuilder
 
         return inputPrompt.ToString();
     }
-    
-    public static string BuildParseResumePrompt(string rawText)
+
+    public static string BuildParseResumePrompt(string rawText, ResumeAdditionalInfo additionalInfo)
     {
         var inputPrompt = new StringBuilder();
+
         inputPrompt.Append("Resume Raw Text: \n");
         inputPrompt.AppendLine(rawText);
-        
+
+        if (!string.IsNullOrEmpty(additionalInfo?.JobDescription))
+        {
+            inputPrompt.AppendLine("Job Description:");
+            inputPrompt.AppendLine(additionalInfo.JobDescription);
+            inputPrompt.AppendLine();
+        }
+
+        if (!string.IsNullOrEmpty(additionalInfo?.Role))
+        {
+            inputPrompt.AppendLine("Role:");
+            inputPrompt.AppendLine(additionalInfo.Role);
+            inputPrompt.AppendLine();
+        }
+
+        if (!string.IsNullOrEmpty(additionalInfo?.Tags))
+        {
+            inputPrompt.AppendLine("Tags:");
+            inputPrompt.AppendLine(additionalInfo.Tags);
+            inputPrompt.AppendLine();
+        }
+
         return inputPrompt.ToString();
     }
 
