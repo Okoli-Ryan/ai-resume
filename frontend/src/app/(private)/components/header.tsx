@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { FileText, LogOut, Menu, User } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/lib/routes";
 interface HeaderProps {
 	onToggleSidebar: () => void;
 }
 
 export default function Header({ onToggleSidebar }: HeaderProps) {
-    const session = useSession()
-	const handleLogout = () => {};
+	const session = useSession();
+	const router = useRouter();
+
+	const handleLogout = async () => {
+		await signOut({ redirect: false });
+		router.push(Routes.signIn);
+	};
 
 	return (
 		<header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">

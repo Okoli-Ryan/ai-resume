@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { Copy, Download, Edit, Eye } from "lucide-react";
 import Link from "next/link";
 import ResumeTags from "./resume-tags";
+import EmptyState from "@/components/empty-state";
 
 interface ResumeTableProps {
 	resumes: Partial<TResume>[];
@@ -33,28 +34,6 @@ export default function ResumeTable({ resumes, isLoading }: ResumeTableProps) {
 			</Card>
 		);
 	}
-
-	// if (resumes.length === 0) {
-	// 	return (
-	// 		<Card>
-	// 			<CardContent className="text-center py-12">
-	// 				<div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-	// 					<FileText className="w-12 h-12 text-gray-400" />
-	// 				</div>
-	// 				<h3 className="text-lg font-medium text-gray-900 mb-2">{searchTerm ? "No resumes found" : "No resumes yet"}</h3>
-	// 				<p className="text-gray-500 mb-6">
-	// 					{searchTerm ? "Try adjusting your search terms or filters" : "Get started by creating your first resume"}
-	// 				</p>
-	// 				{!searchTerm && (
-	// 					<Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-	// 						<Plus className="w-4 h-4 mr-2" />
-	// 						Create Resume
-	// 					</Button>
-	// 				)}
-	// 			</CardContent>
-	// 		</Card>
-	// 	);
-	// }
 
 	return (
 		<Card className="overflow-x-auto">
@@ -93,7 +72,14 @@ export default function ResumeTable({ resumes, isLoading }: ResumeTableProps) {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{resumes.map((resume) => (
+							{resumes.length === 0 ? (
+								<TableRow>
+									<TableCell colSpan={6} className="p-0">
+										<EmptyState title="No resumes found" />
+									</TableCell>
+								</TableRow>
+							) : (
+								resumes.map((resume) => (
 								<TableRow key={resume.id} className="hover:bg-gray-50 transition-colors">
 									<TableCell className=" max-w-60">
 										<div className="flex items-center">
@@ -135,7 +121,8 @@ export default function ResumeTable({ resumes, isLoading }: ResumeTableProps) {
 										</div>
 									</TableCell>
 								</TableRow>
-							))}
+								))
+							)}
 						</TableBody>
 					</Table>
 				</div>

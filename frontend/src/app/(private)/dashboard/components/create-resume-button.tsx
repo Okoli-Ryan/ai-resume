@@ -5,10 +5,10 @@ import { useRouter } from "nextjs-toploader/app";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
-import { createResumeAction } from "@/app/(private)/(root)/actions/create-resume-action";
 import { Button } from "@/components/ui/button";
 import { Routes } from "@/lib/routes";
 import { useResumeStore } from "@/store/resume-store";
+import { createResumeAction } from "../actions/create-resume-action";
 
 const CreateResumeButton = () => {
 	const clearResume = useResumeStore((state) => state.clear);
