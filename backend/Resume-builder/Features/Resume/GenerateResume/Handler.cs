@@ -8,6 +8,7 @@ using Resume_builder.Features.Resume.Common;
 using Resume_builder.Features.Skills;
 using Resume_builder.Features.WorkExperience;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.AIChatClient.Common;
 using Resume_builder.Infrastructure.Services.ClaimService;
@@ -18,6 +19,7 @@ public class GenerateResumeHandler(
     AppDbContext db,
     IClaimsService claimsService,
     IHostEnvironment env,
+    IResumeRepository resumeRepository,
     IAIChatClient chatClient)
     : IResponseHandler<GenerateResumeCommand, ResumeDto>
 {
@@ -28,17 +30,8 @@ public class GenerateResumeHandler(
         if (userId == null)
             return Response<ResumeDto>.Fail(HttpStatusCode.Unauthorized, "Unauthorized");
 
-        var resume = await db.Resume
-            .Where(x => x.UserId == userId && x.Id == command.ResumeId)
-            .AsNoTracking()
-            .Include(x => x.Projects)
-            .ThenInclude(x => x.BulletPoints)
-            .Include(x => x.Education)
-            .ThenInclude(x => x.BulletPoints)
-            .Include(x => x.WorkExperience)
-            .ThenInclude(x => x.BulletPoints)
-            .Include(x => x.Skills)
-            .FirstOrDefaultAsync(cancellationToken);
+        var resume = await resumeRepository.GetResumeByUserAndResumeId(userId, command.ResumeId, cancellationToken);
+
 
         if (resume is null)
             return Response<ResumeDto>.Fail(HttpStatusCode.NotFound, "Resume not found");

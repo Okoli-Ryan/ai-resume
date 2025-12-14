@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Resume_builder.Features.Resume;
 using Resume_builder.Features.Resume.Common;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
 
 namespace Resume_builder.Features.PdfGeneration;
@@ -17,6 +18,7 @@ public class PdfGenerationModule : CarterModule
         endpoint.MapGet("{resumeId}/pdf", async (
             AppDbContext db,
             string resumeId,
+            IResumeRepository resumeRepository,
             IClaimsService claimsService,
             IPdfGenerationService pdfService,
             CancellationToken cancellationToken) =>
@@ -27,16 +29,7 @@ public class PdfGenerationModule : CarterModule
                 return Results.Unauthorized();
             }
 
-            var resume = await db.Resume
-                .Include(r => r.WorkExperience!)
-                    .ThenInclude(w => w.BulletPoints)
-                .Include(r => r.Education!)
-                    .ThenInclude(e => e.BulletPoints)
-                .Include(r => r.Projects!)
-                    .ThenInclude(p => p.BulletPoints)
-                .Include(r => r.Skills)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(r => r.Id == resumeId && r.UserId == userId, cancellationToken);
+            var resume = await resumeRepository.GetResumeByUserAndResumeId(userId, resumeId, cancellationToken);
 
             if (resume == null)
             {

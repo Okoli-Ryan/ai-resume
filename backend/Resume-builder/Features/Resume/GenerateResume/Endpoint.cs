@@ -2,6 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Resume.Common;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.AIChatClient.Common;
 using Resume_builder.Infrastructure.Services.ClaimService;
@@ -23,10 +24,11 @@ public class GenerateResumeEndpoint : ICarterModule
             AppDbContext db,
             IClaimsService claimsService,
             IHostEnvironment env,
+            IResumeRepository resumeRepository,
             CancellationToken cancellationToken
         ) =>
         {
-            var handler = new GenerateResumeHandler(db, claimsService, env, chatClient);
+            var handler = new GenerateResumeHandler(db, claimsService, env, resumeRepository, chatClient);
             var response = await handler.Handle(new GenerateResumeCommand(resumeId, additionalInfo), cancellationToken);
 
             return response.GetResult();

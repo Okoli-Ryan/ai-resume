@@ -4,9 +4,11 @@ using Resume_builder.Features.Resume.Common;
 using Resume_builder.Features.Resume.Create;
 using Resume_builder.Features.Resume.Duplicate;
 using Resume_builder.Features.Resume.GetMinimalResumesByUserId;
+using Resume_builder.Features.Resume.GetResumeById;
 using Resume_builder.Features.Resume.GetResumesByUserId;
 using Resume_builder.Features.Resume.Update;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
 
 namespace Resume_builder.Features.Resume;
@@ -19,12 +21,12 @@ public class ResumeModule : CarterModule
             .RequireAuthorization();
 
         endpoint.MapGet("{resumeId}", async (
-            AppDbContext db,
             string resumeId,
             IClaimsService claimsService,
+            IResumeRepository resumeRepository,
             CancellationToken cancellationToken) =>
         {
-            var handler = new GetResumeByIdHandler(db, claimsService);
+            var handler = new GetResumeByIdHandler(resumeRepository, claimsService);
             var response = await handler.Handle(resumeId, cancellationToken);
 
             return response.GetResult();
@@ -88,10 +90,11 @@ public class ResumeModule : CarterModule
             AppDbContext db,
             IClaimsService claimsService,
             IHostEnvironment env,
+            IResumeRepository resumeRepository,
             CancellationToken cancellationToken
         ) =>
         {
-            var handler = new DuplicateResumeHandler(db, claimsService, env);
+            var handler = new DuplicateResumeHandler(db, claimsService, resumeRepository, env);
             var response = await handler.Handle(new DuplicateResumeCommand(resumeId), cancellationToken);
 
             return response.GetResult();

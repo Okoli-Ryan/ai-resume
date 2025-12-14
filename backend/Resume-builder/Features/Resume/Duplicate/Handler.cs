@@ -9,6 +9,7 @@ using Resume_builder.Features.Resume.Create;
 using Resume_builder.Features.Skills.Create;
 using Resume_builder.Features.WorkExperience.Create;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
 using static Resume_builder.Features.Resume.Common.ResumeExtensions;
 
@@ -17,6 +18,7 @@ namespace Resume_builder.Features.Resume.Duplicate;
 public class DuplicateResumeHandler(
     AppDbContext db,
     IClaimsService claimsService,
+    IResumeRepository resumeRepository,
     IHostEnvironment env) : IResponseHandler<DuplicateResumeCommand, ResumeDto>
 {
     public async Task<Response<ResumeDto>> Handle(DuplicateResumeCommand command, CancellationToken cancellationToken)
@@ -26,17 +28,7 @@ public class DuplicateResumeHandler(
         if (userId is null)
             return Response<ResumeDto>.Fail(HttpStatusCode.Unauthorized, "Unauthorized");
 
-        var resume = await db.Resume
-            .Where(x => x.UserId == userId && x.Id == command.ResumeId)
-            .AsNoTracking()
-            .Include(x => x.Education)
-            .ThenInclude(x => x.BulletPoints)
-            .Include(x => x.Projects)
-            .ThenInclude(x => x.BulletPoints)
-            .Include(x => x.WorkExperience)
-            .ThenInclude(x => x.BulletPoints)
-            .Include(x => x.Skills)
-            .FirstOrDefaultAsync(cancellationToken);
+        var resume = await resumeRepository.GetResumeByUserAndResumeId(userId, command.ResumeId, cancellationToken);
 
         if (resume is null)
             return Response<ResumeDto>.Fail(HttpStatusCode.NotFound, "Resume not found");
