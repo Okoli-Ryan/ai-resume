@@ -6,4 +6,12 @@ import ResumeOrderForm from "@/components/edit-form/resume-order-form/resume-ord
 import SkillsForm from "@/components/edit-form/skills-form/skills-form";
 import WorkExperienceForm from "@/components/edit-form/work-experience-form/work-experience-form";
 
-export const ResumeFormSections = [ResumeInfoForm, ResumeOrderForm, PersonalInfoForm, WorkExperienceForm];
+export const ResumeFormSections = [
+	ResumeInfoForm, 
+	ResumeOrderForm, 
+	PersonalInfoForm, 
+	WorkExperienceForm,
+	EducationForm,
+	ProjectForm,
+	SkillsForm
+];
