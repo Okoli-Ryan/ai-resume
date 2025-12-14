@@ -1,11 +1,8 @@
-using Resume_builder.Common;
+namespace Resume_builder.Features.Link.Create;
 
-namespace Resume_builder.Features.Link;
-
-public class LinkEntity : BaseEntity
+public class CreateLinkCommand
 {
     public string LinkName { get; set; } = string.Empty;
     public string Url { get; set; } = string.Empty;
     public required string ResumeId { get; set; }
-    public required string UserId { get; set; }
 }
