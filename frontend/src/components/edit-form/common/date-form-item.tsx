@@ -12,7 +12,7 @@ const DateFormItem = ({ name, control, label, disabled }: { control: Control<TRe
 			name={name}
 			render={({ field: { onChange, value, ...rest } }) => (
 				<FormItem>
-					<FormLabel>{label}</FormLabel>
+					<FormLabel className="text-sm font-medium">{label}</FormLabel>
 					<FormControl>
 						<Input
 							disabled={disabled}
@@ -24,6 +24,7 @@ const DateFormItem = ({ name, control, label, disabled }: { control: Control<TRe
 								const fullDate = new Date(`${raw}-01`); // Create full date: 2025-06-01
 								onChange(fullDate.toISOString()); // or onChange(fullDate) if storing as Date object
 							}}
+							className="transition-all focus:ring-2 focus:ring-primary/20"
 						/>
 					</FormControl>
 					<FormMessage />
