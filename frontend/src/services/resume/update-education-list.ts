@@ -11,17 +11,17 @@ export const updateEducationList = async (payload: UpdateEducationListRequest, r
 
 export const UpdateEducationListSchema = z.array(
 	z.object({
-		schoolName: z.string().optional(),
-		degree: z.string().optional(),
-		fieldOfStudy: z.string().optional(),
-		location: z.string().optional(),
+		schoolName: z.string().nullable().optional(),
+		degree: z.string().nullable().optional(),
+		fieldOfStudy: z.string().nullable().optional(),
+		location: z.string().nullable().optional(),
 		isOngoing: z.boolean(),
 		startDate: z
-			.string()
+			.string().nullable()
 			.optional()
 			.default(() => new Date().toISOString()),
 		endDate: z
-			.string()
+			.string().nullable()
 			.optional()
 			.default(() => new Date().toISOString()),
 		resumeId: z.string(),

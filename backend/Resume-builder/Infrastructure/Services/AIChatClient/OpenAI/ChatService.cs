@@ -137,4 +137,29 @@ public partial class OpenAiChatClient
             Response = response.Result
         };
     }
+    
+    public async Task<AIResponse<ParsedResumeResponse>> GenerateResumeFromPrompt(string prompt, ResumeAdditionalInfo additionalInfo,
+        CancellationToken cancellationToken)
+    {
+        var inputPrompt = PromptBuilder.BuildGenerateResumeFromPrompt(prompt, additionalInfo);
+
+        var chatHistory = new List<ChatMessage>();
+
+        chatHistory.Add(new ChatMessage(ChatRole.System, SystemPrompts.GenerateResumeFromPrompt));
+
+        chatHistory.Add(new ChatMessage(ChatRole.User, inputPrompt));
+
+        var response = await _chatClient.GetResponseAsync<ParsedResumeResponse>(
+            chatHistory,
+            JsonSerializerOptions.Default,
+            new ChatOptions { Temperature = 0.5f },
+            true,
+            cancellationToken);
+
+        return new AIResponse<ParsedResumeResponse>
+        {
+            PromptUsage = response.Usage?.TotalTokenCount,
+            Response = response.Result
+        };
+    }
 }

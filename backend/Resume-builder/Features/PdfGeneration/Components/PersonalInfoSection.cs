@@ -2,14 +2,13 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Resume_builder.Features.Resume.Common;
-using System.Collections.Generic;
 
 namespace Resume_builder.Features.PdfGeneration.Components;
 
 public class PersonalInfoSection : IComponent
 {
+    private static readonly string HyperlinkColor = Colors.Blue.Medium; // Bright blue
     private readonly ResumeDto _resume;
-    private static readonly string HyperlinkColor = Colors.Blue.Darken4; // Bright blue
 
     public PersonalInfoSection(ResumeDto resume)
     {
@@ -22,10 +21,7 @@ public class PersonalInfoSection : IComponent
         {
             // Name and Role
             var nameText = _resume.UserName ?? string.Empty;
-            if (!string.IsNullOrEmpty(_resume.Role))
-            {
-                nameText += $" - {_resume.Role}";
-            }
+            if (!string.IsNullOrEmpty(_resume.Role)) nameText += $" - {_resume.Role}";
 
             column.Item().AlignCenter().Text(nameText)
                 .FontSize(18)
@@ -40,7 +36,7 @@ public class PersonalInfoSection : IComponent
                 contactElements.Add(txt =>
                 {
                     txt.Span(address)
-                       .FontSize(10);
+                        .FontSize(10);
                 });
             }
 
@@ -101,19 +97,14 @@ public class PersonalInfoSection : IComponent
             }
 
             if (contactElements.Any())
-            {
                 column.Item().PaddingTop(8).AlignCenter().Text(text =>
                 {
-                    for (int i = 0; i < contactElements.Count; i++)
+                    for (var i = 0; i < contactElements.Count; i++)
                     {
                         contactElements[i](text);
-                        if (i < contactElements.Count - 1)
-                        {
-                            text.Span(" | ").FontSize(10);
-                        }
+                        if (i < contactElements.Count - 1) text.Span(" | ").FontSize(10);
                     }
                 });
-            }
         });
     }
 }

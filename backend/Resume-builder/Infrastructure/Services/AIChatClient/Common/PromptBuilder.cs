@@ -5,6 +5,31 @@ namespace Resume_builder.Infrastructure.Services.AIChatClient.Common;
 
 public static class PromptBuilder
 {
+
+    private static void AppendAdditionalInfo(StringBuilder inputPrompt, ResumeAdditionalInfo additionalInfo)
+    {
+        if (!string.IsNullOrEmpty(additionalInfo?.JobDescription))
+        {
+            inputPrompt.AppendLine("Job Description:");
+            inputPrompt.AppendLine(additionalInfo.JobDescription);
+            inputPrompt.AppendLine();
+        }
+
+        if (!string.IsNullOrEmpty(additionalInfo?.Role))
+        {
+            inputPrompt.AppendLine("Role:");
+            inputPrompt.AppendLine(additionalInfo.Role);
+            inputPrompt.AppendLine();
+        }
+
+        if (!string.IsNullOrEmpty(additionalInfo?.Tags))
+        {
+            inputPrompt.AppendLine("Tags:");
+            inputPrompt.AppendLine(additionalInfo.Tags);
+            inputPrompt.AppendLine();
+        }
+    }
+    
     public static string BuildEnhanceSkillsPrompt(List<string> skills, ResumeAdditionalInfo? additionalInfo)
     {
         var inputPrompt = new StringBuilder();
@@ -67,31 +92,23 @@ public static class PromptBuilder
         inputPrompt.Append("Resume Raw Text: \n");
         inputPrompt.AppendLine(rawText);
 
-        if (!string.IsNullOrEmpty(additionalInfo?.JobDescription))
-        {
-            inputPrompt.AppendLine("Job Description:");
-            inputPrompt.AppendLine(additionalInfo.JobDescription);
-            inputPrompt.AppendLine();
-        }
-
-        if (!string.IsNullOrEmpty(additionalInfo?.Role))
-        {
-            inputPrompt.AppendLine("Role:");
-            inputPrompt.AppendLine(additionalInfo.Role);
-            inputPrompt.AppendLine();
-        }
-
-        if (!string.IsNullOrEmpty(additionalInfo?.Tags))
-        {
-            inputPrompt.AppendLine("Tags:");
-            inputPrompt.AppendLine(additionalInfo.Tags);
-            inputPrompt.AppendLine();
-        }
+        AppendAdditionalInfo(inputPrompt, additionalInfo);
 
         return inputPrompt.ToString();
     }
+    
+    public static string BuildGenerateResumeFromPrompt(string prompt, ResumeAdditionalInfo additionalInfo)
+    {
+        var inputPrompt = new StringBuilder();
 
+        inputPrompt.Append("User input: \n");
+        inputPrompt.AppendLine(prompt);
 
+        AppendAdditionalInfo(inputPrompt, additionalInfo);
+
+        return inputPrompt.ToString();
+    }
+    
     public static string BuildEnhanceWorkExperienceBulletPointPrompt(EnhanceBulletPointsRequest request)
     {
         var inputPrompt = new StringBuilder();

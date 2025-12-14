@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Routes } from "@/lib/routes";
-import { SignupRequest } from "@/services/auth/signup";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { FileText, Mail, Lock, User } from "lucide-react";
+import { SignupRequest } from "@/services/auth/signup";
 
 const Signup = () => {
 	const router = useRouter();
@@ -22,6 +22,7 @@ const Signup = () => {
 			email: "",
 			name: "",
 			password: "",
+			confirmPassword: "",
 		},
 	});
 
@@ -144,6 +145,22 @@ const Signup = () => {
 								/>
 							</div>
 							<ErrorLabel control={control} name="password" />
+						</div>
+						<div className="space-y-2">
+							<Label htmlFor="confirmPassword" className="text-gray-700 font-medium">
+								Confirm Password
+							</Label>
+							<div className="relative">
+								<Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+								<Input
+									id="confirmPassword"
+									type="password"
+									placeholder="Confirm your password"
+									className="pl-10 h-12 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+									{...register("confirmPassword")}
+								/>
+							</div>
+							<ErrorLabel control={control} name="confirmPassword" />
 						</div>
 						<Button
 							type="submit"

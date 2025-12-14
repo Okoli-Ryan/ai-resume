@@ -6,7 +6,7 @@ import { AuthResponse } from "@/types/user";
 export type SigninRequest = z.infer<typeof SigninSchema>;
 
 export const signin = async (payload: SigninRequest) => {
-	return FetchClient.post<AuthResponse, SigninRequest>(`/auth/login`, payload);
+	return FetchClient.post<AuthResponse, SigninRequest>(`/auth/login`, payload, { hasAuthorization: false });
 };
 
 export const SigninSchema = z.object({

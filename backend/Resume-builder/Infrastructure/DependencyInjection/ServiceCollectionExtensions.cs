@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Resume_builder.Common;
 using Resume_builder.Features.PdfGeneration;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.AIChatClient.OpenAI;
 using Resume_builder.Infrastructure.Services.ClaimService;
@@ -23,6 +24,7 @@ public static class ServiceCollectionExtensions
         services
             .AddConfig(config)
             .AddPersistence(config)
+            .AddRepositories()
             .AddServices()
             .AddAuth(config)
             .AddHttpContextAccessor()
@@ -32,6 +34,14 @@ public static class ServiceCollectionExtensions
             .AddHttpClient()
             .AddAiChatClient(config)
             .AddOpenApi();
+    }
+
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IResumeRepository, ResumeRepository>();
+
+        return services;
     }
 
 
