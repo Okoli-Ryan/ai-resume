@@ -165,9 +165,16 @@ const WorkExperienceFormItem = ({ form, index, remove }: WorkExperienceFormItemP
 						render={({ field }) => (
 							<FormItem className="flex items-center gap-3 space-y-0 p-3 bg-muted/30 rounded-md">
 								<FormControl>
-									<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+									<Checkbox 
+										id={`workExperience-${index}-isOngoing`}
+										checked={field.value} 
+										onCheckedChange={field.onChange} 
+									/>
 								</FormControl>
-								<FormLabel className="font-normal cursor-pointer">
+								<FormLabel 
+									htmlFor={`workExperience-${index}-isOngoing`}
+									className="font-normal cursor-pointer"
+								>
 									I currently work here
 								</FormLabel>
 							</FormItem>

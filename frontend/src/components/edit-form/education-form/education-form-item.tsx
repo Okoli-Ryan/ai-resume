@@ -134,9 +134,16 @@ const EducationFormItem = ({ index, remove, form }: EducationFormItemProps) => {
 					render={({ field }) => (
 						<FormItem className="flex items-center gap-3 space-y-0 p-3 bg-muted/30 rounded-md">
 							<FormControl>
-								<Checkbox checked={field.value} onCheckedChange={field.onChange} />
+								<Checkbox 
+									id={`education-${index}-isOngoing`}
+									checked={field.value} 
+									onCheckedChange={field.onChange} 
+								/>
 							</FormControl>
-							<FormLabel className="font-normal cursor-pointer">
+							<FormLabel 
+								htmlFor={`education-${index}-isOngoing`}
+								className="font-normal cursor-pointer"
+							>
 								I am currently studying here
 							</FormLabel>
 						</FormItem>
