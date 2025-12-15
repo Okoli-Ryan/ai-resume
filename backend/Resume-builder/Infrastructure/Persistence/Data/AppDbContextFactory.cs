@@ -14,10 +14,6 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
             .AddEnvironmentVariables()
             .Build();
 
-        foreach (var kv in config.AsEnumerable())
-            //Temporary log
-            Console.WriteLine($"{kv.Key} = {kv.Value}");
-
         // Manually bind to AppSettings (like IOptions<AppSettings>)
         var appSettings = config.GetSection("AppSettings").Get<AppSettings>();
 

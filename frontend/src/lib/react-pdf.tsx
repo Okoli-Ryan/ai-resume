@@ -1,4 +1,5 @@
 import EducationForm from "@/components/edit-form/education-form/education-form";
+import LinkForm from "@/components/edit-form/link-form/link-form";
 import PersonalInfoForm from "@/components/edit-form/personal-info/personal-info-form";
 import ProjectForm from "@/components/edit-form/projects-form/projects-form";
 import ResumeInfoForm from "@/components/edit-form/resume-info-form/resume-info-form";
@@ -6,12 +7,4 @@ import ResumeOrderForm from "@/components/edit-form/resume-order-form/resume-ord
 import SkillsForm from "@/components/edit-form/skills-form/skills-form";
 import WorkExperienceForm from "@/components/edit-form/work-experience-form/work-experience-form";
 
-export const ResumeFormSections = [
-	ResumeInfoForm, 
-	ResumeOrderForm, 
-	PersonalInfoForm, 
-	WorkExperienceForm,
-	EducationForm,
-	ProjectForm,
-	SkillsForm
-];
+export const ResumeFormSections = [ResumeInfoForm, ResumeOrderForm, PersonalInfoForm, LinkForm, WorkExperienceForm, EducationForm, ProjectForm, SkillsForm];

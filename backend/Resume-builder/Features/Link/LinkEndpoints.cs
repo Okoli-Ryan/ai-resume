@@ -5,6 +5,7 @@ using Resume_builder.Features.Link.Delete;
 using Resume_builder.Features.Link.GetLinksByResume;
 using Resume_builder.Features.Link.GetLinksByUser;
 using Resume_builder.Features.Link.Update;
+using Resume_builder.Features.Link.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Services.ClaimService;
 
@@ -62,6 +63,20 @@ public class LinkModule : CarterModule
             var handler = new DeleteLinkHandler(db, claimsService);
 
             var response = await handler.Handle(new DeleteLinkCommand(id), cancellationToken);
+
+            return response.GetResult();
+        });
+
+        endpoint.MapPut("resume/{resumeId}", async (
+            string resumeId,
+            List<UpdateLinksByResumeIdRequest> request,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new UpdateLinksByResumeIdHandler(db, claimsService);
+
+            var response = await handler.Handle(new UpdateLinksByResumeIdCommand(resumeId, request), cancellationToken);
 
             return response.GetResult();
         });
