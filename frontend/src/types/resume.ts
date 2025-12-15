@@ -1,5 +1,6 @@
 import { BaseEntity } from './common';
 import { EducationDto } from './education';
+import { LinkDto } from "./link";
 import { ProjectDto } from './project';
 import { SkillDto } from './skill';
 import { WorkExperienceDto } from './work-experience';
@@ -11,10 +12,10 @@ export type TResume = {
 	tags?: string;
 	summary: string;
 	role: string;
-    order: string
+	order: string;
 	address: string;
 	phoneNumber: string;
-    isFavourite: boolean
+	isFavourite: boolean;
 	linkedinUrl: string;
 	githubUrl: string;
 	portfolioUrl: string;
@@ -23,4 +24,5 @@ export type TResume = {
 	education: EducationDto[];
 	projects: ProjectDto[];
 	skills: SkillDto[];
+	links: LinkDto[];
 } & BaseEntity;

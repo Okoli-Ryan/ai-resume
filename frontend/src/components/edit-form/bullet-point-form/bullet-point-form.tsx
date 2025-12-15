@@ -12,7 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { FormLabel } from "@/components/ui/form";
 import { EnhanceTypes } from "@/types/common";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
-import { ArrowUpDown, ChevronDown } from "lucide-react";
+import { ArrowUpDown, ChevronDown, Plus, Sparkles } from "lucide-react";
 import { ReactSortable } from "react-sortablejs";
 import { useResumeContext } from "../resume-info-form/context/resume-context";
 import { enhanceBulletpointListAction } from "./actions/enhance-bullet-point-list-action";
@@ -73,52 +73,91 @@ export function BulletPointsForm<T extends FieldValues>({ form, name, enhanceTyp
 		<Accordion transition transitionTimeout={200}>
 			<AccordionItem
 				buttonProps={{
-					className: "flex justify-between items-center w-full border rounded-sm px-2 py-4 cursor-pointer transition hover:bg-gray-100",
+					className: "flex justify-between items-center w-full border-2 border-border rounded-lg px-4 py-3 cursor-pointer transition-all hover:bg-muted/30 hover:border-primary/30",
 				}}
 				contentProps={{ className: "transition-all duration-200 ease-in-out" }}
 				header={
 					<>
-						<FormLabel className="cursor-pointer">Bullet Points</FormLabel>
+						<FormLabel className="cursor-pointer font-semibold text-sm">
+							Responsibilities & Achievements
+						</FormLabel>
 						<ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200" />
 					</>
 				}>
-				<div className="space-y-4 mt-4">
-					<div className="grid md:grid-cols-2 gap-3">
+				<div className="space-y-4 mt-4 p-4 bg-muted/10 rounded-lg">
+					{/* Action buttons */}
+					<div className="flex flex-wrap gap-2">
 						{enhanceType && (
-							<Button loading={isPending} variant="outline" type="button" onClick={enhanceBulletPoints} className="w-full">
-								Generate With AI
+							<Button 
+								loading={isPending} 
+								variant="outline" 
+								type="button" 
+								onClick={enhanceBulletPoints} 
+								className="flex items-center gap-2 hover:bg-primary/5"
+							>
+								<Sparkles className="h-4 w-4" />
+								{isPending ? "Generating..." : "Generate with AI"}
 							</Button>
 						)}
 						{bulletPointsList.length > 1 && (
-							<Button disabled={isPending} variant="outline" type="button" onClick={() => setInSortMode(!inSortMode)} className="w-full">
-								Sort
-                                <ArrowUpDown/>
+							<Button 
+								disabled={isPending} 
+								variant="outline" 
+								type="button" 
+								onClick={() => setInSortMode(!inSortMode)} 
+								className="flex items-center gap-2"
+							>
+								<ArrowUpDown className="h-4 w-4" />
+								{inSortMode ? "Done" : "Reorder"}
 							</Button>
 						)}
-						<Button variant="secondary" type="button" disabled={isPending} onClick={handlePrepend} className="w-full">
-							+ Add Bullet Point
+						<Button 
+							variant="secondary" 
+							type="button" 
+							disabled={isPending} 
+							onClick={handlePrepend} 
+							className="flex items-center gap-2"
+						>
+							<Plus className="h-4 w-4" />
+							Add Point
 						</Button>
 					</div>
 
-					<div className="flex flex-col gap-6 mt-3">
-						<ReactSortable
-							list={bulletPointsList}
-							setList={(newList) => setValue(name as Path<T>, newList as PathValue<T, Path<T>>)}
-							handle=".drag-handle"
-							ghostClass="drag-ghost"
-							animation={200}
-							delay={2}
-							className="space-y-3">
-							{(bulletPointsList as BulletPointDto[]).map((field, index) => (
-								<BulletPointFormItem
-									key={field.id}
-									inSortMode={inSortMode}
-									control={control}
-									fieldName={`${name}.${index}.text` as Path<T>}
-									onRemove={() => remove(index)}
-								/>
-							))}
-						</ReactSortable>
+					{/* Bullet points list */}
+					<div className="flex flex-col gap-4 mt-4">
+						{bulletPointsList.length === 0 ? (
+							<div className="text-center py-8 px-4 border-2 border-dashed rounded-lg bg-background">
+								<p className="text-sm text-muted-foreground mb-3">No bullet points added yet</p>
+								<Button
+									variant="outline"
+									type="button"
+									onClick={handlePrepend}
+									className="flex items-center gap-2"
+								>
+									<Plus className="h-4 w-4" />
+									Add Your First Point
+								</Button>
+							</div>
+						) : (
+							<ReactSortable
+								list={bulletPointsList}
+								setList={(newList) => setValue(name as Path<T>, newList as PathValue<T, Path<T>>)}
+								handle=".drag-handle"
+								ghostClass="drag-ghost"
+								animation={200}
+								delay={2}
+								className="space-y-3">
+								{(bulletPointsList as BulletPointDto[]).map((field, index) => (
+									<BulletPointFormItem
+										key={field.id}
+										inSortMode={inSortMode}
+										control={control}
+										fieldName={`${name}.${index}.text` as Path<T>}
+										onRemove={() => remove(index)}
+									/>
+								))}
+							</ReactSortable>
+						)}
 					</div>
 				</div>
 			</AccordionItem>

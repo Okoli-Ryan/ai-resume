@@ -19,6 +19,7 @@ public class ResumeRepository(AppDbContext db) : IResumeRepository
             .Include(x => x.WorkExperience)!
             .ThenInclude(x => x.BulletPoints)
             .Include(x => x.Skills)
+            .Include(x => x.Links)
             .FirstOrDefaultAsync(cancellationToken);
     }
 }

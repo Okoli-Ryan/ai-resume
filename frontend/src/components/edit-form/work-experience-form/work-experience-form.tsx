@@ -12,7 +12,7 @@ import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
-import { ArrowUpDown, GripVertical } from "lucide-react";
+import { ArrowUpDown, GripVertical, Plus } from "lucide-react";
 import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { updateWorkExperienceListAction } from "./actions/update-work-experience-list-action";
@@ -61,60 +61,128 @@ const WorkExperienceForm = () => {
 	return (
 		<Form {...form}>
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-				<div className="grid md:grid-cols-2 gap-3">
+				{/* Action buttons */}
+				<div className="flex flex-wrap gap-3">
 					{workExperienceList.length > 1 && (
-						<Button disabled={isPending} variant="outline" type="button" onClick={() => setInSortMode(!inSortMode)} className="w-full">
-							Sort
-							<ArrowUpDown />
+						<Button 
+							disabled={isPending} 
+							variant="outline" 
+							type="button" 
+							onClick={() => setInSortMode(!inSortMode)} 
+							className="flex items-center gap-2 hover:bg-primary/5"
+						>
+							<ArrowUpDown className="h-4 w-4" />
+							{inSortMode ? "Done Sorting" : "Reorder Items"}
 						</Button>
 					)}
+					<Button
+						type="button"
+						variant="secondary"
+						className="flex items-center gap-2"
+						onClick={() => {
+							append({
+								companyName: "",
+								endDate: new Date().toISOString(),
+								location: "",
+								startDate: new Date().toISOString(),
+								isOngoing: false,
+								resumeId: "",
+								title: "",
+								userId: "",
+								companyLink: "",
+								bulletPoints: [],
+								workType: "",
+								createdAt: new Date().toISOString(),
+								updatedAt: new Date().toISOString(),
+								id: "",
+							});
+						}}>
+						<Plus className="h-4 w-4" />
+						Add Experience
+					</Button>
 				</div>
+
+				{/* Sort mode view */}
 				{inSortMode && (
-					<ReactSortable
-						list={workExperienceList}
-						setList={(newList) => setValue("workExperience", newList)}
-						handle=".drag-handle"
-						ghostClass="drag-ghost"
-						animation={200}
-						delay={2}
-						className="space-y-3">
-						{workExperienceList.map((field) => (
-							<div key={field.id} className={cn("bg-white p-2 border rounded-md flex items-center justify-between", inSortMode && "shake")}>
-								<span className="capitalize text-sm">{field.companyName}</span>
-								<GripVertical className="text-sm drag-handle cursor-grab text-gray-500" />
-							</div>
-						))}
-					</ReactSortable>
+					<div className="space-y-3 p-4 bg-muted/30 rounded-lg border-2 border-dashed border-primary/30">
+						<p className="text-sm text-muted-foreground mb-3">Drag items to reorder them</p>
+						<ReactSortable
+							list={workExperienceList}
+							setList={(newList) => setValue("workExperience", newList)}
+							handle=".drag-handle"
+							ghostClass="drag-ghost"
+							animation={200}
+							delay={2}
+							className="space-y-3">
+							{workExperienceList.map((field) => (
+								<div 
+									key={field.id} 
+									className={cn(
+										"bg-white p-4 border-2 rounded-lg flex items-center justify-between shadow-sm",
+										inSortMode && "shake hover:border-primary/50 transition-colors"
+									)}
+								>
+									<div className="flex-1">
+										<p className="font-medium text-sm">{field.companyName || "Untitled Experience"}</p>
+										<p className="text-xs text-muted-foreground">{field.title || "No title"}</p>
+									</div>
+									<GripVertical className="h-5 w-5 drag-handle cursor-grab text-muted-foreground hover:text-primary transition-colors" />
+								</div>
+							))}
+						</ReactSortable>
+					</div>
 				)}
-				{!inSortMode && fields.map((experience, index) => <WorkExperienceFormItem key={experience.id} form={form} index={index} remove={remove} />)}
 
-				<Button
-					type="button"
-					variant="outline"
-					className="tw-w-max"
-					onClick={() => {
-						append({
-							companyName: "",
-							endDate: new Date().toISOString(),
-							location: "",
-							startDate: new Date().toISOString(),
-							isOngoing: false,
-							resumeId: "",
-							title: "",
-							userId: "",
-							companyLink: "",
-							bulletPoints: [],
-							workType: "",
-							createdAt: new Date().toISOString(),
-							updatedAt: new Date().toISOString(),
-							id: "",
-						});
-					}}>
-					Add Experience
-				</Button>
+				{/* Normal edit mode */}
+				{!inSortMode && (
+					<div className="space-y-4">
+						{fields.length === 0 ? (
+							<div className="text-center py-12 px-4 border-2 border-dashed rounded-lg bg-muted/10">
+								<p className="text-muted-foreground mb-4">No work experience added yet</p>
+								<Button
+									type="button"
+									variant="outline"
+									onClick={() => {
+										append({
+											companyName: "",
+											endDate: new Date().toISOString(),
+											location: "",
+											startDate: new Date().toISOString(),
+											isOngoing: false,
+											resumeId: "",
+											title: "",
+											userId: "",
+											companyLink: "",
+											bulletPoints: [],
+											workType: "",
+											createdAt: new Date().toISOString(),
+											updatedAt: new Date().toISOString(),
+											id: "",
+										});
+									}}>
+									<Plus className="h-4 w-4 mr-2" />
+									Add Your First Experience
+								</Button>
+							</div>
+						) : (
+							fields.map((experience, index) => (
+								<WorkExperienceFormItem 
+									key={experience.id} 
+									form={form} 
+									index={index} 
+									remove={remove} 
+								/>
+							))
+						)}
+					</div>
+				)}
 
-				<Button loading={isPending} type="submit" className="w-full">
-					Update
+				<Button 
+					loading={isPending} 
+					type="submit" 
+					className="w-full h-11 font-medium mt-6 transition-all hover:shadow-md"
+				>
+					{isPending ? "Saving..." : "Save Changes"}
 				</Button>
 			</form>
 		</Form>

@@ -58,6 +58,16 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 							|
 						</>
 					)}
+					{resume?.links &&
+						resume.links.map((link) => (
+							<span key={link.id}>
+								{" "}
+								<a href={link.url} className="text-inherit">
+									{link.name}
+								</a>{" "}
+								|
+							</span>
+						))}
 				</div>
 			</div>
 		</div>

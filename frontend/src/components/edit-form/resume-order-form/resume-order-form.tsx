@@ -6,11 +6,12 @@ import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
 import { useMutation } from "@tanstack/react-query";
-import { GripVertical } from "lucide-react";
+import { GripVertical, ListOrdered } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { ReactSortable } from "react-sortablejs";
 import { toast } from "sonner";
 import { updateResumeOrderAction } from "./actions/update-resume-order-action";
+import { cn } from "@/lib/utils";
 
 const ResumeOrderForm = () => {
 	const resume = useResumeStore((state) => state.resume)!;
@@ -51,30 +52,59 @@ const ResumeOrderForm = () => {
 	return (
 		<FormLayout>
 			<Form {...form}>
-				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+					<div className="space-y-4">
+						<h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+							<ListOrdered className="h-4 w-4" />
+							Section Order
+						</h4>
+						<p className="text-sm text-muted-foreground">
+							Drag sections to rearrange their order on your resume
+						</p>
+					</div>
+
 					<FormItem>
-						<ReactSortable
-							tag="ul"
-							list={orderedList}
-							setList={(newOrder) =>
-								setValue(
-									"order",
-									newOrder.map((item) => item.id)
-								)
-							}
-							handle=".drag-handle"
-							ghostClass="drag-ghost"
-							className="space-y-3">
-							{order.map((sectionKey) => (
-								<li key={sectionKey} className="bg-white p-2 border rounded-md flex items-center justify-between">
-									<span className="capitalize text-sm">{sectionKey}</span>
-									<GripVertical className="text-sm drag-handle cursor-grab text-gray-500" />
-								</li>
-							))}
-						</ReactSortable>
+						<div className="p-4 bg-muted/30 rounded-lg border-2 border-dashed border-primary/30">
+							<ReactSortable
+								tag="ul"
+								list={orderedList}
+								setList={(newOrder) =>
+									setValue(
+										"order",
+										newOrder.map((item) => item.id)
+									)
+								}
+								handle=".drag-handle"
+								ghostClass="drag-ghost"
+								animation={200}
+								className="space-y-3">
+								{order.map((sectionKey, index) => (
+									<li 
+										key={sectionKey} 
+										className={cn(
+											"bg-white p-4 border-2 rounded-lg flex items-center justify-between shadow-sm",
+											"hover:border-primary/50 transition-colors"
+										)}
+									>
+										<div className="flex items-center gap-3">
+											<span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary text-sm font-semibold">
+												{index + 1}
+											</span>
+											<span className="capitalize font-medium text-sm">{sectionKey}</span>
+										</div>
+										<GripVertical className="h-5 w-5 drag-handle cursor-grab text-muted-foreground hover:text-primary transition-colors" />
+									</li>
+								))}
+							</ReactSortable>
+						</div>
 					</FormItem>
-					<Button loading={isPending} type="submit" className="w-full">
-						Update Order
+
+					<Button 
+						loading={isPending} 
+						type="submit" 
+						className="w-full h-11 font-medium transition-all hover:shadow-md"
+					>
+						{isPending ? "Saving..." : "Save Order"}
 					</Button>
 				</form>
 			</Form>

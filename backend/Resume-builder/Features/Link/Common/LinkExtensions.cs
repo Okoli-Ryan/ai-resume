@@ -8,6 +8,7 @@ public static class LinkExtensions
         {
             Url = linkEntity.Url,
             Name = linkEntity.LinkName,
+            Index = linkEntity.Index,
             ResumeId = linkEntity.ResumeId,
             UserId = linkEntity.UserId,
             Id = linkEntity.Id,
@@ -23,6 +24,7 @@ public static class LinkExtensions
         {
             Url = linkDto.Url,
             LinkName = linkDto.Name,
+            Index = linkDto.Index,
             Id = linkDto.Id,
             ResumeId = linkDto.ResumeId,
             UserId = linkDto.UserId,
