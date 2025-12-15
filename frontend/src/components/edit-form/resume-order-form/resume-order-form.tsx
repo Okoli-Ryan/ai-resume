@@ -83,7 +83,7 @@ const ResumeOrderForm = () => {
 										key={sectionKey} 
 										className={cn(
 											"bg-white p-4 border-2 rounded-lg flex items-center justify-between shadow-sm",
-											"shake hover:border-primary/50 transition-colors"
+											"hover:border-primary/50 transition-colors"
 										)}
 									>
 										<div className="flex items-center gap-3">

@@ -180,6 +180,7 @@ const SkillsForm = () => {
 										<div className="flex-1">
 											<p className="font-medium text-sm">{field.category || "Untitled Category"}</p>
 											<p className="text-xs text-muted-foreground">
+												{/* Simple string split is performant enough for sort mode display */}
 												{field.skills ? field.skills.split(',').length : 0} skills
 											</p>
 										</div>
