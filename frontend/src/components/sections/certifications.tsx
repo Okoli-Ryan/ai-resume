@@ -4,6 +4,16 @@ import Section from "./section";
 import { TResume } from "@/types/resume";
 import BulletPoint from "./bullet-point";
 
+// Simple URL validation function
+const isValidUrl = (url: string): boolean => {
+	try {
+		const urlObj = new URL(url);
+		return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+	} catch {
+		return false;
+	}
+};
+
 const Certifications = ({ resume }: { resume: Partial<TResume> }) => {
 	const certificationsList = resume?.certifications || [];
 
@@ -17,7 +27,7 @@ const Certifications = ({ resume }: { resume: Partial<TResume> }) => {
 						<div className="flex flex-col gap-[3px] break-inside-avoid" key={certification.id}>
 							<div>
 								<Row>
-									{certification.certificateLink ? (
+									{certification.certificateLink && isValidUrl(certification.certificateLink) ? (
 										<a 
 											href={certification.certificateLink} 
 											target="_blank" 

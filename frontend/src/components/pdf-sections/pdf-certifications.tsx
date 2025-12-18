@@ -5,6 +5,16 @@ import PDFBulletPoint from './pdf-bullet-point';
 import { TResume } from '@/types/resume';
 import { styles } from './pdf-styles';
 
+// Simple URL validation function
+const isValidUrl = (url: string): boolean => {
+	try {
+		const urlObj = new URL(url);
+		return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+	} catch {
+		return false;
+	}
+};
+
 const PDFCertifications = ({ resume }: { resume: Partial<TResume> }) => {
 	const certificationsList = resume?.certifications || [];
 
@@ -16,7 +26,7 @@ const PDFCertifications = ({ resume }: { resume: Partial<TResume> }) => {
 				{certificationsList.map((certification) => (
 					<View key={certification.id} style={styles.itemContainer}>
 						<View style={styles.row}>
-							{certification.certificateLink ? (
+							{certification.certificateLink && isValidUrl(certification.certificateLink) ? (
 								<Link src={certification.certificateLink} style={[styles.companyName, { color: '#0066cc' }]}>
 									{certification.certificationName}
 								</Link>

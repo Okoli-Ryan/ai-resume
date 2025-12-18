@@ -21,5 +21,5 @@ public class CertificationEntity : BaseEntity
     public virtual ResumeEntity? Resume { get; set; }
 
     public virtual User? User { get; set; }
-    public List<BulletPointEntity> BulletPoints { get; set; } = [];
+    public virtual List<BulletPointEntity> BulletPoints { get; set; } = [];
 }

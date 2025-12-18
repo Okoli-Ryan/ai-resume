@@ -17,6 +17,19 @@ import { useState } from "react";
 import { ReactSortable } from "react-sortablejs";
 import { updateCertificationListAction } from "./actions/update-certification-list-action";
 import CertificationFormItem from "./certification-form-item";
+import { CertificationDto } from "@/types/certification";
+
+const createEmptyCertification = (): CertificationDto => ({
+	certificationName: "",
+	certificateLink: "",
+	dateAttained: new Date().toISOString(),
+	bulletPoints: [],
+	resumeId: "",
+	userId: "",
+	createdAt: new Date().toISOString(),
+	updatedAt: new Date().toISOString(),
+	id: "",
+});
 
 export const CertificationForm = () => {
 	const { id } = useParams<{ id: string }>();
@@ -80,19 +93,7 @@ export const CertificationForm = () => {
 							type="button"
 							variant="secondary"
 							className="flex items-center gap-2"
-							onClick={() => {
-								append({
-									certificationName: "",
-									certificateLink: "",
-									dateAttained: new Date().toISOString(),
-									bulletPoints: [],
-									resumeId: "",
-									userId: "",
-									createdAt: new Date().toISOString(),
-									updatedAt: new Date().toISOString(),
-									id: "",
-								});
-							}}>
+							onClick={() => append(createEmptyCertification())}>
 							<Plus className="h-4 w-4" />
 							Add Certification
 						</Button>
@@ -142,19 +143,7 @@ export const CertificationForm = () => {
 									<Button
 										type="button"
 										variant="outline"
-										onClick={() => {
-											append({
-												certificationName: "",
-												certificateLink: "",
-												dateAttained: new Date().toISOString(),
-												bulletPoints: [],
-												resumeId: "",
-												userId: "",
-												createdAt: new Date().toISOString(),
-												updatedAt: new Date().toISOString(),
-												id: "",
-											});
-										}}>
+										onClick={() => append(createEmptyCertification())}>
 										<Plus className="h-4 w-4 mr-2" />
 										Add Your First Certification
 									</Button>
