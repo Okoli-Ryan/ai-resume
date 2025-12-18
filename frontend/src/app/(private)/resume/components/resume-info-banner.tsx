@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -28,13 +28,14 @@ import { useResumeContext } from "@/components/edit-form/resume-info-form/contex
 export const ResumeInfoBanner = () => {
 	const { id } = useParams<{ id: string }>();
 	const [open, setOpen] = useState(false);
+	const jobDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
 	const { additionalInfo, setAdditionalInfo } = useResumeContext();
 	const resume = useResumeStore((state) => state.resume)!;
 	const updateResume = useResumeStore((state) => state.update);
 	const form = useForm<Partial<TResume>>({
 		defaultValues: {
 			resumeName: resume?.resumeName || "",
-			tags: resume?.tags || [],
+			tags: resume?.tags || "",
 		},
 	});
 
@@ -42,7 +43,6 @@ export const ResumeInfoBanner = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
-		setValue,
 	} = form;
 
 	const { mutate: updateResumeInfo, isPending } = useMutation({
@@ -69,7 +69,7 @@ export const ResumeInfoBanner = () => {
 	});
 
 	const onSubmit = (data: Partial<TResume>) => {
-		const updatedJobDescription = data.jobDescription || "";
+		const updatedJobDescription = jobDescriptionRef.current?.value || "";
 		updateResumeInfo(data);
 		setAdditionalInfo((prev) => ({
 			...prev,
@@ -78,7 +78,8 @@ export const ResumeInfoBanner = () => {
 	};
 
 	const hasJobDescription = additionalInfo.jobDescription?.trim().length > 0;
-	const tagsCount = resume?.tags?.length || 0;
+	const tagsArray = resume?.tags ? resume.tags.split(",").filter(Boolean) : [];
+	const tagsCount = tagsArray.length;
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -187,8 +188,8 @@ export const ResumeInfoBanner = () => {
 							</div>
 							<FormControl>
 								<Textarea
-									{...register("jobDescription")}
 									defaultValue={additionalInfo.jobDescription}
+									ref={jobDescriptionRef}
 									placeholder="Paste the job description here to help AI tailor your resume...
 
 Example:
@@ -196,7 +197,6 @@ Example:
 • Job responsibilities and requirements
 • Company culture and values"
 									className="min-h-[180px] transition-all focus:ring-2 focus:ring-primary/20 font-mono text-sm"
-									onChange={(e) => setValue("jobDescription", e.target.value)}
 								/>
 							</FormControl>
 							<div className="flex items-start gap-2 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-md">
