@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Resume_builder.Common;
 using Resume_builder.Features.BulletPoint;
+using Resume_builder.Features.Certification;
 using Resume_builder.Features.Education;
 using Resume_builder.Features.Link;
 using Resume_builder.Features.Project;
@@ -21,6 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<WorkExperienceEntity> WorkExperience { get; set; }
     public DbSet<SkillEntity> Skill { get; set; }
     public DbSet<LinkEntity> Link { get; set; }
+    public DbSet<CertificationEntity> Certification { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

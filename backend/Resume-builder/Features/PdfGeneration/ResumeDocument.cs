@@ -9,7 +9,7 @@ namespace Resume_builder.Features.PdfGeneration;
 public class ResumeDocument : IDocument
 {
     private readonly ResumeDto _resume;
-    private static readonly string[] DefaultResumeOrder = ["summary", "workExperience", "education", "projects", "skills"];
+    private static readonly string[] DefaultResumeOrder = ["summary", "workExperience", "education", "certifications", "projects", "skills"];
 
     public ResumeDocument(ResumeDto resume)
     {
@@ -68,6 +68,7 @@ public class ResumeDocument : IDocument
             "summary" => new SummarySection(_resume),
             "workexperience" => new WorkExperienceSection(_resume),
             "education" => new EducationSection(_resume),
+            "certifications" => new CertificationsSection(_resume),
             "projects" => new ProjectsSection(_resume),
             "skills" => new SkillsSection(_resume),
             _ => null
