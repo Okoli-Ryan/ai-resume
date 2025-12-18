@@ -6,5 +6,5 @@ export const ErrorMessage = {
 	ServerError: "Server Error",
 };
 
-export const DEFAULT_RESUME_ORDER = ["summary", "workExperience", "education", "projects", "skills"] as const;
+export const DEFAULT_RESUME_ORDER = ["summary", "workExperience", "education", "certifications", "projects", "skills"] as const;
 

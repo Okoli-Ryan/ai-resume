@@ -1,4 +1,5 @@
 import { BaseEntity } from './common';
+import { CertificationDto } from './certification';
 import { EducationDto } from './education';
 import { LinkDto } from "./link";
 import { ProjectDto } from './project';
@@ -25,4 +26,5 @@ export type TResume = {
 	projects: ProjectDto[];
 	skills: SkillDto[];
 	links: LinkDto[];
+	certifications: CertificationDto[];
 } & BaseEntity;

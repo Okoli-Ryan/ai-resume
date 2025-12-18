@@ -4,6 +4,7 @@ import PersonalInfo from "@/components/sections/personal-info";
 import Summary from "@/components/sections/summary";
 import WorkExperience from "@/components/sections/work-experience";
 import Education from "@/components/sections/education";
+import Certifications from "@/components/sections/certifications";
 import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
@@ -38,6 +39,7 @@ const ResumeDocument = () => {
 		summary: <Summary resume={resume} />,
 		workExperience: <WorkExperience resume={resume} />,
 		education: <Education resume={resume} />,
+		certifications: <Certifications resume={resume} />,
 		projects: <Projects resume={resume} />,
 		skills: <Skills resume={resume} />,
 	};
