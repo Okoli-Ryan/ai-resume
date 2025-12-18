@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 
 import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
+import { ResumeProvider } from "@/components/edit-form/resume-info-form/context/resume-context";
 
 import ResumeSidebar from "./resume-sidebar";
+import { ResumeInfoBanner } from "./resume-info-banner";
 
 const DocumentViewer = dynamic(() => import("./document-viewer").then((mod) => mod.default), {
 	ssr: false,
@@ -33,10 +35,13 @@ const ResumeDoc = ({ resume: initialResume }: { resume?: TResume }) => {
 	if (!isLoaded) return null;
 
 	return (
-		<div className="w-full">
-			<DocumentViewer />
-			<ResumeSidebar />
-		</div>
+		<ResumeProvider>
+			<div className="w-full">
+				<ResumeInfoBanner />
+				<DocumentViewer />
+				<ResumeSidebar />
+			</div>
+		</ResumeProvider>
 	);
 };
 
