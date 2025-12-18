@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Resume_builder.Common;
+using Resume_builder.Features.Certification;
 using Resume_builder.Features.Education;
 using Resume_builder.Features.Project;
 using Resume_builder.Features.WorkExperience;
@@ -17,4 +18,6 @@ public class BulletPointEntity : BaseEntity
     public virtual ProjectEntity? Project { get; set; }
     public string? WorkExperienceId { get; set; }
     public virtual WorkExperienceEntity? WorkExperience { get; set; }
+    public string? CertificationId { get; set; }
+    public virtual CertificationEntity? Certification { get; set; }
 }

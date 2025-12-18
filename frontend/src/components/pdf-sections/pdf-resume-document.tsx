@@ -3,6 +3,7 @@ import PDFPersonalInfo from './pdf-personal-info';
 import PDFSummary from './pdf-summary';
 import PDFWorkExperience from './pdf-work-experience';
 import PDFEducation from './pdf-education';
+import PDFCertifications from './pdf-certifications';
 import PDFProjects from './pdf-projects';
 import PDFSkills from './pdf-skills';
 import { TResume } from '@/types/resume';
@@ -20,6 +21,7 @@ const PDFResumeDocument = ({ resume }: PDFResumeDocumentProps) => {
 		summary: <PDFSummary resume={resume} key="summary" />,
 		workExperience: <PDFWorkExperience resume={resume} key="workExperience" />,
 		education: <PDFEducation resume={resume} key="education" />,
+		certifications: <PDFCertifications resume={resume} key="certifications" />,
 		projects: <PDFProjects resume={resume} key="projects" />,
 		skills: <PDFSkills resume={resume} key="skills" />,
 	};

@@ -1,4 +1,5 @@
 using Resume_builder.Common;
+using Resume_builder.Features.Certification.Common;
 using Resume_builder.Features.Education.Common;
 using Resume_builder.Features.Link;
 using Resume_builder.Features.Project.Common;
@@ -29,4 +30,5 @@ public class ResumeDto : BaseEntity
     public virtual List<WorkExperienceDto>? WorkExperience { get; set; }
     public virtual List<SkillDto>? Skills { get; set; }
     public virtual List<LinkDto>? Links { get; set; }
+    public virtual List<CertificationDto>? Certifications { get; set; }
 }

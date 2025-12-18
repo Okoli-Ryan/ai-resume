@@ -9,4 +9,5 @@ public class BulletPointDto : BaseEntity
     public string? EducationId { get; set; }
     public string? ProjectId { get; set; }
     public string? WorkExperienceId { get; set; }
+    public string? CertificationId { get; set; }
 }

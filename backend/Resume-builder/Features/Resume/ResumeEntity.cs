@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Resume_builder.Common;
+using Resume_builder.Features.Certification;
 using Resume_builder.Features.Education;
 using Resume_builder.Features.Link;
 using Resume_builder.Features.Project;
@@ -43,4 +44,5 @@ public class ResumeEntity : BaseEntity
     public virtual List<WorkExperienceEntity>? WorkExperience { get; set; }
     public virtual List<SkillEntity>? Skills { get; set; }
     public virtual List<LinkEntity>? Links { get; set; }
+    public virtual List<CertificationEntity>? Certifications { get; set; }
 }

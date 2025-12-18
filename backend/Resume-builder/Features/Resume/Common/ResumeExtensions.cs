@@ -1,4 +1,6 @@
 using Resume_builder.Features.BulletPoint;
+using Resume_builder.Features.Certification;
+using Resume_builder.Features.Certification.Common;
 using Resume_builder.Features.Education;
 using Resume_builder.Features.Education.Common;
 using Resume_builder.Features.Project;
@@ -39,7 +41,8 @@ public static class ResumeExtensions
             WorkExperience = resumeEntity.WorkExperience?.Select(x => x.ToDto()).ToList(),
             Projects = resumeEntity.Projects?.Select(x => x.ToDto()).ToList(),
             Education = resumeEntity.Education?.Select(x => x.ToDto()).ToList(),
-            Skills = resumeEntity.Skills?.Select(x => x.ToDto()).ToList()
+            Skills = resumeEntity.Skills?.Select(x => x.ToDto()).ToList(),
+            Certifications = resumeEntity.Certifications?.Select(x => x.ToDto()).ToList()
         };
     }
 
@@ -72,7 +75,8 @@ public static class ResumeExtensions
             UpdatedAt = resume.UpdatedAt,
             WorkExperience = resume.WorkExperience?.Select(x => x.ToEntity()).ToList(),
             Projects = resume.Projects?.Select(x => x.ToEntity()).ToList(),
-            Education = resume.Education?.Select(x => x.ToEntity()).ToList()
+            Education = resume.Education?.Select(x => x.ToEntity()).ToList(),
+            Certifications = resume.Certifications?.Select(x => x.ToEntity()).ToList()
         };
     }
 

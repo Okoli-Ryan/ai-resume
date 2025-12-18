@@ -11,9 +11,11 @@ public static class BulletPointExtensions
             UpdatedAt = bulletPoint.UpdatedAt,
             ActiveStatus = bulletPoint.ActiveStatus,
             Text = bulletPoint.Text,
+            Order = bulletPoint.Order,
             ProjectId = bulletPoint.ProjectId,
             EducationId = bulletPoint.EducationId,
-            WorkExperienceId = bulletPoint.WorkExperienceId
+            WorkExperienceId = bulletPoint.WorkExperienceId,
+            CertificationId = bulletPoint.CertificationId
         };
     }
 
@@ -29,7 +31,8 @@ public static class BulletPointExtensions
             Order = bulletPoint.Order,
             EducationId = bulletPoint.EducationId,
             ProjectId = bulletPoint.ProjectId,
-            WorkExperienceId = bulletPoint.WorkExperienceId
+            WorkExperienceId = bulletPoint.WorkExperienceId,
+            CertificationId = bulletPoint.CertificationId
         };
     }
 }
