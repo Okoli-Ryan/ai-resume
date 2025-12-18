@@ -86,14 +86,14 @@ export const ResumeInfoBanner = () => {
 		updateResumeInfo(data);
 	};
 
-	// Early return after all hooks
+	const hasJobDescription = additionalInfo.jobDescription?.trim().length > 0;
+	const tagsArray = resume?.tags ? resume.tags.split(",").filter(Boolean) : [];
+	const tagsCount = tagsArray.length;
+
+	// Return null if resume is not loaded yet
 	if (!resume) {
 		return null;
 	}
-
-	const hasJobDescription = additionalInfo.jobDescription?.trim().length > 0;
-	const tagsArray = resume.tags ? resume.tags.split(",").filter(Boolean) : [];
-	const tagsCount = tagsArray.length;
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
