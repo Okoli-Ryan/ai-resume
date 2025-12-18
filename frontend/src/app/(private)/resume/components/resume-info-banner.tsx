@@ -25,12 +25,21 @@ import { TResume } from "@/types/resume";
 import { updateResumeInfoAction } from "@/components/edit-form/resume-info-form/actions/update-resume-info-action";
 import { useResumeContext } from "@/components/edit-form/resume-info-form/context/resume-context";
 
+import { cn } from "@/lib/utils";
+
+const JOB_DESCRIPTION_PLACEHOLDER = `Paste the job description here to help AI tailor your resume...
+
+Example:
+• Required skills and technologies
+• Job responsibilities and requirements
+• Company culture and values`;
+
 export const ResumeInfoBanner = () => {
 	const { id } = useParams<{ id: string }>();
 	const [open, setOpen] = useState(false);
 	const jobDescriptionRef = useRef<HTMLTextAreaElement | null>(null);
 	const { additionalInfo, setAdditionalInfo } = useResumeContext();
-	const resume = useResumeStore((state) => state.resume)!;
+	const resume = useResumeStore((state) => state.resume);
 	const updateResume = useResumeStore((state) => state.update);
 	const form = useForm<Partial<TResume>>({
 		defaultValues: {
@@ -60,6 +69,11 @@ export const ResumeInfoBanner = () => {
 				tags: data.tags,
 			};
 			updateResume(appendedResume);
+			const updatedJobDescription = jobDescriptionRef.current?.value || "";
+			setAdditionalInfo((prev) => ({
+				...prev,
+				jobDescription: updatedJobDescription,
+			}));
 			toast.success("Resume information updated successfully");
 			setOpen(false);
 		},
@@ -69,16 +83,16 @@ export const ResumeInfoBanner = () => {
 	});
 
 	const onSubmit = (data: Partial<TResume>) => {
-		const updatedJobDescription = jobDescriptionRef.current?.value || "";
 		updateResumeInfo(data);
-		setAdditionalInfo((prev) => ({
-			...prev,
-			jobDescription: updatedJobDescription,
-		}));
 	};
 
+	// Early return after all hooks
+	if (!resume) {
+		return null;
+	}
+
 	const hasJobDescription = additionalInfo.jobDescription?.trim().length > 0;
-	const tagsArray = resume?.tags ? resume.tags.split(",").filter(Boolean) : [];
+	const tagsArray = resume.tags ? resume.tags.split(",").filter(Boolean) : [];
 	const tagsCount = tagsArray.length;
 
 	return (
@@ -86,12 +100,12 @@ export const ResumeInfoBanner = () => {
 			<DialogTrigger asChild>
 				<div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-2xl px-4">
 					<div
-						className={`
-							bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 
-							border-2 border-primary/20 rounded-lg shadow-lg 
-							p-4 cursor-pointer transition-all hover:shadow-xl hover:border-primary/30
-							backdrop-blur-sm
-						`}>
+						className={cn(
+							"bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10",
+							"border-2 border-primary/20 rounded-lg shadow-lg",
+							"p-4 cursor-pointer transition-all hover:shadow-xl hover:border-primary/30",
+							"backdrop-blur-sm"
+						)}>
 						<div className="flex items-center justify-between gap-4">
 							<div className="flex items-center gap-3 flex-1 min-w-0">
 								<div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 flex-shrink-0">
@@ -190,12 +204,7 @@ export const ResumeInfoBanner = () => {
 								<Textarea
 									defaultValue={additionalInfo.jobDescription}
 									ref={jobDescriptionRef}
-									placeholder="Paste the job description here to help AI tailor your resume...
-
-Example:
-• Required skills and technologies
-• Job responsibilities and requirements
-• Company culture and values"
+									placeholder={JOB_DESCRIPTION_PLACEHOLDER}
 									className="min-h-[180px] transition-all focus:ring-2 focus:ring-primary/20 font-mono text-sm"
 								/>
 							</FormControl>
