@@ -6,28 +6,55 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import PromptModeContent from "./prompt-mode-content";
+import ImportModeContent from "./import-mode-content";
+import ScratchModeContent from "./scratch-mode-content";
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Routes } from "@/lib/routes";
+import { fileToBase64, validateResumeFile } from "@/lib/utils";
 import { GenerateResumeFromPromptRequest } from "@/services/resume/generate-resume-from-prompt";
+import { ImportResumeRequest } from "@/services/resume/import-resume";
 import { useResumeStore } from "@/store/resume-store";
 import { createResumeAction } from "../actions/create-resume-action";
 import { generateResumeFromPromptAction } from "../actions/generate-resume-from-prompt-action";
+import { importResumeAction } from "../actions/import-resume-action";
 
-type CreateMode = "prompt" | "scratch";
+type CreateMode = "prompt" | "scratch" | "import";
+
+const modes: Array<{ value: CreateMode; label: string }> = [
+	{ value: "scratch", label: "Create from scratch" },
+	{ value: "prompt", label: "Generate from prompt" },
+	{ value: "import", label: "Import as PDF" },
+];
 
 const CreateResumeButton = () => {
 	const clearResume = useResumeStore((state) => state.clear);
 	const [isPending, startTransition] = useTransition();
 	const [open, setOpen] = useState(false);
-	const [mode, setMode] = useState<CreateMode>("prompt");
+	const [mode, setMode] = useState<CreateMode>("scratch");
+	const [file, setFile] = useState<File | null>(null);
 	const router = useRouter();
 
-	const form = useForm<GenerateResumeFromPromptRequest>({
+	// Validate on drop/select before storing
+	const handleFileSelect = (value: File | null | ((prev: File | null) => File | null)) => {
+		const selected = typeof value === "function" ? value(file) : value;
+		if (!selected) {
+			setFile(null);
+			return;
+		}
+		const validation = validateResumeFile(selected);
+		if (!validation.valid) {
+			toast.error(validation.message ?? "Invalid file");
+			return;
+		}
+		setFile(selected);
+	};
+
+	const formPrompt = useForm<GenerateResumeFromPromptRequest>({
 		defaultValues: {
 			prompt: "",
 			additionalInfo: {
@@ -38,46 +65,97 @@ const CreateResumeButton = () => {
 		},
 	});
 
-	const createFromScratch = () => {
-		startTransition(async () => {
-			const response = await createResumeAction({});
-
-			if (!response.success) {
-				toast.error(response.message);
-				return;
-			}
-
-			clearResume();
-			setOpen(false);
-			form.reset();
-			router.push(Routes.editResume(response.data.id));
-		});
-	};
-
-	const generateFromPrompt = () => {
-		const payload = form.getValues();
-
-		startTransition(async () => {
-			const response = await generateResumeFromPromptAction(payload);
-
-			if (!response.success) {
-				toast.error(response.message);
-				return;
-			}
-
-			clearResume();
-			setOpen(false);
-			form.reset();
-			router.push(Routes.editResume(response.data.id));
-		});
-	};
+	const formImport = useForm<Partial<ImportResumeRequest>>({
+		defaultValues: {
+			base64String: "",
+			additionalInfo: {
+				jobDescription: "",
+				role: "",
+				tags: "",
+			},
+		},
+	});
 
 	const handleSubmit = () => {
 		if (mode === "scratch") {
-			createFromScratch();
-		} else {
-			generateFromPrompt();
+			startTransition(async () => {
+				const response = await createResumeAction({});
+
+				if (!response.success) {
+					toast.error(response.message);
+					return;
+				}
+
+				clearResume();
+				setOpen(false);
+				formPrompt.reset();
+				formImport.reset();
+				setFile(null);
+				router.push(Routes.editResume(response.data.id));
+			});
+			return;
 		}
+
+		if (mode === "prompt") {
+			const payload = formPrompt.getValues();
+			startTransition(async () => {
+				const response = await generateResumeFromPromptAction(payload);
+
+				if (!response.success) {
+					toast.error(response.message);
+					return;
+				}
+
+				clearResume();
+				setOpen(false);
+				formPrompt.reset();
+				formImport.reset();
+				setFile(null);
+				router.push(Routes.editResume(response.data.id));
+			});
+			return;
+		}
+
+		// import mode
+		if (!file) {
+			toast.error("Please select a PDF file");
+			return;
+		}
+
+		// Validate size/type again on submit
+		const validation = validateResumeFile(file);
+		if (!validation.valid) {
+			toast.error(validation.message ?? "Invalid file");
+			return;
+		}
+
+		startTransition(async () => {
+			const fileBase64 = await fileToBase64(file);
+			const values = formImport.getValues();
+
+			const payload: ImportResumeRequest = {
+				base64String: fileBase64,
+				additionalInfo: {
+					jobDescription: values.additionalInfo?.jobDescription || undefined,
+					role: values.additionalInfo?.role || undefined,
+					tags: values.additionalInfo?.tags || undefined,
+				},
+			};
+
+			const response = await importResumeAction(payload);
+
+			if (!response.success) {
+				toast.error(response.message);
+				return;
+			}
+
+			clearResume();
+			setOpen(false);
+			formPrompt.reset();
+			formImport.reset();
+			setFile(null);
+			router.push(Routes.editResume(response.data.id));
+		});
 	};
 
 	return (
@@ -98,82 +176,34 @@ const CreateResumeButton = () => {
 					<div className="space-y-3">
 						<Label>Creation Mode</Label>
 						<div className="flex flex-col space-y-2">
-							<label className="flex items-center space-x-3 cursor-pointer">
-								<input
-									type="radio"
-									name="mode"
-									value="prompt"
-									checked={mode === "prompt"}
-									onChange={() => setMode("prompt")}
-									className="w-4 h-4 text-primary"
-								/>
-								<span className="text-sm">Generate from prompt</span>
-							</label>
-							<label className="flex items-center space-x-3 cursor-pointer">
-								<input
-									type="radio"
-									name="mode"
-									value="scratch"
-									checked={mode === "scratch"}
-									onChange={() => setMode("scratch")}
-									className="w-4 h-4 text-primary"
-								/>
-								<span className="text-sm">Create from scratch</span>
-							</label>
+							{modes.map((m) => (
+								<label key={m.value} className="flex items-center space-x-3 cursor-pointer">
+									<input
+										type="radio"
+										name="mode"
+										value={m.value}
+										checked={mode === m.value}
+										onChange={() => setMode(m.value)}
+										className="w-4 h-4 text-primary"
+									/>
+									<span className="text-sm">{m.label}</span>
+								</label>
+							))}
 						</div>
 					</div>
 
-					{/* Form - Only show when mode is "prompt" */}
+					{/* Mode-specific content */}
 					{mode === "prompt" && (
-						<Form {...form}>
-							<div className="space-y-4">
-								{/* Prompt */}
-								<FormField
-									control={form.control}
-									name="prompt"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Tell us about yourself</FormLabel>
-											<FormControl>
-												<Textarea
-													placeholder="Describe your experience, skills, and career goals... (e.g., I'm a software engineer with 5 years of experience in React and Node.js, passionate about building scalable web applications...)"
-													className="min-h-[120px] resize-none"
-													{...field}
-												/>
-											</FormControl>
-										</FormItem>
-									)}
-								/>
+						<Form {...formPrompt}>
+							<PromptModeContent form={formPrompt} />
+						</Form>
+					)}
 
-								{/* Job Description */}
-								<FormField
-									control={form.control}
-									name="additionalInfo.jobDescription"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Job Description (optional)</FormLabel>
-											<FormControl>
-												<Textarea placeholder="Paste the job description here..." className="min-h-[100px] resize-none" {...field} />
-											</FormControl>
-										</FormItem>
-									)}
-								/>
+					{mode === "scratch" && <ScratchModeContent />}
 
-								{/* Role */}
-								<FormField
-									control={form.control}
-									name="additionalInfo.role"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Role (optional)</FormLabel>
-											<FormControl>
-												<Input placeholder="e.g., Software Engineer, Product Manager" {...field} />
-											</FormControl>
-										</FormItem>
-									)}
-								/>
-
-							</div>
+					{mode === "import" && (
+						<Form {...formImport}>
+							<ImportModeContent form={formImport} file={file} setFile={handleFileSelect} />
 						</Form>
 					)}
 				</div>
@@ -182,7 +212,7 @@ const CreateResumeButton = () => {
 						Cancel
 					</Button>
 					<Button onClick={handleSubmit} loading={isPending}>
-						{mode === "scratch" ? "Create Resume" : "Generate Resume"}
+						{mode === "scratch" ? "Create Resume" : mode === "prompt" ? "Generate Resume" : "Import Resume"}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

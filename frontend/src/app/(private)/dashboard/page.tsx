@@ -3,7 +3,6 @@ import { isCustomError } from "@/lib/utils";
 import { getMinimalResumesByUserId } from "@/services/resume/get-minimal-resume-list";
 
 import CreateResumeButton from "./components/create-resume-button";
-import ImportResumeButton from "./components/import-resume-button";
 import ResumeTable from "./components/resume-table";
 
 const Home = async () => {
@@ -22,47 +21,10 @@ const Home = async () => {
 			</div>
 			<div className="flex flex-col sm:flex-row gap-4 mb-8">
 				<CreateResumeButton />
-				<ImportResumeButton />
 			</div>
 			<div className="w-full overflow-x-auto">
 				<ResumeTable resumes={resumes} isLoading={false} />
 			</div>
-			{/* <div className="rounded-lg border mt-4">
-				<Table>
-					<TableHeader>
-						<TableRow>
-							<TableHead>Name</TableHead>
-							<TableHead>Role</TableHead>
-							<TableHead>Tags</TableHead>
-							<TableHead>Date Created</TableHead>
-							<TableHead>Actions</TableHead>
-						</TableRow>
-					</TableHeader>
-					<TableBody>
-						{resumes.map((resume) => (
-							<TableRow key={resume.id}>
-								<TableCell>
-									<div className="flex items-center">
-										{resume.resumeName}
-										<Star fill="yellow" strokeWidth={0} size={14} className={cn("ml-2", { invisible: !resume.isFavourite })} />
-									</div>
-								</TableCell>
-								<TableCell>{resume.role}</TableCell>
-								<TableCell>
-									<ResumeTags tags={resume.tags} />
-								</TableCell>
-								<TableCell>{new Date(resume.createdAt!).toLocaleDateString()}</TableCell>
-								<TableCell>
-									<div className="flex gap-2">
-										<ViewResumeButton resumeId={resume.id!} />
-										<DuplicateResumeButton resumeId={resume.id!} />
-									</div>
-								</TableCell>
-							</TableRow>
-						))}
-					</TableBody>
-				</Table>
-			</div> */}
 		</div>
 	);
 };

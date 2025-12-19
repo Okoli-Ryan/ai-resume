@@ -32,6 +32,32 @@ export const fileToBase64 = (file: File): Promise<string> => {
 	});
 };
 
+// File validation helpers
+const BYTES_PER_MB = 1024 * 1024;
+export const MAX_RESUME_FILE_SIZE_MB = 2;
+
+export const getFileSizeMB = (file: File) => file.size / BYTES_PER_MB;
+
+export const isPdfFile = (file: File) => {
+	const byMime = file.type?.toLowerCase() === "application/pdf";
+	const byName = /\.pdf$/i.test(file.name);
+	return byMime || byName;
+};
+
+export const validateResumeFile = (
+	file: File,
+	opts: { maxSizeMB?: number } = { maxSizeMB: MAX_RESUME_FILE_SIZE_MB }
+) => {
+	const maxSize = opts.maxSizeMB ?? MAX_RESUME_FILE_SIZE_MB;
+	if (getFileSizeMB(file) > maxSize) {
+		return { valid: false as const, message: `File too large. Max ${maxSize} MB.` };
+	}
+	if (!isPdfFile(file)) {
+		return { valid: false as const, message: "Only PDF files are allowed." };
+	}
+	return { valid: true as const };
+};
+
 export const isValidLink = (link: string) => link.startsWith("http://") || link.startsWith("https://");
 
 export class ActionResponse {
