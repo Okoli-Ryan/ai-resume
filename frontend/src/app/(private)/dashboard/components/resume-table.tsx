@@ -1,14 +1,16 @@
-import { Button } from "@/components/ui/button";
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Routes } from "@/lib/routes";
 import { getRelativeTime } from "@/lib/utils";
 import { TResume } from "@/types/resume";
 import { format } from "date-fns";
-import { Copy, Download, Edit, Eye } from "lucide-react";
 import Link from "next/link";
 import ResumeTags from "./resume-tags";
 import EmptyState from "@/components/empty-state";
+import DuplicateResumeButton from "./duplicate-resume-button";
+import DownloadResumeButton from "./download-resume-button";
+import EditResumeButton from "./edit-resume-button";
 
 interface ResumeTableProps {
 	resumes: Partial<TResume>[];
@@ -80,47 +82,38 @@ export default function ResumeTable({ resumes, isLoading }: ResumeTableProps) {
 								</TableRow>
 							) : (
 								resumes.map((resume) => (
-								<TableRow key={resume.id} className="hover:bg-gray-50 transition-colors">
-									<TableCell className=" max-w-60">
-										<div className="flex items-center">
-											<div>
-												<div className="text-sm font-medium text-gray-900">{resume.resumeName}</div>
-												{/* <div className="text-sm text-gray-500">{resume.template}</div> */}
+									<TableRow key={resume.id} className="hover:bg-gray-50 transition-colors">
+										<TableCell className=" max-w-60">
+											<div className="flex items-center">
+												<Link href={Routes.editResume(resume.id!)}>
+													<div className="text-sm font-medium text-gray-900 hover:text-primary transition-colors duration-200 hover:underline">
+														{resume.resumeName}
+													</div>
+												</Link>
 											</div>
-										</div>
-									</TableCell>
-									<TableCell className="text-sm text-gray-900">{resume.role}</TableCell>
-									<TableCell className="text-sm text-gray-900">
-										<ResumeTags tags={resume.tags} />
-									</TableCell>
-									<TableCell className="text-sm text-gray-900  whitespace-nowrap">{getRelativeTime(resume.updatedAt!)}</TableCell>
-									<TableCell className="text-sm text-gray-900  whitespace-nowrap">{formatDate(resume.createdAt!)}</TableCell>
-									<TableCell>
-										<div className="flex items-center space-x-2">
-											<Link href={Routes.editResume(resume.id!)}>
-												<Button variant="ghost" size="sm" className="hover:text-primary/80">
-													<Eye className="w-4 h-4" />
-												</Button>
-											</Link>
-											<Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-												<Edit className="w-4 h-4" />
-											</Button>
-											<Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-800">
-												<Copy className="w-4 h-4" />
-											</Button>
-											<Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-800">
-												<Download className="w-4 h-4" />
-											</Button>
-											{/* <Button
+										</TableCell>
+										<TableCell className="text-sm text-gray-900">{resume.role}</TableCell>
+										<TableCell className="text-sm text-gray-900">
+											<ResumeTags tags={resume.tags} />
+										</TableCell>
+										<TableCell className="text-sm text-gray-900  whitespace-nowrap">{getRelativeTime(resume.updatedAt!)}</TableCell>
+										<TableCell className="text-sm text-gray-900  whitespace-nowrap">{formatDate(resume.createdAt!)}</TableCell>
+										<TableCell>
+											<div className="flex items-center space-x-2">
+												<EditResumeButton resumeId={resume.id!} />
+												<DuplicateResumeButton resumeId={resume.id!} />
+												<DownloadResumeButton resumeId={resume.id!} resumeName={resume.resumeName} role={resume.role} />
+
+												{/* <Button
 												variant="ghost"
 												size="sm"
 												className="text-red-600 hover:text-red-800"
                                                 >
 												<Trash2 className="w-4 h-4" />
 											</Button> */}
-										</div>
-									</TableCell>
-								</TableRow>
+											</div>
+										</TableCell>
+									</TableRow>
 								))
 							)}
 						</TableBody>

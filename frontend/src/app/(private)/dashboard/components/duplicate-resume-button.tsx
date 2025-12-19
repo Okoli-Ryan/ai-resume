@@ -1,14 +1,15 @@
 "use client";
 
 import { Copy, LoaderCircle } from "lucide-react";
-import { useRouter } from 'nextjs-toploader/app';
-import { useTransition } from 'react';
-import { toast } from 'sonner';
+import { useRouter } from "nextjs-toploader/app";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button';
-import { Routes } from '@/lib/routes';
+import { Button } from "@/components/ui/button";
+import { Routes } from "@/lib/routes";
 
-import { duplicateResumeAction } from '../actions/duplicate-resume-action';
+import { duplicateResumeAction } from "../actions/duplicate-resume-action";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const DuplicateResumeButton = ({ resumeId }: { resumeId: string }) => {
 	const [isPending, startTransition] = useTransition();
@@ -29,10 +30,18 @@ const DuplicateResumeButton = ({ resumeId }: { resumeId: string }) => {
 	}
 
 	return (
-		<Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={duplicate}>
-			{isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
-			<span className="sr-only">Duplicate resume</span>
-		</Button>
+		<TooltipProvider>
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Button onClick={duplicate} variant="ghost" size="sm" className="text-gray-600 hover:text-primary/80">
+						{isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
+					</Button>
+				</TooltipTrigger>
+				<TooltipContent>
+					<p>Duplicate</p>
+				</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
 	);
 };
 
