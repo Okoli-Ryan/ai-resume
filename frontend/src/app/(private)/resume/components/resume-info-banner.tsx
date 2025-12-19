@@ -4,18 +4,11 @@ import { useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { FileText, Tag, Briefcase, Sparkles, Edit } from "lucide-react";
+import { FileText, Tag, Briefcase, Sparkles, Edit, Info } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -97,7 +90,8 @@ export const ResumeInfoBanner = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
+			{/* Desktop Banner - Hidden on mobile */}
+			<DialogTrigger asChild className="hidden md:block">
 				<div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40 w-full max-w-2xl px-4">
 					<div
 						className={cn(
@@ -140,15 +134,32 @@ export const ResumeInfoBanner = () => {
 					</div>
 				</div>
 			</DialogTrigger>
+
+			{/* Mobile Floating Edit Button - Hidden on desktop */}
+			<DialogTrigger asChild className="md:hidden">
+				<Button
+					size="icon"
+					className={cn(
+						"fixed bottom-40 right-8 z-40 size-12 rounded-full shadow-lg",
+						"bg-primary hover:bg-primary/90 transition-all hover:scale-110",
+						!hasJobDescription && "animate-pulse"
+					)}>
+					<Info className="h-6 w-6" />
+					{!hasJobDescription && (
+						<span className="absolute -top-1 -right-1 flex h-3 w-3">
+							<span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+							<span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+						</span>
+					)}
+				</Button>
+			</DialogTrigger>
 			<DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle className="flex items-center gap-2 text-xl">
 						<Sparkles className="h-5 w-5 text-primary" />
 						Customize Your Resume
 					</DialogTitle>
-					<DialogDescription>
-						Add details about your target role to get better AI-powered suggestions for your resume content.
-					</DialogDescription>
+					<DialogDescription>Add details about your target role to get better AI-powered suggestions for your resume content.</DialogDescription>
 				</DialogHeader>
 
 				<Form {...form}>
@@ -178,12 +189,7 @@ export const ResumeInfoBanner = () => {
 								<Tag className="h-4 w-4" />
 								Tags
 							</h4>
-							<TagsInputForm
-								form={form}
-								name={`tags`}
-								label="Keywords & Tags"
-								placeholder="Enter a tag and press Enter"
-							/>
+							<TagsInputForm form={form} name={`tags`} label="Keywords & Tags" placeholder="Enter a tag and press Enter" />
 							<p className="text-xs text-muted-foreground">Add relevant keywords to help organize and search your resume</p>
 						</div>
 
@@ -211,8 +217,8 @@ export const ResumeInfoBanner = () => {
 							<div className="flex items-start gap-2 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-md">
 								<Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
 								<p className="text-xs text-blue-700 dark:text-blue-300">
-									<strong>Pro tip:</strong> Adding a job description helps AI features generate more relevant bullet
-									points, enhance your summary, and optimize your resume for the target role.
+									<strong>Pro tip:</strong> Adding a job description helps AI features generate more relevant bullet points, enhance your
+									summary, and optimize your resume for the target role.
 								</p>
 							</div>
 						</div>
