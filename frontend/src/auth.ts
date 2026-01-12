@@ -66,10 +66,10 @@ export const authConfig = {
 		authorized({ auth, request: { nextUrl } }) {
 			const isLoggedIn = !!auth?.user;
 
-			const publicPaths = ["/sign-in"];
-			const isProtected = !publicPaths.some((path) => nextUrl.pathname.startsWith(path)) || nextUrl.pathname === "/";
+			const publicPaths = ["/sign-in", "/", "/sign-up"];
+			const isPublicPath = publicPaths.some((path) => nextUrl.pathname === path || nextUrl.pathname.startsWith(path + "/"));
 
-			if (isProtected && !isLoggedIn) {
+			if (!isPublicPath && !isLoggedIn) {
 				const redirectUrl = new URL(Routes.signIn, nextUrl.origin);
 				redirectUrl.searchParams.append("callbackUrl", nextUrl.href);
 				return Response.redirect(redirectUrl.href);
