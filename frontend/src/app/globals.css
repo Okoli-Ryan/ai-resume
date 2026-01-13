@@ -125,3 +125,13 @@
 	page-break-inside: avoid;
 	break-inside: avoid;
 }
+
+/* Custom styles for react-responsive-modal */
+.react-responsive-modal-overlay {
+	background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.react-responsive-modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

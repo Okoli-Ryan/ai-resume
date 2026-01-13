@@ -22,6 +22,7 @@ const DocumentViewer = dynamic(() => import("./document-viewer").then((mod) => m
 const ResumeDoc = ({ resume: initialResume }: { resume?: TResume }) => {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const update = useResumeStore((state) => state.update);
+	const resume = useResumeStore((state) => state.resume);
 
 	useEffect(() => {
 		if (initialResume) update(initialResume);
@@ -39,7 +40,7 @@ const ResumeDoc = ({ resume: initialResume }: { resume?: TResume }) => {
 			<div className="w-full">
 				<ResumeInfoBanner />
 				<DocumentViewer />
-				<ResumeSidebar />
+				<ResumeSidebar resumeId={resume?.id ?? ""} />
 			</div>
 		</ResumeProvider>
 	);
