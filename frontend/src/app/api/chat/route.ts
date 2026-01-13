@@ -1,17 +1,19 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages } from "ai";
+import { getResumeByIdTool } from "./tools/get-resume-by-id-tool";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-	const { messages, resumeId }: { messages: UIMessage[]; resumeId: string } = await req.json();
+	try {
+		const { messages, resumeId }: { messages: UIMessage[]; resumeId: string } = await req.json();
 
-	// Convert UI messages to model messages format
-	const modelMessages = await convertToModelMessages(messages);
+		// Convert UI messages to model messages format
+		const modelMessages = await convertToModelMessages(messages);
 
-	// System prompt for the resume assistant
-	const systemPrompt = `You are an expert resume writing assistant. Your role is to help users improve their resumes by providing:
+		// System prompt for the resume assistant
+		const systemPrompt = `You are an expert resume writing assistant. Your role is to help users improve their resumes by providing:
 
 1. Specific, actionable suggestions for improving resume content
 2. Better phrasing and action verbs for experiences and achievements
@@ -28,11 +30,27 @@ When providing feedback:
 
 The user is currently editing resume ID: ${resumeId}. Provide helpful, professional, and encouraging feedback.`;
 
-	const result = streamText({
-		model: openai("gpt-4o-mini"),
-		system: systemPrompt,
-		messages: modelMessages,
-	});
+		const result = streamText({
+			model: openai("gpt-4o-mini"),
+			system: systemPrompt,
+			messages: modelMessages,
+			tools: {
+				getResumeById: getResumeByIdTool(resumeId),
+			},
+		});
 
-	return result.toUIMessageStreamResponse();
+		return result.toUIMessageStreamResponse();
+	} catch (error) {
+		console.error("Chat API error:", error);
+		return new Response(
+			JSON.stringify({
+				error: "Failed to process chat request",
+				message: error instanceof Error ? error.message : "Unknown error",
+			}),
+			{
+				status: 500,
+				headers: { "Content-Type": "application/json" },
+			}
+		);
+	}
 }
