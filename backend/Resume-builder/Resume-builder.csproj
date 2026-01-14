@@ -45,4 +45,10 @@
         <RemoveDir Directories="$(PublishDir)/LatoFont"/>
     </Target>
 
+    <ItemGroup>
+        <Content Include="Resources/Fonts/**/*.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>
