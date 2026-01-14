@@ -126,9 +126,12 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddQuestPDFFont(this IServiceCollection services)
     {
-        using var fontStream = File.OpenRead(@"Resources\Fonts\times-new-roman.ttf");
-        FontManager.RegisterFont(fontStream);
+        var fontBytes = File.ReadAllBytes(
+            Path.Combine("Resources", "Fonts", "times-new-roman.ttf")
+        );
 
+        var stream = new MemoryStream(fontBytes);
+        FontManager.RegisterFont(stream);
 
         return services;
     }
