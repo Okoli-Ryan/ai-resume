@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.AI;
 using Microsoft.IdentityModel.Tokens;
+using QuestPDF.Drawing;
 using Resume_builder.Common;
 using Resume_builder.Features.PdfGeneration;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -23,6 +24,7 @@ public static class ServiceCollectionExtensions
     {
         services
             .AddConfig(config)
+            .AddQuestPDFFont()
             .AddPersistence(config)
             .AddRepositories()
             .AddServices()
@@ -118,6 +120,25 @@ public static class ServiceCollectionExtensions
             });
 
         services.AddAuthorization();
+
+        return services;
+    }
+
+    private static IServiceCollection AddQuestPDFFont(this IServiceCollection services)
+    {
+        // Set up font discovery path with absolute path
+        var fontPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Fonts");
+
+        QuestPDF.Settings.FontDiscoveryPaths.Clear();
+        QuestPDF.Settings.FontDiscoveryPaths.Add(fontPath);
+
+        // Register Times New Roman font from the Resources/Fonts directory
+        var timesNewRomanPath = Path.Combine(fontPath, "times-new-roman.ttf");
+        if (File.Exists(timesNewRomanPath))
+        {
+            using var fontStream = File.OpenRead(timesNewRomanPath);
+            FontManager.RegisterFont(fontStream);
+        }
 
         return services;
     }

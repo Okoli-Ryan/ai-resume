@@ -14,6 +14,8 @@ public class ResumeDocument : IDocument
     public ResumeDocument(ResumeDto resume)
     {
         _resume = resume;
+        
+
     }
 
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
