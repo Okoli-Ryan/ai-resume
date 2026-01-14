@@ -126,19 +126,9 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection AddQuestPDFFont(this IServiceCollection services)
     {
-        // Set up font discovery path with absolute path
-        var fontPath = Path.Combine(AppContext.BaseDirectory, "Resources", "Fonts");
+        using var fontStream = File.OpenRead(@"Resources\Fonts\times-new-roman.ttf");
+        FontManager.RegisterFont(fontStream);
 
-        QuestPDF.Settings.FontDiscoveryPaths.Clear();
-        QuestPDF.Settings.FontDiscoveryPaths.Add(fontPath);
-
-        // Register Times New Roman font from the Resources/Fonts directory
-        var timesNewRomanPath = Path.Combine(fontPath, "times-new-roman.ttf");
-        if (File.Exists(timesNewRomanPath))
-        {
-            using var fontStream = File.OpenRead(timesNewRomanPath);
-            FontManager.RegisterFont(fontStream);
-        }
 
         return services;
     }
