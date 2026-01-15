@@ -1,0 +1,451 @@
+# Resume API Examples - HTTP Requests
+
+This file contains example HTTP requests for all resume endpoints. These can be executed using tools like curl, Postman, or REST Client extensions.
+
+## Authentication
+All requests require a JWT bearer token. Replace `{token}` with your actual authentication token.
+
+---
+
+## Core Resume Operations
+
+### Get Resume by ID
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Create Resume
+```http
+POST /api/v1/resume HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "resumeName": "Software Engineer Resume",
+  "userName": "John Doe",
+  "email": "john@example.com",
+  "role": "Software Engineer"
+}
+```
+
+### Full Update (PUT)
+```http
+PUT /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "userName": "John Doe",
+  "resumeName": "Senior Software Engineer Resume",
+  "email": "john@example.com",
+  "summary": "Experienced software engineer with 7+ years...",
+  "role": "Senior Software Engineer",
+  "order": "WorkExperience,Skills,Projects,Education,Certifications",
+  "address": "San Francisco, CA",
+  "phoneNumber": "+1-555-0123",
+  "tags": "backend,python,go",
+  "isFavourite": true,
+  "linkedinUrl": "https://linkedin.com/in/johndoe",
+  "githubUrl": "https://github.com/johndoe",
+  "portfolioUrl": "https://johndoe.dev"
+}
+```
+
+### Partial Update (PATCH) - Update Only Summary
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "summary": "Passionate backend engineer specializing in distributed systems and microservices architecture"
+}
+```
+
+### Partial Update (PATCH) - Update Multiple Fields
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "role": "Senior Backend Engineer",
+  "tags": "backend,golang,kubernetes,microservices",
+  "isFavourite": true
+}
+```
+
+---
+
+## Section Management
+
+### Get All Sections
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Projects Section
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections/projects HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Education Section
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections/education HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Work Experience Section
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections/work-experience HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Skills Section
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections/skills HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Certifications Section
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections/certifications HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+---
+
+## Tailoring & Organization
+
+### Get Tailoring Suggestions - Frontend Developer
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/tailor?role=Frontend%20Developer HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Tailoring Suggestions - Data Scientist
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/tailor?role=Data%20Scientist HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Get Tailoring Suggestions - DevOps Engineer
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/tailor?role=DevOps%20Engineer HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+### Reorder Sections - Standard Order
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/reorder HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "order": "WorkExperience,Education,Skills,Projects,Certifications"
+}
+```
+
+### Reorder Sections - Frontend Focus
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/reorder HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "order": "WorkExperience,Projects,Skills,Education,Certifications"
+}
+```
+
+### Reorder Sections - Data Science Focus
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/reorder HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "order": "WorkExperience,Education,Skills,Projects,Certifications"
+}
+```
+
+### Update Bullet Points for Specific Role
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/bullets HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "targetRole": "Senior Backend Engineer",
+  "bulletPoints": [
+    {
+      "bulletPointId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "text": "Architected and deployed microservices handling 10M+ daily requests with 99.99% uptime"
+    },
+    {
+      "bulletPointId": "01ARZ3NDEKTSV4RRFFQ69G5FAW",
+      "text": "Led migration from monolith to microservices, reducing deployment time by 75%"
+    },
+    {
+      "bulletPointId": "01ARZ3NDEKTSV4RRFFQ69G5FAX",
+      "text": "Implemented distributed tracing and monitoring, improving incident response by 60%"
+    }
+  ]
+}
+```
+
+---
+
+## Complete Workflow Examples
+
+### Example 1: Tailoring Resume for Frontend Developer Position
+
+**Step 1: Get Tailoring Suggestions**
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/tailor?role=Frontend%20Developer HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "resumeId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+  "targetRole": "Frontend Developer",
+  "suggestedOrder": "WorkExperience,Projects,Skills,Education,Certifications",
+  "suggestedSummary": "Consider emphasizing your Frontend Developer experience...",
+  "recommendedSections": ["WorkExperience", "Skills", "Projects", "Education"],
+  "sectionPriorities": {
+    "WorkExperience": "Priority 1",
+    "Projects": "Priority 2",
+    "Skills": "Priority 3",
+    "Education": "Priority 4",
+    "Certifications": "Priority 5"
+  }
+}
+```
+
+**Step 2: Apply Section Reordering**
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/reorder HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "order": "WorkExperience,Projects,Skills,Education,Certifications"
+}
+```
+
+**Step 3: Update Summary**
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "summary": "Creative frontend developer with 5+ years building responsive, accessible web applications using React, TypeScript, and modern CSS. Passionate about user experience and performance optimization.",
+  "role": "Frontend Developer"
+}
+```
+
+**Step 4: Get Work Experience Section**
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections/work-experience HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+**Step 5: Update Bullet Points**
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/bullets HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "targetRole": "Frontend Developer",
+  "bulletPoints": [
+    {
+      "bulletPointId": "bullet-id-1",
+      "text": "Built reusable React component library adopted across 5 teams, reducing development time by 40%"
+    },
+    {
+      "bulletPointId": "bullet-id-2",
+      "text": "Improved web vitals scores by 50% through code splitting and lazy loading optimization"
+    },
+    {
+      "bulletPointId": "bullet-id-3",
+      "text": "Implemented responsive design system achieving 100% accessibility compliance (WCAG 2.1 AA)"
+    }
+  ]
+}
+```
+
+---
+
+### Example 2: Quick Summary Update
+
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "summary": "Results-driven engineer with expertise in cloud-native applications, seeking opportunities in distributed systems"
+}
+```
+
+---
+
+### Example 3: Mark Resume as Favorite
+
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "isFavourite": true
+}
+```
+
+---
+
+## Error Responses
+
+### 400 Bad Request - Invalid Section Order
+```http
+PATCH /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/reorder HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "order": "WorkExperience,InvalidSection,Skills"
+}
+```
+
+**Response:**
+```json
+{
+  "error": "Invalid section names: InvalidSection. Valid sections: WorkExperience, Education, Skills, Projects, Certifications, Links"
+}
+```
+
+### 401 Unauthorized - Missing Token
+```http
+GET /api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV HTTP/1.1
+Host: localhost:5000
+```
+
+**Response:**
+```
+HTTP/1.1 401 Unauthorized
+```
+
+### 404 Not Found - Resume Doesn't Exist
+```http
+GET /api/v1/resume/nonexistent-id HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer {token}
+```
+
+**Response:**
+```json
+{
+  "error": "Resume not found"
+}
+```
+
+---
+
+## cURL Examples
+
+### Get Tailoring Suggestions
+```bash
+curl -X GET "http://localhost:5000/api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/tailor?role=Backend%20Developer" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json"
+```
+
+### Partial Update with PATCH
+```bash
+curl -X PATCH "http://localhost:5000/api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "summary": "Experienced backend engineer specializing in scalable systems",
+    "role": "Senior Backend Engineer"
+  }'
+```
+
+### Reorder Sections
+```bash
+curl -X PATCH "http://localhost:5000/api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/reorder" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "order": "WorkExperience,Skills,Projects,Education,Certifications"
+  }'
+```
+
+### Get All Sections
+```bash
+curl -X GET "http://localhost:5000/api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/sections" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json"
+```
+
+### Update Bullet Points
+```bash
+curl -X PATCH "http://localhost:5000/api/v1/resume/01ARZ3NDEKTSV4RRFFQ69G5FAV/bullets" \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "targetRole": "DevOps Engineer",
+    "bulletPoints": [
+      {
+        "bulletPointId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+        "text": "Automated CI/CD pipelines reducing deployment time from hours to minutes"
+      }
+    ]
+  }'
+```
+
+---
+
+## Notes
+
+1. **Base URL**: Replace `localhost:5000` with your actual server URL
+2. **Resume ID**: Replace `01ARZ3NDEKTSV4RRFFQ69G5FAV` with actual resume IDs
+3. **Bullet Point IDs**: Replace example IDs with actual bullet point IDs from your resume
+4. **Authentication**: Always include valid JWT bearer token
+5. **Content-Type**: Use `application/json` for all request bodies
+
+---
+
+Last Updated: 2026-01-15
