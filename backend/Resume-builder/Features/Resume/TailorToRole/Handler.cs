@@ -13,14 +13,18 @@ public class TailorResumeHandler(
     // Common role-based section ordering templates
     private static readonly Dictionary<string, string> RoleOrderTemplates = new()
     {
-        ["frontend"] = "WorkExperience,Projects,Skills,Education,Certifications",
-        ["backend"] = "WorkExperience,Skills,Projects,Education,Certifications",
-        ["fullstack"] = "WorkExperience,Skills,Projects,Education,Certifications",
+        ["frontend developer"] = "WorkExperience,Projects,Skills,Education,Certifications",
+        ["frontend engineer"] = "WorkExperience,Projects,Skills,Education,Certifications",
+        ["backend developer"] = "WorkExperience,Skills,Projects,Education,Certifications",
+        ["backend engineer"] = "WorkExperience,Skills,Projects,Education,Certifications",
+        ["fullstack developer"] = "WorkExperience,Skills,Projects,Education,Certifications",
+        ["fullstack engineer"] = "WorkExperience,Skills,Projects,Education,Certifications",
         ["data scientist"] = "WorkExperience,Education,Skills,Projects,Certifications",
         ["data engineer"] = "WorkExperience,Skills,Projects,Education,Certifications",
-        ["devops"] = "WorkExperience,Skills,Certifications,Projects,Education",
-        ["machine learning"] = "WorkExperience,Education,Skills,Projects,Certifications",
-        ["mobile"] = "WorkExperience,Projects,Skills,Education,Certifications",
+        ["devops engineer"] = "WorkExperience,Skills,Certifications,Projects,Education",
+        ["sre"] = "WorkExperience,Skills,Certifications,Projects,Education",
+        ["machine learning engineer"] = "WorkExperience,Education,Skills,Projects,Certifications",
+        ["mobile developer"] = "WorkExperience,Projects,Skills,Education,Certifications",
         ["default"] = "WorkExperience,Education,Skills,Projects,Certifications"
     };
 
@@ -37,12 +41,28 @@ public class TailorResumeHandler(
         if (resume == null)
             return Response<TailorResumeResponse>.Fail(HttpStatusCode.NotFound, "Resume not found");
 
-        var targetRole = command.TargetRole.ToLower();
+        var targetRole = command.TargetRole.ToLower().Trim();
         
-        // Find best matching template
-        var suggestedOrder = RoleOrderTemplates
-            .FirstOrDefault(kvp => targetRole.Contains(kvp.Key)).Value 
-            ?? RoleOrderTemplates["default"];
+        // Find best matching template - try exact match first, then partial
+        var suggestedOrder = RoleOrderTemplates["default"];
+        
+        // Try exact match
+        if (RoleOrderTemplates.TryGetValue(targetRole, out var exactMatch))
+        {
+            suggestedOrder = exactMatch;
+        }
+        else
+        {
+            // Try partial match with word boundaries
+            foreach (var template in RoleOrderTemplates)
+            {
+                if (template.Key != "default" && targetRole.Contains(template.Key))
+                {
+                    suggestedOrder = template.Value;
+                    break;
+                }
+            }
+        }
 
         // Build section priorities
         var sectionPriorities = new Dictionary<string, string>();

@@ -30,13 +30,34 @@ public class UpdateBulletsByRoleHandler(
         // Get all bullet point IDs to update
         var bulletPointIds = request.BulletPoints.Select(bp => bp.BulletPointId).ToList();
 
-        // Fetch bullet points and verify they belong to this resume's sections
+        // First, get all section IDs that belong to this resume
+        var workExperienceIds = await db.WorkExperience
+            .Where(w => w.ResumeId == command.ResumeId)
+            .Select(w => w.Id)
+            .ToListAsync(cancellationToken);
+
+        var projectIds = await db.Project
+            .Where(p => p.ResumeId == command.ResumeId)
+            .Select(p => p.Id)
+            .ToListAsync(cancellationToken);
+
+        var educationIds = await db.Education
+            .Where(e => e.ResumeId == command.ResumeId)
+            .Select(e => e.Id)
+            .ToListAsync(cancellationToken);
+
+        var certificationIds = await db.Certification
+            .Where(c => c.ResumeId == command.ResumeId)
+            .Select(c => c.Id)
+            .ToListAsync(cancellationToken);
+
+        // Fetch bullet points that belong to these sections
         var bulletPoints = await db.BulletPoint
             .Where(bp => bulletPointIds.Contains(bp.Id) && (
-                (bp.WorkExperienceId != null && db.WorkExperience.Any(w => w.Id == bp.WorkExperienceId && w.ResumeId == command.ResumeId)) ||
-                (bp.ProjectId != null && db.Project.Any(p => p.Id == bp.ProjectId && p.ResumeId == command.ResumeId)) ||
-                (bp.EducationId != null && db.Education.Any(e => e.Id == bp.EducationId && e.ResumeId == command.ResumeId)) ||
-                (bp.CertificationId != null && db.Certification.Any(c => c.Id == bp.CertificationId && c.ResumeId == command.ResumeId))
+                (bp.WorkExperienceId != null && workExperienceIds.Contains(bp.WorkExperienceId)) ||
+                (bp.ProjectId != null && projectIds.Contains(bp.ProjectId)) ||
+                (bp.EducationId != null && educationIds.Contains(bp.EducationId)) ||
+                (bp.CertificationId != null && certificationIds.Contains(bp.CertificationId))
             ))
             .ToListAsync(cancellationToken);
 
