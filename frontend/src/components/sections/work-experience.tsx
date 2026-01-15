@@ -24,7 +24,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 								</Row>
 								<Row>
 									<span className="italic font-times text-[10px]">
-										{experience.title} {experience.workType && <span>({experience.workType})</span>}
+										{experience.title} {experience.workType && <>({experience.workType})</>}
 									</span>
 									<span className="italic font-times text-[10px]">
 										{format(new Date(experience.startDate as string), "MMM yyyy")} -{" "}

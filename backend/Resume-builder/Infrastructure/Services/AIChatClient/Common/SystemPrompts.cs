@@ -146,18 +146,16 @@ public static class SystemPrompts
                                                   - fullName: The candidate’s full name.
                                                   - summary: A brief professional summary or objective, wrap in a <p> tag, can use <a> tag only if specified prior.
                                                   - education: An array of entries. Each entry should include:
-                                                    - startDate (set to iso string)
-                                                    - endDate (if isOngoing is true, set to any date, must be iso string)
                                                     - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
                                                   - experience: An array of entries. Each entry should include:
-                                                    - startDate (set to iso string)
-                                                    - endDate (if isOngoing is true, set to any date, must be iso string)
                                                     - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
                                                   - projects: An array of entries. Each entry should include:
-                                                    - startDate (set to iso string)
-                                                    - endDate (if isOngoing is true, set to any date, must be iso string)
                                                     - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
                                                   - skills: A categorized group of skills eg category: Frontend, skills: [HTML, CSS, JavaScript]...
+                                                  
+                                                  For any field that has startDate and endDates, 
+                                                  - startDate (must be set to iso string)
+                                                  - endDate (if isOngoing is true, set to any iso string date, else convert set date to iso string)
 
                                                   Output only a valid JSON object matching this schema. Do not include explanations, markdown, or commentary.
 

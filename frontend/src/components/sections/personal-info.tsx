@@ -10,13 +10,13 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 				<div>
 					{resume?.address && (
 						<>
-							<span>{resume?.address}</span> |
+							<span className="font-times">{resume?.address}</span> |
 						</>
 					)}
 					{resume?.phoneNumber && (
 						<>
 							{" "}
-							<a href={`tel:${resume?.phoneNumber}`} className="text-inherit">
+							<a href={`tel:${resume?.phoneNumber}`} className="text-inherit font-times text-blue-500">
 								{resume?.phoneNumber}
 							</a>{" "}
 							|
@@ -25,7 +25,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.email && (
 						<>
 							{" "}
-							<a href={`mailto:${resume?.email}`} className="text-inherit">
+							<a href={`mailto:${resume?.email}`} className="text-inherit font-times text-blue-500">
 								{resume?.email}
 							</a>{" "}
 							|
@@ -34,7 +34,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.linkedinUrl && (
 						<>
 							{" "}
-							<a href={resume?.linkedinUrl} className="text-inherit">
+							<a href={resume?.linkedinUrl} className="text-inherit font-times text-blue-500">
 								LinkedIn
 							</a>{" "}
 							|
@@ -43,7 +43,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.githubUrl && (
 						<>
 							{" "}
-							<a href={resume?.githubUrl} className="text-inherit">
+							<a href={resume?.githubUrl} className="text-inherit font-times text-blue-500">
 								Github
 							</a>{" "}
 							|
@@ -52,7 +52,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.portfolioUrl && (
 						<>
 							{" "}
-							<a href={resume?.portfolioUrl} className="text-inherit">
+							<a href={resume?.portfolioUrl} className="text-inherit font-times text-blue-500">
 								Portfolio
 							</a>{" "}
 							|
@@ -62,7 +62,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 						resume.links.map((link) => (
 							<span key={link.id}>
 								{" "}
-								<a href={link.url} className="text-inherit">
+								<a href={link.url} className="text-inherit font-times text-blue-500">
 									{link.name}
 								</a>{" "}
 								|

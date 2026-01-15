@@ -135,3 +135,85 @@
     justify-content: center;
     align-items: center;
 }
+
+/* Markdown prose styles for chat messages */
+.prose-chat {
+	@apply text-sm leading-relaxed;
+}
+
+.prose-chat p {
+	@apply mb-2 last:mb-0;
+}
+
+.prose-chat ul, .prose-chat ol {
+	@apply mb-2 pl-4 last:mb-0;
+}
+
+.prose-chat ul {
+	@apply list-disc;
+}
+
+.prose-chat ol {
+	@apply list-decimal;
+}
+
+.prose-chat li {
+	@apply mb-1;
+}
+
+.prose-chat code {
+	@apply bg-black/10 dark:bg-white/10 px-1 py-0.5 rounded text-xs font-mono;
+}
+
+.prose-chat pre {
+	@apply bg-black/10 dark:bg-white/10 p-3 rounded-md mb-2 overflow-x-auto;
+}
+
+.prose-chat pre code {
+	@apply bg-transparent p-0;
+}
+
+.prose-chat strong {
+	@apply font-semibold;
+}
+
+.prose-chat em {
+	@apply italic;
+}
+
+.prose-chat a {
+	@apply underline underline-offset-2;
+}
+
+.prose-chat h1, .prose-chat h2, .prose-chat h3, .prose-chat h4, .prose-chat h5, .prose-chat h6 {
+	@apply font-semibold mb-2 mt-3 first:mt-0;
+}
+
+.prose-chat h1 {
+	@apply text-lg;
+}
+
+.prose-chat h2 {
+	@apply text-base;
+}
+
+.prose-chat h3, .prose-chat h4, .prose-chat h5, .prose-chat h6 {
+	@apply text-sm;
+}
+
+.prose-chat blockquote {
+	@apply border-l-2 pl-3 italic mb-2;
+}
+
+.prose-chat hr {
+	@apply my-3;
+}
+
+/* User message specific prose styles */
+.prose-chat-user code {
+	@apply bg-white/20;
+}
+
+.prose-chat-user pre {
+	@apply bg-white/20;
+}

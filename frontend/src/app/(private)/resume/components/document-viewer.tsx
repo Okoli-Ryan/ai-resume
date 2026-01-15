@@ -46,7 +46,7 @@ const ResumeDocument = () => {
 
 	return (
 		<div
-			className="bg-white font-times text-[10px] leading-tight"
+			className="bg-white font-times *:!font-times text-[10px] leading-tight"
 			style={{
 				width: "210mm",
 				minHeight: "297mm",

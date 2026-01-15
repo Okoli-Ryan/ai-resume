@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Bot, User } from "lucide-react";
 import { memo } from "react";
+import Markdown from "react-markdown";
 
 interface ChatMessageProps {
 	role: "user" | "assistant";
@@ -21,12 +22,10 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
 				)}>
 				{isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
 			</div>
-			<div
-				className={cn(
-					"flex-1 space-y-2 overflow-hidden rounded-lg px-4 py-3 text-sm",
-					isUser ? "bg-primary text-primary-foreground" : "bg-muted"
-				)}>
-				<div className="whitespace-pre-wrap break-words leading-relaxed">{content}</div>
+			<div className={cn("flex-1 overflow-hidden rounded-lg px-4 py-3", isUser ? "bg-primary text-primary-foreground" : "bg-muted")}>
+				<div className={cn("prose-chat break-words", isUser && "prose-chat-user")}>
+					<Markdown>{content}</Markdown>
+				</div>
 			</div>
 		</div>
 	);

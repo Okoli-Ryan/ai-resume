@@ -67,9 +67,15 @@ const ChatMessages = ({ messages, isLoading }: ChatMessagesProps) => {
 		);
 	}
 
+	// Filter out messages with empty content (happens during tool calls)
+	const filteredMessages = messages.filter((message) => {
+		const content = getMessageContent(message);
+		return content.trim().length > 0;
+	});
+
 	return (
 		<div ref={scrollRef} className="flex-1 overflow-y-auto">
-			{messages.map((message) => (
+			{filteredMessages.map((message) => (
 				<ChatMessage 
 					key={message.id} 
 					role={message.role as "user" | "assistant"} 

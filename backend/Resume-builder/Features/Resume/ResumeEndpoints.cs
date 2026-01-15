@@ -6,6 +6,7 @@ using Resume_builder.Features.Resume.Duplicate;
 using Resume_builder.Features.Resume.GetMinimalResumesByUserId;
 using Resume_builder.Features.Resume.GetResumeById;
 using Resume_builder.Features.Resume.GetResumesByUserId;
+using Resume_builder.Features.Resume.PatchUpdate;
 using Resume_builder.Features.Resume.Update;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Repositories.ResumeRepository;
@@ -80,6 +81,26 @@ public class ResumeModule : CarterModule
 
             var handler = new UpdateResumeHandler(db, claimsService);
             var response = await handler.Handle(new UpdateResumeCommand(resumeId, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+
+        endpoint.MapPatch("{resumeId}", async (
+            string resumeId,
+            PatchUpdateResumeRequest request,
+            PatchUpdateResumeValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken
+        ) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+            if (validationError != null)
+                return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateResumeHandler(db, claimsService);
+            var response = await handler.Handle(new PatchUpdateResumeCommand(resumeId, request), cancellationToken);
 
             return response.GetResult();
         });

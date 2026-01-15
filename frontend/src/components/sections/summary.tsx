@@ -12,7 +12,7 @@ const Summary = ({ resume }: { resume: Partial<TResume> }) => {
 	return (
 		<div>
 			<Section title="Summary">
-				<div className="font-times text-[10px] leading-tight" dangerouslySetInnerHTML={{ __html: sanitizeHtml(summary) }} />
+				<div className="*:!font-times text-[10px] leading-tight" dangerouslySetInnerHTML={{ __html: sanitizeHtml(summary) }} />
 			</Section>
 		</div>
 	);

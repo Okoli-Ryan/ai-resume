@@ -1,18 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Download } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 
-const DownloadModal = ({ toPDF }: { toPDF: () => void }) => {
+const DownloadModal = ({ toPDF }: { toPDF: () => Promise<void> }) => {
 	const [open, setOpen] = useState(false);
+	const [isPending, startTransition] = useTransition();
 
-	const handleDownload = () => {
-		toPDF();
-		setOpen(false);
-	};
+	function downloadResume() {
+		startTransition(async () => {
+			await toPDF();
+			setOpen(false);
+		});
+	}
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -28,7 +31,8 @@ const DownloadModal = ({ toPDF }: { toPDF: () => void }) => {
 					<DialogTitle>Get Resume</DialogTitle>
 					<DialogDescription>Download as PDF</DialogDescription>
 				</DialogHeader>
-				<Button type="button" onClick={handleDownload}>
+				<Button type="button" onClick={downloadResume} disabled={isPending}>
+					{isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 					Download as PDF
 				</Button>
 			</DialogContent>
