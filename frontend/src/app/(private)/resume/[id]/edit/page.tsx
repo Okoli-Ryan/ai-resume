@@ -1,7 +1,7 @@
 import { isCustomError } from '@/lib/utils';
 import { getResumeById } from '@/services/resume/get-resume-by-id';
 
-import ResumeDoc from '../../components/resume-doc';
+import ResumeDoc from "./components/resume-doc";
 
 const EditResume = async ({ params }: { params: Promise<{ id: string }> }) => {
 	const resumeId = (await params).id;

@@ -16,7 +16,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.phoneNumber && (
 						<>
 							{" "}
-							<a href={`tel:${resume?.phoneNumber}`} className="text-inherit font-times text-blue-500">
+							<a href={`tel:${resume?.phoneNumber}`} className="font-times text-blue-500">
 								{resume?.phoneNumber}
 							</a>{" "}
 							|
@@ -25,7 +25,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.email && (
 						<>
 							{" "}
-							<a href={`mailto:${resume?.email}`} className="text-inherit font-times text-blue-500">
+							<a href={`mailto:${resume?.email}`} className="font-times text-blue-500">
 								{resume?.email}
 							</a>{" "}
 							|
@@ -34,7 +34,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.linkedinUrl && (
 						<>
 							{" "}
-							<a href={resume?.linkedinUrl} className="text-inherit font-times text-blue-500">
+							<a href={resume?.linkedinUrl} className="font-times text-blue-500">
 								LinkedIn
 							</a>{" "}
 							|
@@ -43,7 +43,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.githubUrl && (
 						<>
 							{" "}
-							<a href={resume?.githubUrl} className="text-inherit font-times text-blue-500">
+							<a href={resume?.githubUrl} className="font-times text-blue-500">
 								Github
 							</a>{" "}
 							|
@@ -52,7 +52,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 					{resume?.portfolioUrl && (
 						<>
 							{" "}
-							<a href={resume?.portfolioUrl} className="text-inherit font-times text-blue-500">
+							<a href={resume?.portfolioUrl} className="font-times text-blue-500">
 								Portfolio
 							</a>{" "}
 							|
@@ -62,7 +62,7 @@ const PersonalInfo = ({ resume }: { resume: Partial<TResume> }) => {
 						resume.links.map((link) => (
 							<span key={link.id}>
 								{" "}
-								<a href={link.url} className="text-inherit font-times text-blue-500">
+								<a href={link.url} className="font-times text-blue-500">
 									{link.name}
 								</a>{" "}
 								|

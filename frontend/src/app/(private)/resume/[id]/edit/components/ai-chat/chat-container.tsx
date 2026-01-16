@@ -1,5 +1,7 @@
 "use client";
 
+import { TOOL_NAMES } from "@/ai/tools";
+import { ChatStatus, isChatLoading } from "@/ai/types";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { memo, useCallback, useMemo } from "react";
@@ -28,7 +30,7 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 		id: `resume-${resumeId}`,
 		transport,
 		onToolCall: async ({ toolCall }) => {
-			if (toolCall.toolName === "updateResume") {
+			if (toolCall.toolName === TOOL_NAMES.UPDATE_RESUME) {
 				try {
 					const resume = await getResumeByIdQuery(resumeId);
 					updateResume(resume);
@@ -39,7 +41,7 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 		},
 	});
 
-	const isLoading = status === "streaming" || status === "submitted";
+	const isLoading = isChatLoading(status as ChatStatus);
 
 	const onSubmit = useCallback(
 		(content: string) => {
@@ -53,19 +55,9 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 		[sendMessage]
 	);
 
-	async function refetch() {
-		try {
-			const resume = await getResumeByIdQuery(resumeId);
-			updateResume(resume);
-		} catch (error) {
-			console.error("Failed to refetch resume:", error);
-		}
-	}
-
 	return (
 		<div className="flex flex-col h-full">
-			<button onClick={refetch}>Refresh</button>
-			<ChatMessages messages={messages} isLoading={isLoading} />
+			<ChatMessages messages={messages} status={status as ChatStatus} />
 			<ChatInput isLoading={isLoading} onSubmit={onSubmit} resumeId={resumeId} />
 		</div>
 	);

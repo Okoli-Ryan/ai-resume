@@ -1,7 +1,6 @@
+import { getResumeByIdTool, TOOL_NAMES, updateResumeTool } from "@/ai/tools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from "ai";
-import { getResumeByIdTool } from "./tools/get-resume-by-id-tool";
-import { updateResumeTool } from "./tools/update-resume-tool";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -36,8 +35,8 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 			system: systemPrompt,
 			messages: modelMessages,
 			tools: {
-				getResumeById: getResumeByIdTool(resumeId),
-				updateResume: updateResumeTool(resumeId),
+				[TOOL_NAMES.GET_RESUME_BY_ID]: getResumeByIdTool(resumeId),
+				[TOOL_NAMES.UPDATE_RESUME]: updateResumeTool(resumeId),
 			},
 			stopWhen: stepCountIs(5),
 		});

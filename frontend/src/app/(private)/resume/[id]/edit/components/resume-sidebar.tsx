@@ -4,10 +4,11 @@ import { ChevronDown, MessageCircle, PanelRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useDisclose } from "@/hooks/use-disclose";
 import { ResumeFormSections } from "@/lib/react-pdf";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import { memo } from "react";
-import { ChatModal, useChatModal } from "../[id]/ai-chat";
+import { ChatModal } from "./ai-chat";
 
 interface ResumeSidebarProps {
 	resumeId: string;
@@ -55,17 +56,17 @@ const ResumeSidebar = ({ resumeId }: ResumeSidebarProps) => {
 };
 
 function ResumeChatModal({ resumeId }: { resumeId: string }) {
-	const { closeChat, isOpen, openChat } = useChatModal();
+	const { isOpen, onOpen, onClose } = useDisclose();
 
 	return (
 		<>
 			<Button
-				onClick={openChat}
+				onClick={onOpen}
 				className="fixed bottom-8 right-24 size-12 flex justify-center items-center rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-200"
 				title="AI Assistant">
 				<MessageCircle className="h-5 w-5" />
 			</Button>
-			<ChatModal isOpen={isOpen} onClose={closeChat} resumeId={resumeId} />
+			<ChatModal isOpen={isOpen} onClose={onClose} resumeId={resumeId} />
 		</>
 	);
 }

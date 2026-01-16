@@ -7,7 +7,7 @@ import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
 import { ResumeProvider } from "@/components/edit-form/resume-info-form/context/resume-context";
 
-import ResumeSidebar from "./resume-sidebar";
+import ResumeSidebar from "./resume-sidebar"
 import { ResumeInfoBanner } from "./resume-info-banner";
 
 const DocumentViewer = dynamic(() => import("./document-viewer").then((mod) => mod.default), {

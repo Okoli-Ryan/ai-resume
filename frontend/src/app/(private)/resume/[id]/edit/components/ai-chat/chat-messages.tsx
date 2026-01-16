@@ -1,13 +1,14 @@
 "use client";
 
+import { ChatStatus, getChatUIState, isChatLoading } from "@/ai/types";
 import { memo, useEffect, useRef } from "react";
 import ChatMessage from "./chat-message";
 import { UIMessage } from "@ai-sdk/react";
-import { Loader2 } from "lucide-react";
+import { Bot, Loader2, Sparkles } from "lucide-react";
 
 interface ChatMessagesProps {
 	messages: UIMessage[];
-	isLoading: boolean;
+	status: ChatStatus;
 }
 
 // Helper function to extract text content from message parts
@@ -18,8 +19,10 @@ const getMessageContent = (message: UIMessage): string => {
 		.join("");
 };
 
-const ChatMessages = ({ messages, isLoading }: ChatMessagesProps) => {
+const ChatMessages = ({ messages, status }: ChatMessagesProps) => {
 	const scrollRef = useRef<HTMLDivElement>(null);
+	const uiState = getChatUIState(status);
+	const isLoading = isChatLoading(status);
 
 	useEffect(() => {
 		if (scrollRef.current) {
@@ -31,11 +34,7 @@ const ChatMessages = ({ messages, isLoading }: ChatMessagesProps) => {
 		return (
 			<div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
 				<div className="rounded-full bg-primary/10 p-4 mb-4">
-					<svg
-						className="h-8 w-8 text-primary"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24">
+					<svg className="h-8 w-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
 							strokeLinecap="round"
 							strokeLinejoin="round"
@@ -46,21 +45,17 @@ const ChatMessages = ({ messages, isLoading }: ChatMessagesProps) => {
 				</div>
 				<h3 className="font-semibold text-lg mb-2">Resume AI Assistant</h3>
 				<p className="text-muted-foreground text-sm max-w-sm">
-					Ask me anything about your resume! I can help you improve content, suggest better phrasing, or provide
-					tips for making your resume stand out.
+					Ask me anything about your resume! I can help you improve content, suggest better phrasing, or provide tips for making your resume stand
+					out.
 				</p>
 				<div className="mt-6 space-y-2">
 					<p className="text-xs text-muted-foreground">Try asking:</p>
 					<div className="flex flex-wrap gap-2 justify-center">
-						{["How can I improve my summary?", "Suggest better action verbs", "Review my experience section"].map(
-							(suggestion) => (
-								<span
-									key={suggestion}
-									className="text-xs bg-muted px-3 py-1.5 rounded-full text-muted-foreground">
-									{suggestion}
-								</span>
-							)
-						)}
+						{["How can I improve my summary?", "Suggest better action verbs", "Review my experience section"].map((suggestion) => (
+							<span key={suggestion} className="text-xs bg-muted px-3 py-1.5 rounded-full text-muted-foreground">
+								{suggestion}
+							</span>
+						))}
 					</div>
 				</div>
 			</div>
@@ -76,26 +71,43 @@ const ChatMessages = ({ messages, isLoading }: ChatMessagesProps) => {
 	return (
 		<div ref={scrollRef} className="flex-1 overflow-y-auto">
 			{filteredMessages.map((message) => (
-				<ChatMessage 
-					key={message.id} 
-					role={message.role as "user" | "assistant"} 
-					content={getMessageContent(message)} 
-				/>
+				<ChatMessage key={message.id} role={message.role as "user" | "assistant"} content={getMessageContent(message)} />
 			))}
-			{isLoading && messages[messages.length - 1]?.role === "user" && (
-				<div className="flex gap-3 p-4">
-					<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
-						<Loader2 className="h-4 w-4 animate-spin" />
-					</div>
-					<div className="flex-1 rounded-lg bg-muted px-4 py-3">
-						<div className="flex items-center gap-1">
-							<span className="h-2 w-2 rounded-full bg-foreground/30 animate-pulse" />
-							<span className="h-2 w-2 rounded-full bg-foreground/30 animate-pulse delay-150" />
-							<span className="h-2 w-2 rounded-full bg-foreground/30 animate-pulse delay-300" />
-						</div>
-					</div>
+			{isLoading && messages[messages.length - 1]?.role === "user" && <LoadingIndicator uiState={uiState} />}
+		</div>
+	);
+};
+
+/**
+ * Loading indicator component that shows different states
+ */
+const LoadingIndicator = ({ uiState }: { uiState: ReturnType<typeof getChatUIState> }) => {
+	const isThinking = uiState === "thinking";
+
+	return (
+		<div className="flex gap-3 p-4 animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
+			<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
+				{isThinking ? <Sparkles className="h-4 w-4 text-primary animate-pulse" /> : <Bot className="h-4 w-4" />}
+			</div>
+			<div className="flex-1 rounded-lg bg-muted px-4 py-3">
+				<div className="flex items-center gap-2">
+					{isThinking ? (
+						<>
+							<Loader2 className="h-4 w-4 animate-spin text-primary" />
+							<span className="text-sm text-muted-foreground">Thinking...</span>
+						</>
+					) : (
+						<>
+							<div className="flex items-center gap-1">
+								<span className="h-2 w-2 rounded-full bg-primary/60 animate-pulse" style={{ animationDelay: "0ms" }} />
+								<span className="h-2 w-2 rounded-full bg-primary/60 animate-pulse" style={{ animationDelay: "150ms" }} />
+								<span className="h-2 w-2 rounded-full bg-primary/60 animate-pulse" style={{ animationDelay: "300ms" }} />
+							</div>
+							<span className="text-sm text-muted-foreground">Responding...</span>
+						</>
+					)}
 				</div>
-			)}
+			</div>
 		</div>
 	);
 };

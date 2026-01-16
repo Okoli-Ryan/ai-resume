@@ -2,7 +2,7 @@ import { isCustomError } from "@/lib/utils";
 import { patchUpdateResumeInfo } from "@/services/resume/patch-update-resume";
 import { tool } from "ai";
 import z from "zod";
-import { jsonToToon } from '@jojojoseph/toon-json-converter';
+import { jsonToToon } from "@jojojoseph/toon-json-converter";
 
 const updateResumeSchema = z.object({
 	userName: z.string().optional().describe("The user's full name"),
