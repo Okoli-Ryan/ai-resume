@@ -7,7 +7,7 @@ import { DefaultChatTransport } from "ai";
 import { memo, useCallback, useMemo } from "react";
 import ChatInput from "./chat-input";
 import ChatMessages from "./chat-messages";
-import { getResumeByIdQuery } from "@/queries/get-resume-by-id-query";
+import { getResumeById } from "@/queries/use-resume-by-id";
 import { useResumeStore } from "@/store/resume-store";
 
 interface ChatContainerProps {
@@ -15,7 +15,7 @@ interface ChatContainerProps {
 }
 
 const ChatContainer = ({ resumeId }: ChatContainerProps) => {
-	const updateResume = useResumeStore((state) => state.update);
+	const { update } = useResumeStore();
 
 	const transport = useMemo(
 		() =>
@@ -29,14 +29,16 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 	const { messages, status, sendMessage } = useChat({
 		id: `resume-${resumeId}`,
 		transport,
-		onToolCall: async ({ toolCall }) => {
-			if (toolCall.toolName === TOOL_NAMES.UPDATE_RESUME) {
-				try {
-					const resume = await getResumeByIdQuery(resumeId);
-					updateResume(resume);
-				} catch (error) {
-					console.error("Failed to refetch resume:", error);
-				}
+		onFinish: async (response) => {
+			const didUpdateResume = response.messages.flatMap((m) => m.parts).some((p) => p.type === `tool-${TOOL_NAMES.UPDATE_RESUME}`);
+
+			if (!didUpdateResume) return;
+
+			try {
+				const updatedResume = await getResumeById(resumeId);
+				update(updatedResume);
+			} catch {
+				// TODO handle error
 			}
 		},
 	});
