@@ -769,6 +769,11 @@
     wrap-ansi "^8.1.0"
     wrap-ansi-cjs "npm:wrap-ansi@^7.0.0"
 
+"@jojojoseph/toon-json-converter@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@jojojoseph/toon-json-converter/-/toon-json-converter-2.0.3.tgz#e92e0731ab34722cf6375d0ca0c75d0a6a7003a2"
+  integrity sha512-XjBrrSV/kkzPx/DLuqsebUfTGYOaKs2MWUXtb0WzGcLVMSMg62W6xAYPJtbqdFjVS8n+tYtadxLx+UYg4RxRZw==
+
 "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.8"
   resolved "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.8.tgz"

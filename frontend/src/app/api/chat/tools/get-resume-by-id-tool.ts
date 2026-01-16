@@ -1,5 +1,6 @@
 import { isCustomError } from "@/lib/utils";
 import { getResumeById } from "@/services/resume/get-resume-by-id";
+import { JsonObject, jsonToToon } from "@jojojoseph/toon-json-converter";
 import { tool } from "ai";
 import z from "zod";
 
@@ -20,7 +21,7 @@ export const getResumeByIdTool = (resumeId: string) =>
 					throw new Error(`Failed to fetch resume: ${response.message}`);
 				}
 
-				return response;
+				return jsonToToon(response as JsonObject);
 			} catch (error) {
 				throw new Error(`Unable to fetch resume data: ${error instanceof Error ? error.message : "Unknown error"}`);
 			}

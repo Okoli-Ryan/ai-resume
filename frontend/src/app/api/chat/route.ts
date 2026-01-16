@@ -1,6 +1,7 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from "ai";
 import { getResumeByIdTool } from "./tools/get-resume-by-id-tool";
+import { updateResumeTool } from "./tools/update-resume-tool";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -36,6 +37,7 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 			messages: modelMessages,
 			tools: {
 				getResumeById: getResumeByIdTool(resumeId),
+				updateResume: updateResumeTool(resumeId),
 			},
 			stopWhen: stepCountIs(5),
 		});
