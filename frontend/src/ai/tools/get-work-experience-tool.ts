@@ -21,7 +21,7 @@ export const getWorkExperienceTool = (resumeId: string) =>
 					throw new Error(`Failed to fetch work experience: ${response.message}`);
 				}
 
-				return jsonToToon(response as JsonObject);
+				return jsonToToon(response as unknown as JsonObject);
 			} catch (error) {
 				throw new Error(`Unable to fetch work experience data: ${error instanceof Error ? error.message : "Unknown error"}`);
 			}

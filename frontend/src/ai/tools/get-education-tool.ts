@@ -21,7 +21,7 @@ export const getEducationTool = (resumeId: string) =>
 					throw new Error(`Failed to fetch education: ${response.message}`);
 				}
 
-				return jsonToToon(response as JsonObject);
+				return jsonToToon(response as unknown as JsonObject);
 			} catch (error) {
 				throw new Error(`Unable to fetch education data: ${error instanceof Error ? error.message : "Unknown error"}`);
 			}

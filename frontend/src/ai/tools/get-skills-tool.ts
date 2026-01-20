@@ -21,7 +21,7 @@ export const getSkillsTool = (resumeId: string) =>
 					throw new Error(`Failed to fetch skills: ${response.message}`);
 				}
 
-				return jsonToToon(response as JsonObject);
+				return jsonToToon(response as unknown as JsonObject);
 			} catch (error) {
 				throw new Error(`Unable to fetch skills data: ${error instanceof Error ? error.message : "Unknown error"}`);
 			}

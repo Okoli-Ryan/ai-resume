@@ -21,7 +21,7 @@ export const getProjectsTool = (resumeId: string) =>
 					throw new Error(`Failed to fetch projects: ${response.message}`);
 				}
 
-				return jsonToToon(response as JsonObject);
+				return jsonToToon(response as unknown as JsonObject);
 			} catch (error) {
 				throw new Error(`Unable to fetch projects data: ${error instanceof Error ? error.message : "Unknown error"}`);
 			}
