@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Education.Create;
+using Resume_builder.Features.Education.GetByResumeId;
 using Resume_builder.Features.Education.Update;
 using Resume_builder.Features.Education.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -12,7 +13,19 @@ public class EducationModule : CarterModule
 {
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        var endpoint = app.MapGroup("education").WithTags("Education");
+        var endpoint = app.MapGroup("education").WithTags("Education").RequireAuthorization();
+
+        endpoint.MapGet("/resume/{resumeId}", async (
+            string resumeId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new GetEducationByResumeIdHandler(db, claimsService);
+            var response = await handler.Handle(resumeId, cancellationToken);
+
+            return response.GetResult();
+        });
 
         endpoint.MapPost("", async (
             CreateEducationCommand command,
