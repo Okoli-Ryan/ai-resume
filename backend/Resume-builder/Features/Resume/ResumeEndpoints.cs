@@ -6,7 +6,12 @@ using Resume_builder.Features.Resume.Duplicate;
 using Resume_builder.Features.Resume.GetMinimalResumesByUserId;
 using Resume_builder.Features.Resume.GetResumeById;
 using Resume_builder.Features.Resume.GetResumesByUserId;
-using Resume_builder.Features.Resume.PatchUpdate;
+using Resume_builder.Features.Resume.Patch_Update_Order;
+using Resume_builder.Features.Resume.Patch_Update_Resume_Info;
+using Resume_builder.Features.Resume.Patch_Update_Summary;
+using Resume_builder.Features.Resume.PatchUpdateLinks;
+using Resume_builder.Features.Resume.PatchUpdateOrder;
+using Resume_builder.Features.Resume.PatchUpdateResumeInfo;
 using Resume_builder.Features.Resume.Update;
 using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Repositories.ResumeRepository;
@@ -86,10 +91,10 @@ public class ResumeModule : CarterModule
         });
 
 
-        endpoint.MapPatch("{resumeId}", async (
+        endpoint.MapPatch("{resumeId}/info", async (
             string resumeId,
-            PatchUpdateResumeRequest request,
-            PatchUpdateResumeValidator validator,
+            PatchUpdateResumeInfoRequest request,
+            PatchUpdateResumeInfoValidator validator,
             AppDbContext db,
             IClaimsService claimsService,
             CancellationToken cancellationToken
@@ -99,8 +104,68 @@ public class ResumeModule : CarterModule
             if (validationError != null)
                 return Results.BadRequest(validationError);
 
-            var handler = new PatchUpdateResumeHandler(db, claimsService);
-            var response = await handler.Handle(new PatchUpdateResumeCommand(resumeId, request), cancellationToken);
+            var handler = new PatchUpdateResumeInfoHandler(db, claimsService);
+            var response = await handler.Handle(new PatchUpdateResumeInfoCommand(resumeId, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+
+        endpoint.MapPatch("{resumeId}/summary", async (
+            string resumeId,
+            PatchUpdateSummaryRequest request,
+            PatchUpdateSummaryValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken
+        ) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+            if (validationError != null)
+                return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateSummaryHandler(db, claimsService);
+            var response = await handler.Handle(new PatchUpdateSummaryCommand(resumeId, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+
+        endpoint.MapPatch("{resumeId}/order", async (
+            string resumeId,
+            PatchUpdateOrderRequest request,
+            PatchUpdateOrderValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken
+        ) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+            if (validationError != null)
+                return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateOrderHandler(db, claimsService);
+            var response = await handler.Handle(new PatchUpdateOrderCommand(resumeId, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+
+        endpoint.MapPatch("{resumeId}/links", async (
+            string resumeId,
+            PatchUpdateLinksRequest request,
+            PatchUpdateLinksValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken
+        ) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+            if (validationError != null)
+                return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateLinksHandler(db, claimsService);
+            var response = await handler.Handle(new PatchUpdateLinksCommand(resumeId, request), cancellationToken);
 
             return response.GetResult();
         });

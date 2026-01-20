@@ -1,6 +1,6 @@
 "use client";
 
-import { TOOL_NAMES } from "@/ai/tools";
+import { TOOL_REFETCH_MAP } from "@/ai/tools";
 import { ChatStatus, isChatLoading } from "@/ai/types";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
@@ -30,9 +30,14 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 		id: `resume-${resumeId}`,
 		transport,
 		onFinish: async (response) => {
-			const didUpdateResume = response.messages.flatMap((m) => m.parts).some((p) => p.type === `tool-${TOOL_NAMES.UPDATE_RESUME}`);
+			const toolCalls = response.messages.flatMap((m) => m.parts).filter((p) => p.type.startsWith("tool-"));
 
-			if (!didUpdateResume) return;
+			const needsRefetch = toolCalls.some((toolCall) => {
+				const toolName = toolCall.type.replace("tool-", "");
+				return TOOL_REFETCH_MAP[toolName as keyof typeof TOOL_REFETCH_MAP];
+			});
+
+			if (!needsRefetch) return;
 
 			try {
 				const updatedResume = await getResumeById(resumeId);

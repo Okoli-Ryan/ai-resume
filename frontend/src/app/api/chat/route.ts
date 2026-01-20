@@ -1,4 +1,4 @@
-import { getResumeByIdTool, TOOL_NAMES, updateResumeTool } from "@/ai/tools";
+import { getResumeByIdTool, TOOL_NAMES, updateResumeTool, updateResumeInfoTool, updateSummaryTool, updateOrderTool, updateLinksTool } from "@/ai/tools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from "ai";
 
@@ -28,7 +28,14 @@ When providing feedback:
 - Focus on quantifiable achievements
 - Suggest strong action verbs
 
-The user is currently editing resume ID: ${resumeId}. Provide helpful, professional, and encouraging feedback.`;
+CRITICAL INSTRUCTIONS FOR UPDATES:
+- NEVER guess, assume, or invent values for resume fields
+- ONLY update fields that the user has explicitly provided or requested to change
+- If a user asks to update something that is required but doesn't provide the new value, ask them for it
+- Do not fill in missing information based on context or assumptions
+- Always confirm what specific changes the user wants before making updates
+
+The user is currently editing resume ID: ${resumeId}. Provide helpful, professional, and encouraging feedback while being precise about any updates you make.`;
 
 		const result = streamText({
 			model: openai("gpt-4o-mini"),
@@ -37,6 +44,10 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 			tools: {
 				[TOOL_NAMES.GET_RESUME_BY_ID]: getResumeByIdTool(resumeId),
 				[TOOL_NAMES.UPDATE_RESUME]: updateResumeTool(resumeId),
+				[TOOL_NAMES.UPDATE_RESUME_INFO]: updateResumeInfoTool(resumeId),
+				[TOOL_NAMES.UPDATE_SUMMARY]: updateSummaryTool(resumeId),
+				[TOOL_NAMES.UPDATE_ORDER]: updateOrderTool(resumeId),
+				[TOOL_NAMES.UPDATE_LINKS]: updateLinksTool(resumeId),
 			},
 			stopWhen: stepCountIs(5),
 		});
@@ -52,7 +63,7 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 			{
 				status: 500,
 				headers: { "Content-Type": "application/json" },
-			}
+			},
 		);
 	}
 }
