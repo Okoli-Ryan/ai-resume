@@ -1,9 +1,7 @@
 ########Critical######
 fix fetch failed on google auth stlil entering dashboard section
 certificate section
-Mobile view
-hide/show sections
-ensure max file size for import resume button
+Get Project, work experience ... by resume id, add enhancement controller and tool
 
 #######Future#######
 Upload to cloudinary feature, get link
@@ -16,4 +14,3 @@ Handle empty skill category
 Create job feature, where job can have 1 resume, tie job desc to resume for additional info
 Be able to generate tags from job
 Add redirect to log in on expired session
-Generate tags from job description during "resume import"
