@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.WorkExperience.Create;
+using Resume_builder.Features.WorkExperience.GetByResumeId;
 using Resume_builder.Features.WorkExperience.Update;
 using Resume_builder.Features.WorkExperience.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -13,6 +14,18 @@ public class WorkExperienceEndpoints : CarterModule
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         var endpoint = app.MapGroup("work-experience").WithTags("Work Experience").RequireAuthorization();
+
+        endpoint.MapGet("/resume/{resumeId}", async (
+            string resumeId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new GetWorkExperienceByResumeIdHandler(db, claimsService);
+            var response = await handler.Handle(resumeId, cancellationToken);
+
+            return response.GetResult();
+        });
 
         endpoint.MapPost("", async (
                 CreateWorkExperienceCommand command,

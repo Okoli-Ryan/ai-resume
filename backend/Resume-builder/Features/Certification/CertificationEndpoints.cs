@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Certification.Create;
+using Resume_builder.Features.Certification.GetByResumeId;
 using Resume_builder.Features.Certification.Update;
 using Resume_builder.Features.Certification.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -12,7 +13,19 @@ public class CertificationModule : CarterModule
 {
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        var endpoint = app.MapGroup("certification").WithTags("Certification");
+        var endpoint = app.MapGroup("certification").WithTags("Certification").RequireAuthorization();
+
+        endpoint.MapGet("/resume/{resumeId}", async (
+            string resumeId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new GetCertificationsByResumeIdHandler(db, claimsService);
+            var response = await handler.Handle(resumeId, cancellationToken);
+
+            return response.GetResult();
+        });
 
         endpoint.MapPost("", async (
             CreateCertificationCommand command,
