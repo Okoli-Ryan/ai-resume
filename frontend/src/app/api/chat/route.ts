@@ -1,4 +1,18 @@
-import { getResumeByIdTool, TOOL_NAMES, updateResumeTool, updateResumeInfoTool, updateSummaryTool, updateOrderTool, updateLinksTool } from "@/ai/tools";
+import { 
+	getResumeByIdTool, 
+	getResumeInfoTool, 
+	getCertificationsTool, 
+	getProjectsTool, 
+	getSkillsTool, 
+	getWorkExperienceTool, 
+	getEducationTool, 
+	TOOL_NAMES, 
+	updateResumeTool, 
+	updateResumeInfoTool, 
+	updateSummaryTool, 
+	updateOrderTool, 
+	updateLinksTool 
+} from "@/ai/tools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from "ai";
 
@@ -43,6 +57,12 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 			messages: modelMessages,
 			tools: {
 				[TOOL_NAMES.GET_RESUME_BY_ID]: getResumeByIdTool(resumeId),
+				[TOOL_NAMES.GET_RESUME_INFO]: getResumeInfoTool(resumeId),
+				[TOOL_NAMES.GET_CERTIFICATIONS]: getCertificationsTool(resumeId),
+				[TOOL_NAMES.GET_PROJECTS]: getProjectsTool(resumeId),
+				[TOOL_NAMES.GET_SKILLS]: getSkillsTool(resumeId),
+				[TOOL_NAMES.GET_WORK_EXPERIENCE]: getWorkExperienceTool(resumeId),
+				[TOOL_NAMES.GET_EDUCATION]: getEducationTool(resumeId),
 				[TOOL_NAMES.UPDATE_RESUME]: updateResumeTool(resumeId),
 				[TOOL_NAMES.UPDATE_RESUME_INFO]: updateResumeInfoTool(resumeId),
 				[TOOL_NAMES.UPDATE_SUMMARY]: updateSummaryTool(resumeId),

@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Project.Create;
+using Resume_builder.Features.Project.GetByResumeId;
 using Resume_builder.Features.Project.Update;
 using Resume_builder.Features.Project.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -12,7 +13,19 @@ public class ProjectModule : CarterModule
 {
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        var endpoint = app.MapGroup("project").WithTags("Project");
+        var endpoint = app.MapGroup("project").WithTags("Project").RequireAuthorization();
+
+        endpoint.MapGet("/resume/{resumeId}", async (
+            string resumeId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new GetProjectsByResumeIdHandler(db, claimsService);
+            var response = await handler.Handle(resumeId, cancellationToken);
+
+            return response.GetResult();
+        });
 
         endpoint.MapPost("", async (
             CreateProjectCommand command,

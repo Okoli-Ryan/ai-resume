@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Skills.Create;
+using Resume_builder.Features.Skills.GetByResumeId;
 using Resume_builder.Features.Skills.Update;
 using Resume_builder.Features.Skills.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -13,6 +14,18 @@ public class SkillEndpoints : CarterModule
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
         var endpoint = app.MapGroup("skill").RequireAuthorization();
+
+        endpoint.MapGet("/resume/{resumeId}", async (
+            string resumeId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new GetSkillsByResumeIdHandler(db, claimsService);
+            var response = await handler.Handle(resumeId, cancellationToken);
+
+            return response.GetResult();
+        });
 
         endpoint.MapPost("", async (
             CreateSkillCommand command,

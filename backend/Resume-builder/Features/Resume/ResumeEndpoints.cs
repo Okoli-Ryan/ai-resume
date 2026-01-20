@@ -5,6 +5,7 @@ using Resume_builder.Features.Resume.Create;
 using Resume_builder.Features.Resume.Duplicate;
 using Resume_builder.Features.Resume.GetMinimalResumesByUserId;
 using Resume_builder.Features.Resume.GetResumeById;
+using Resume_builder.Features.Resume.GetResumeInfo;
 using Resume_builder.Features.Resume.GetResumesByUserId;
 using Resume_builder.Features.Resume.Patch_Update_Order;
 using Resume_builder.Features.Resume.Patch_Update_Resume_Info;
@@ -33,6 +34,18 @@ public class ResumeModule : CarterModule
             CancellationToken cancellationToken) =>
         {
             var handler = new GetResumeByIdHandler(resumeRepository, claimsService);
+            var response = await handler.Handle(resumeId, cancellationToken);
+
+            return response.GetResult();
+        });
+
+        endpoint.MapGet("{resumeId}/info", async (
+            string resumeId,
+            IClaimsService claimsService,
+            IResumeRepository resumeRepository,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new GetResumeInfoHandler(resumeRepository, claimsService);
             var response = await handler.Handle(resumeId, cancellationToken);
 
             return response.GetResult();
