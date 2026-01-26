@@ -2,6 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Certification.Create;
 using Resume_builder.Features.Certification.GetByResumeId;
+using Resume_builder.Features.Certification.PatchUpdate;
 using Resume_builder.Features.Certification.Update;
 using Resume_builder.Features.Certification.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -61,6 +62,25 @@ public class CertificationModule : CarterModule
             var handler = new UpdateCertificationHandler(db, claimsService);
 
             var response = await handler.Handle(new UpdateCertificationCommand(id, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+        endpoint.MapPatch("{id}", async (
+            string id,
+            PatchUpdateCertificationRequest request,
+            PatchUpdateCertificationValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+
+            if (validationError != null) return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateCertificationHandler(db, claimsService);
+
+            var response = await handler.Handle(new PatchUpdateCertificationCommand(id, request), cancellationToken);
 
             return response.GetResult();
         });

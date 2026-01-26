@@ -2,6 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Education.Create;
 using Resume_builder.Features.Education.GetByResumeId;
+using Resume_builder.Features.Education.PatchUpdate;
 using Resume_builder.Features.Education.Update;
 using Resume_builder.Features.Education.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -61,6 +62,25 @@ public class EducationModule : CarterModule
             var handler = new UpdateEducationHandler(db, claimsService);
 
             var response = await handler.Handle(new UpdateEducationCommand(id, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+        endpoint.MapPatch("{id}", async (
+            string id,
+            PatchUpdateEducationRequest request,
+            PatchUpdateEducationValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+
+            if (validationError != null) return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateEducationHandler(db, claimsService);
+
+            var response = await handler.Handle(new PatchUpdateEducationCommand(id, request), cancellationToken);
 
             return response.GetResult();
         });

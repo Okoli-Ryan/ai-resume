@@ -2,6 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.WorkExperience.Create;
 using Resume_builder.Features.WorkExperience.GetByResumeId;
+using Resume_builder.Features.WorkExperience.PatchUpdate;
 using Resume_builder.Features.WorkExperience.Update;
 using Resume_builder.Features.WorkExperience.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -66,6 +67,27 @@ public class WorkExperienceEndpoints : CarterModule
                 return Results.Ok(result);
             })
             .WithName("Update Work Experience");
+
+        endpoint.MapPatch("{workExperienceId}", async (
+                string workExperienceId,
+                PatchUpdateWorkExperienceRequest request,
+                PatchUpdateWorkExperienceValidator validator,
+                IClaimsService claimsService,
+                AppDbContext db,
+                CancellationToken cancellationToken) =>
+            {
+                var validationError = await validator.ValidateRequest(request);
+                if (validationError != null)
+                    return Results.BadRequest(validationError);
+
+                var command = new PatchUpdateWorkExperienceCommand(workExperienceId, request);
+
+                var handler = new PatchUpdateWorkExperienceHandler(db, claimsService);
+
+                var result = await handler.Handle(command, cancellationToken);
+                return result.GetResult();
+            })
+            .WithName("Patch Update Work Experience");
         
         
         endpoint.MapPut("/resume/{resumeId}", async (

@@ -1,17 +1,22 @@
-import { 
-	getResumeByIdTool, 
-	getResumeInfoTool, 
-	getCertificationsTool, 
-	getProjectsTool, 
-	getSkillsTool, 
-	getWorkExperienceTool, 
-	getEducationTool, 
-	TOOL_NAMES, 
-	updateResumeTool, 
-	updateResumeInfoTool, 
-	updateSummaryTool, 
-	updateOrderTool, 
-	updateLinksTool 
+import {
+	getResumeInfoTool,
+	getCertificationsTool,
+	getProjectsTool,
+	getSkillsTool,
+	getWorkExperienceTool,
+	getEducationTool,
+	TOOL_NAMES,
+	updateResumeTool,
+	updateResumeInfoTool,
+	updateSummaryTool,
+	updateOrderTool,
+	updateLinksTool,
+	updateBulletPointTool,
+	updateBulletPointsByFieldTool,
+	patchUpdateCertificationTool,
+	patchUpdateEducationTool,
+	patchUpdateProjectTool,
+	patchUpdateWorkExperienceTool,
 } from "@/ai/tools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from "ai";
@@ -56,7 +61,6 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 			system: systemPrompt,
 			messages: modelMessages,
 			tools: {
-				[TOOL_NAMES.GET_RESUME_BY_ID]: getResumeByIdTool(resumeId),
 				[TOOL_NAMES.GET_RESUME_INFO]: getResumeInfoTool(resumeId),
 				[TOOL_NAMES.GET_CERTIFICATIONS]: getCertificationsTool(resumeId),
 				[TOOL_NAMES.GET_PROJECTS]: getProjectsTool(resumeId),
@@ -68,6 +72,12 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 				[TOOL_NAMES.UPDATE_SUMMARY]: updateSummaryTool(resumeId),
 				[TOOL_NAMES.UPDATE_ORDER]: updateOrderTool(resumeId),
 				[TOOL_NAMES.UPDATE_LINKS]: updateLinksTool(resumeId),
+				[TOOL_NAMES.UPDATE_BULLET_POINT]: updateBulletPointTool(),
+				[TOOL_NAMES.UPDATE_BULLET_POINTS_BY_FIELD]: updateBulletPointsByFieldTool(),
+				[TOOL_NAMES.PATCH_UPDATE_CERTIFICATION]: patchUpdateCertificationTool(),
+				[TOOL_NAMES.PATCH_UPDATE_EDUCATION]: patchUpdateEducationTool(),
+				[TOOL_NAMES.PATCH_UPDATE_PROJECT]: patchUpdateProjectTool(),
+				[TOOL_NAMES.PATCH_UPDATE_WORK_EXPERIENCE]: patchUpdateWorkExperienceTool(),
 			},
 			stopWhen: stepCountIs(5),
 		});

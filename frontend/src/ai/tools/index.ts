@@ -17,6 +17,12 @@ export { updateResumeInfoTool } from "./update-resume-info-tool";
 export { updateSummaryTool } from "./update-summary-tool";
 export { updateOrderTool } from "./update-order-tool";
 export { updateLinksTool } from "./update-links-tool";
+export { updateBulletPointTool } from "./update-bullet-point-tool";
+export { updateBulletPointsByFieldTool } from "./update-bullet-points-by-field-tool";
+export { patchUpdateCertificationTool } from "./patch-update-certification-tool";
+export { patchUpdateEducationTool } from "./patch-update-education-tool";
+export { patchUpdateProjectTool } from "./patch-update-project-tool";
+export { patchUpdateWorkExperienceTool } from "./patch-update-work-experience-tool";
 
 /**
  * Constant object containing all tool names.
@@ -35,6 +41,12 @@ export const TOOL_NAMES = {
 	UPDATE_SUMMARY: "update_summary",
 	UPDATE_ORDER: "update_order",
 	UPDATE_LINKS: "update_links",
+	UPDATE_BULLET_POINT: "update_bullet_point",
+	UPDATE_BULLET_POINTS_BY_FIELD: "update_bullet_points_by_field",
+	PATCH_UPDATE_CERTIFICATION: "patch_update_certification",
+	PATCH_UPDATE_EDUCATION: "patch_update_education",
+	PATCH_UPDATE_PROJECT: "patch_update_project",
+	PATCH_UPDATE_WORK_EXPERIENCE: "patch_update_work_experience",
 } as const;
 
 /**
@@ -54,4 +66,10 @@ export const TOOL_REFETCH_MAP = {
 	[TOOL_NAMES.UPDATE_SUMMARY]: true,
 	[TOOL_NAMES.UPDATE_ORDER]: true,
 	[TOOL_NAMES.UPDATE_LINKS]: true,
+	[TOOL_NAMES.UPDATE_BULLET_POINT]: true,
+	[TOOL_NAMES.UPDATE_BULLET_POINTS_BY_FIELD]: true,
+	[TOOL_NAMES.PATCH_UPDATE_CERTIFICATION]: true,
+	[TOOL_NAMES.PATCH_UPDATE_EDUCATION]: true,
+	[TOOL_NAMES.PATCH_UPDATE_PROJECT]: true,
+	[TOOL_NAMES.PATCH_UPDATE_WORK_EXPERIENCE]: true,
 } as const;

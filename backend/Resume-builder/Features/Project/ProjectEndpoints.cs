@@ -2,6 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Project.Create;
 using Resume_builder.Features.Project.GetByResumeId;
+using Resume_builder.Features.Project.PatchUpdate;
 using Resume_builder.Features.Project.Update;
 using Resume_builder.Features.Project.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -58,6 +59,24 @@ public class ProjectModule : CarterModule
 
             var handler = new UpdateProjectHandler(db, claimsService);
             var response = await handler.Handle(new UpdateProjectCommand(id, request), cancellationToken);
+
+            return response.GetResult();
+        });
+
+        endpoint.MapPatch("{id}", async (
+            string id,
+            PatchUpdateProjectRequest request,
+            PatchUpdateProjectValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+            if (validationError != null)
+                return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateProjectHandler(db, claimsService);
+            var response = await handler.Handle(new PatchUpdateProjectCommand(id, request), cancellationToken);
 
             return response.GetResult();
         });
