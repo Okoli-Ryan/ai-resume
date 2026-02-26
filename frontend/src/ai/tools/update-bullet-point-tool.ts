@@ -2,7 +2,7 @@ import { isCustomError } from "@/lib/utils";
 import { updateBulletPoint } from "@/services/bullet-points/update-bullet-point";
 import { tool } from "ai";
 import z from "zod";
-import { filterUpdates, checkForUpdates, createUpdateSuccessResponse } from "@/ai/utils";
+import { createUpdateSuccessResponse } from "@/ai/utils";
 
 const updateBulletPointSchema = z.object({
 	bulletPointId: z.string().describe("The ID of the bullet point to update"),
