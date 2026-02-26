@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Project.Create;
+using Resume_builder.Features.Project.Delete;
 using Resume_builder.Features.Project.GetByResumeId;
 using Resume_builder.Features.Project.PatchUpdate;
 using Resume_builder.Features.Project.Update;
@@ -95,5 +96,18 @@ public class ProjectModule : CarterModule
 
             return response.GetResult();
         });
+
+        endpoint.MapDelete("{projectId}", async (
+            string projectId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new DeleteProjectHandler(db, claimsService);
+
+            var response = await handler.Handle(new DeleteProjectCommand(projectId), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Delete Project");
     }
 }

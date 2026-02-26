@@ -13,5 +13,5 @@ public class CreateWorkExperienceCommand
     public bool IsOngoing { get; set; } = true;
     public string? Location { get; set; }
     public string? WorkType { get; set; }
-    public List<BulletPointDto> BulletPoints { get; set; }
+    public List<BulletPointDto> BulletPoints { get; set; } = [];
 }

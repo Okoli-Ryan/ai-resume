@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Education.Create;
+using Resume_builder.Features.Education.Delete;
 using Resume_builder.Features.Education.GetByResumeId;
 using Resume_builder.Features.Education.PatchUpdate;
 using Resume_builder.Features.Education.Update;
@@ -98,5 +99,18 @@ public class EducationModule : CarterModule
 
             return response.GetResult();
         });
+
+        endpoint.MapDelete("{educationId}", async (
+            string educationId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new DeleteEducationHandler(db, claimsService);
+
+            var response = await handler.Handle(new DeleteEducationCommand(educationId), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Delete Education");
     }
 }

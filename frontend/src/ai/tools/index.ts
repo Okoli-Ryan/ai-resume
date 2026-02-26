@@ -24,6 +24,15 @@ export { patchUpdateEducationTool } from "./patch-update-education-tool";
 export { patchUpdateProjectTool } from "./patch-update-project-tool";
 export { patchUpdateWorkExperienceTool } from "./patch-update-work-experience-tool";
 
+// Unified patch tool - consolidates CRUD operations for all resume sections
+export { resumePatchTool } from "./resume-patch";
+export type {
+	ResumePatch,
+	ResumePatchInput,
+	ResumePatchToolInput,
+	PatchResult,
+} from "./resume-patch";
+
 /**
  * Constant object containing all tool names.
  * Use this for type-safe tool name references throughout the application.
@@ -47,6 +56,8 @@ export const TOOL_NAMES = {
 	PATCH_UPDATE_EDUCATION: "patch_update_education",
 	PATCH_UPDATE_PROJECT: "patch_update_project",
 	PATCH_UPDATE_WORK_EXPERIENCE: "patch_update_work_experience",
+	// Unified patch tool
+	RESUME_PATCH: "resume_patch",
 } as const;
 
 /**
@@ -72,4 +83,6 @@ export const TOOL_REFETCH_MAP = {
 	[TOOL_NAMES.PATCH_UPDATE_EDUCATION]: true,
 	[TOOL_NAMES.PATCH_UPDATE_PROJECT]: true,
 	[TOOL_NAMES.PATCH_UPDATE_WORK_EXPERIENCE]: true,
+	// Unified patch tool - always triggers refetch since it modifies data
+	[TOOL_NAMES.RESUME_PATCH]: true,
 } as const;

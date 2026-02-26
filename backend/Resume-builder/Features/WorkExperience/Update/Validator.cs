@@ -9,6 +9,6 @@ public class UpdateWorkExperienceValidator : BaseValidator<UpdateWorkExperienceR
     {
         RuleFor(x => x.EndDate)
             .NotEmpty()
-            .When(x => x.IsOngoing);
+            .When(x => !x.IsOngoing);
     }
 }

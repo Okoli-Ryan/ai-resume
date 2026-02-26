@@ -9,6 +9,6 @@ public class UpdateEducationValidator : BaseValidator<UpdateEducationRequest>
     {
         RuleFor(x => x.EndDate)
             .NotEmpty()
-            .When(x => x.IsOngoing);
+            .When(x => !x.IsOngoing);
     }
 }

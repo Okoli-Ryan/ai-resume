@@ -45,6 +45,18 @@ public class PatchUpdateEducationHandler(
         // Apply patch update using the helper
         var hasUpdates = PatchUpdateHelper.ApplyPatch(request, education, PropertyMappings);
 
+        // Custom logic: if EndDate is present in the request, set IsOngoing accordingly
+        if (request.EndDate != null)
+        {
+            education.IsOngoing = false;
+            hasUpdates = true;
+        }
+        else if (request.EndDate == null && request.EndDate != education.EndDate)
+        {
+            education.IsOngoing = true;
+            hasUpdates = true;
+        }
+
         if (hasUpdates)
         {
             db.Education.Update(education);

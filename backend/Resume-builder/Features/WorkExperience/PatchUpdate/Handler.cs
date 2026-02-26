@@ -46,6 +46,18 @@ public class PatchUpdateWorkExperienceHandler(
         // Apply patch update using the helper
         var hasUpdates = PatchUpdateHelper.ApplyPatch(request, workExperience, PropertyMappings);
 
+        // Custom logic: if EndDate is present in the request, set IsOngoing accordingly
+        if (request.EndDate != null)
+        {
+            workExperience.IsOngoing = false;
+            hasUpdates = true;
+        }
+        else if (request.EndDate == null && request.EndDate != workExperience.EndDate)
+        {
+            workExperience.IsOngoing = true;
+            hasUpdates = true;
+        }
+
         if (hasUpdates)
         {
             db.WorkExperience.Update(workExperience);

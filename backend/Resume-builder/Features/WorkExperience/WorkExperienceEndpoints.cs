@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.WorkExperience.Create;
+using Resume_builder.Features.WorkExperience.Delete;
 using Resume_builder.Features.WorkExperience.GetByResumeId;
 using Resume_builder.Features.WorkExperience.PatchUpdate;
 using Resume_builder.Features.WorkExperience.Update;
@@ -103,5 +104,18 @@ public class WorkExperienceEndpoints : CarterModule
 
             return response.GetResult();
         });
+
+        endpoint.MapDelete("{workExperienceId}", async (
+            string workExperienceId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new DeleteWorkExperienceHandler(db, claimsService);
+
+            var response = await handler.Handle(new DeleteWorkExperienceCommand(workExperienceId), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Delete Work Experience");
     }
 }

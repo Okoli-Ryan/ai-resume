@@ -23,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.MapGroup("/api/v1").MapCarter();
 
 app.Run();

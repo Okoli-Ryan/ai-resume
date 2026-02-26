@@ -4,6 +4,7 @@ using Resume_builder.Features.Link.Create;
 using Resume_builder.Features.Link.Delete;
 using Resume_builder.Features.Link.GetLinksByResume;
 using Resume_builder.Features.Link.GetLinksByUser;
+using Resume_builder.Features.Link.PatchUpdate;
 using Resume_builder.Features.Link.Update;
 using Resume_builder.Features.Link.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -106,5 +107,24 @@ public class LinkModule : CarterModule
 
             return response.GetResult();
         });
+
+        endpoint.MapPatch("{id}", async (
+            string id,
+            PatchUpdateLinkRequest request,
+            PatchUpdateLinkValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+
+            if (validationError != null) return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateLinkHandler(db, claimsService);
+
+            var response = await handler.Handle(new PatchUpdateLinkCommand(id, request), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Patch Update Link");
     }
 }

@@ -5,18 +5,8 @@ import {
 	getSkillsTool,
 	getWorkExperienceTool,
 	getEducationTool,
+	resumePatchTool,
 	TOOL_NAMES,
-	updateResumeTool,
-	updateResumeInfoTool,
-	updateSummaryTool,
-	updateOrderTool,
-	updateLinksTool,
-	updateBulletPointTool,
-	updateBulletPointsByFieldTool,
-	patchUpdateCertificationTool,
-	patchUpdateEducationTool,
-	patchUpdateProjectTool,
-	patchUpdateWorkExperienceTool,
 } from "@/ai/tools";
 import { openai } from "@ai-sdk/openai";
 import { streamText, UIMessage, convertToModelMessages, stepCountIs } from "ai";
@@ -31,8 +21,8 @@ export async function POST(req: Request) {
 		// Convert UI messages to model messages format
 		const modelMessages = await convertToModelMessages(messages);
 
-		// System prompt for the resume assistant
-		const systemPrompt = `You are an expert resume writing assistant. Your role is to help users improve their resumes by providing:
+			   // System prompt for the resume assistant
+			   const systemPrompt = `You are an expert resume writing assistant. Your role is to help users improve their resumes by providing:
 
 1. Specific, actionable suggestions for improving resume content
 2. Better phrasing and action verbs for experiences and achievements
@@ -54,6 +44,14 @@ CRITICAL INSTRUCTIONS FOR UPDATES:
 - Do not fill in missing information based on context or assumptions
 - Always confirm what specific changes the user wants before making updates
 
+IMPORTANT FOR ID FIELDS:
+- If you need an ID (e.g., workExperienceId, educationId, projectId, certificationId, etc.), use one of the available tools to fetch the relevant data by resumeId and derive the required ID from the response. Do not guess or invent IDs.
+
+For any modifications to the resume, use the unified resume_patch tool which supports:
+- ALL CRUD operations (add, update, delete) for work experience, projects, education, certifications, skills, and links
+- UPDATE operations for summary, resume info, and section order
+- Batch operations to make multiple changes at once
+
 The user is currently editing resume ID: ${resumeId}. Provide helpful, professional, and encouraging feedback while being precise about any updates you make.`;
 
 		const result = streamText({
@@ -67,17 +65,7 @@ The user is currently editing resume ID: ${resumeId}. Provide helpful, professio
 				[TOOL_NAMES.GET_SKILLS]: getSkillsTool(resumeId),
 				[TOOL_NAMES.GET_WORK_EXPERIENCE]: getWorkExperienceTool(resumeId),
 				[TOOL_NAMES.GET_EDUCATION]: getEducationTool(resumeId),
-				[TOOL_NAMES.UPDATE_RESUME]: updateResumeTool(resumeId),
-				[TOOL_NAMES.UPDATE_RESUME_INFO]: updateResumeInfoTool(resumeId),
-				[TOOL_NAMES.UPDATE_SUMMARY]: updateSummaryTool(resumeId),
-				[TOOL_NAMES.UPDATE_ORDER]: updateOrderTool(resumeId),
-				[TOOL_NAMES.UPDATE_LINKS]: updateLinksTool(resumeId),
-				[TOOL_NAMES.UPDATE_BULLET_POINT]: updateBulletPointTool(),
-				[TOOL_NAMES.UPDATE_BULLET_POINTS_BY_FIELD]: updateBulletPointsByFieldTool(),
-				[TOOL_NAMES.PATCH_UPDATE_CERTIFICATION]: patchUpdateCertificationTool(),
-				[TOOL_NAMES.PATCH_UPDATE_EDUCATION]: patchUpdateEducationTool(),
-				[TOOL_NAMES.PATCH_UPDATE_PROJECT]: patchUpdateProjectTool(),
-				[TOOL_NAMES.PATCH_UPDATE_WORK_EXPERIENCE]: patchUpdateWorkExperienceTool(),
+				[TOOL_NAMES.RESUME_PATCH]: resumePatchTool(resumeId),
 			},
 			stopWhen: stepCountIs(5),
 		});

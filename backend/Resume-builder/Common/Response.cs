@@ -22,12 +22,14 @@ public static class ResponseExtensions
         return response switch
         {
             { IsSuccess: true } => Results.Ok(response.Data),
-            { Code: HttpStatusCode.NotFound } => Results.NotFound(response.Error),
-            { Code: HttpStatusCode.BadRequest } => Results.BadRequest(response.Error),
+            { Code: HttpStatusCode.NotFound } => Results.NotFound(new Error(response.Error)),
+            { Code: HttpStatusCode.BadRequest } => Results.BadRequest(new Error(response.Error)),
             { Code: HttpStatusCode.Unauthorized } => Results.Unauthorized(),
             { Code: HttpStatusCode.Forbidden } => Results.Forbid(),
-            { Code: HttpStatusCode.Conflict } => Results.Conflict(response.Error),
+            { Code: HttpStatusCode.Conflict } => Results.Conflict(new Error(response.Error)),
             _ => Results.StatusCode((int)response.Code)
         };
     }
 }
+
+record Error(string? Message);

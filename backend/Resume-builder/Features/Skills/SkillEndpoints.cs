@@ -1,7 +1,9 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Skills.Create;
+using Resume_builder.Features.Skills.Delete;
 using Resume_builder.Features.Skills.GetByResumeId;
+using Resume_builder.Features.Skills.PatchUpdate;
 using Resume_builder.Features.Skills.Update;
 using Resume_builder.Features.Skills.UpdateByResumeId;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -67,5 +69,37 @@ public class SkillEndpoints : CarterModule
 
             return response.GetResult();
         });
+
+        endpoint.MapPatch("{skillId}", async (
+            string skillId,
+            PatchUpdateSkillRequest request,
+            PatchUpdateSkillValidator validator,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var validationError = await validator.ValidateRequest(request);
+            if (validationError != null)
+                return Results.BadRequest(validationError);
+
+            var handler = new PatchUpdateSkillHandler(db, claimsService);
+
+            var response = await handler.Handle(new PatchUpdateSkillCommand(skillId, request), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Patch Update Skill");
+
+        endpoint.MapDelete("{skillId}", async (
+            string skillId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new DeleteSkillHandler(db, claimsService);
+
+            var response = await handler.Handle(new DeleteSkillCommand(skillId), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Delete Skill");
     }
 }

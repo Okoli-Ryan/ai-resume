@@ -76,7 +76,13 @@ class FetchClient {
 
 			if (!response.ok) {
 				console.log("RESPONSE ERROR", response.status, response.statusText, url);
-				return customError(response.statusText, response.statusText, response.status);
+				try {
+					const errorData = await response.json();
+					const errorMessage = errorData?.error || errorData?.message || response.statusText;
+					return customError(errorMessage, errorMessage, response.status);
+				} catch {
+					return customError(response.statusText, response.statusText, response.status);
+				}
 			}
 
 			if (options.responseFormat === "text") return response.text() as Response;

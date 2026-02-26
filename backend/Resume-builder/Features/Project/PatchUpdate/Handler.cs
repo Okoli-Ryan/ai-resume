@@ -39,7 +39,7 @@ public class PatchUpdateProjectHandler(
 
         // Apply patch update using the helper
         var hasUpdates = PatchUpdateHelper.ApplyPatch(request, project, PropertyMappings);
-
+        
         if (hasUpdates)
         {
             db.Project.Update(project);

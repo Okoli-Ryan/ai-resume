@@ -39,14 +39,15 @@ public class UpdateWorkExperienceByResumeIdHandler(AppDbContext db, IClaimsServi
                 Title = dto.Title,
                 Location = dto.Location,
                 WorkType = dto.WorkType,
-                IsOngoing = dto.IsOngoing,
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
                 UserId = userId,
                 ResumeId = resumeId,
-
             };
-            
+
+            // Custom logic: if EndDate is present, set IsOngoing accordingly
+            newWorkExperience.IsOngoing = dto.EndDate == null;
+
             newWorkExperience.BulletPoints = dto.BulletPoints.Select(bp =>
             {
                 var bullet = bp.ToEntity();

@@ -31,11 +31,20 @@ public class UpdateEducationHandler(AppDbContext db, IClaimsService claimsServic
         education.Degree = request.Degree;
         education.FieldOfStudy = request.FieldOfStudy;
         education.Location = request.Location;
-        education.IsOngoing = request.IsOngoing;
         education.StartDate = request.StartDate;
         education.EndDate = request.EndDate;
         education.UserId = userId;
         education.BulletPoints = request.BulletPoints.Select(x => x.ToEntity()).ToList();
+
+        // Custom logic: if EndDate is present, set IsOngoing accordingly
+        if (request.EndDate != null)
+        {
+            education.IsOngoing = false;
+        }
+        else
+        {
+            education.IsOngoing = true;
+        }
 
         db.Education.Update(education);
         await db.SaveChangesAsync(cancellationToken);

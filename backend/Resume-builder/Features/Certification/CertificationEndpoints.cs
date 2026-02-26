@@ -1,6 +1,7 @@
 using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Certification.Create;
+using Resume_builder.Features.Certification.Delete;
 using Resume_builder.Features.Certification.GetByResumeId;
 using Resume_builder.Features.Certification.PatchUpdate;
 using Resume_builder.Features.Certification.Update;
@@ -98,5 +99,18 @@ public class CertificationModule : CarterModule
 
             return response.GetResult();
         });
+
+        endpoint.MapDelete("{certificationId}", async (
+            string certificationId,
+            AppDbContext db,
+            IClaimsService claimsService,
+            CancellationToken cancellationToken) =>
+        {
+            var handler = new DeleteCertificationHandler(db, claimsService);
+
+            var response = await handler.Handle(new DeleteCertificationCommand(certificationId), cancellationToken);
+
+            return response.GetResult();
+        }).WithName("Delete Certification");
     }
 }
