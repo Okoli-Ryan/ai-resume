@@ -44,9 +44,8 @@ public class GenerateResumeWorkExperienceResponse
     public string CompanyLink { get; set; } = string.Empty;
     public string Location { get; set; } = string.Empty;
     public string WorkType { get; set; } = string.Empty;
-    public bool IsOngoing { get; set; }
     public DateTime StartTime { get; set; } = new();
-    public DateTime EndTime { get; set; } = new();
+    public DateTime? EndTime { get; set; } = new();
     public List<string> BulletPoints { get; set; } = [];
 }
 
@@ -119,7 +118,6 @@ public class ParsedResumeEducation
 
     public string? Location { get; set; }
 
-    public bool IsOngoing { get; set; }
 
     [Description("to ISO string")] public string? StartDate { get; set; }
 
@@ -143,7 +141,6 @@ public class ParsedResumeWorkExperience
     [Description("to ISO string, if is Ongoing is true, set to any date")]
     public string? EndDate { get; set; }
 
-    public bool IsOngoing { get; set; } = true;
     public string? Location { get; set; }
 
     [Description("Remote, On-site, Full-time, Part-time, Internship, Contract, Freelance, Other, if specified")]

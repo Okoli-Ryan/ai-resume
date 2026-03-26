@@ -7,8 +7,5 @@ public class UpdateEducationValidator : BaseValidator<UpdateEducationRequest>
 {
     public UpdateEducationValidator()
     {
-        RuleFor(x => x.EndDate)
-            .NotEmpty()
-            .When(x => !x.IsOngoing);
     }
 }

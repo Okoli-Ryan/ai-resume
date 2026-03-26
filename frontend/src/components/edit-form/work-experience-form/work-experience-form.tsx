@@ -1,5 +1,4 @@
 "use client";
-import "react-quill-new/dist/quill.snow.css";
 
 import { useParams } from "next/navigation";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -64,13 +63,12 @@ const WorkExperienceForm = () => {
 				{/* Action buttons */}
 				<div className="flex flex-wrap gap-3">
 					{workExperienceList.length > 1 && (
-						<Button 
-							disabled={isPending} 
-							variant="outline" 
-							type="button" 
-							onClick={() => setInSortMode(!inSortMode)} 
-							className="flex items-center gap-2 hover:bg-primary/5"
-						>
+						<Button
+							disabled={isPending}
+							variant="outline"
+							type="button"
+							onClick={() => setInSortMode(!inSortMode)}
+							className="flex items-center gap-2 hover:bg-primary/5">
 							<ArrowUpDown className="h-4 w-4" />
 							{inSortMode ? "Done Sorting" : "Reorder Items"}
 						</Button>
@@ -85,7 +83,6 @@ const WorkExperienceForm = () => {
 								endDate: new Date().toISOString(),
 								location: "",
 								startDate: new Date().toISOString(),
-								isOngoing: false,
 								resumeId: "",
 								title: "",
 								userId: "",
@@ -115,13 +112,12 @@ const WorkExperienceForm = () => {
 							delay={2}
 							className="space-y-3">
 							{workExperienceList.map((field) => (
-								<div 
-									key={field.id} 
+								<div
+									key={field.id}
 									className={cn(
 										"bg-white p-4 border-2 rounded-lg flex items-center justify-between shadow-sm",
-										inSortMode && "shake hover:border-primary/50 transition-colors"
-									)}
-								>
+										inSortMode && "shake hover:border-primary/50 transition-colors",
+									)}>
 									<div className="flex-1">
 										<p className="font-medium text-sm">{field.companyName || "Untitled Experience"}</p>
 										<p className="text-xs text-muted-foreground">{field.title || "No title"}</p>
@@ -148,7 +144,6 @@ const WorkExperienceForm = () => {
 											endDate: new Date().toISOString(),
 											location: "",
 											startDate: new Date().toISOString(),
-											isOngoing: false,
 											resumeId: "",
 											title: "",
 											userId: "",
@@ -165,23 +160,12 @@ const WorkExperienceForm = () => {
 								</Button>
 							</div>
 						) : (
-							fields.map((experience, index) => (
-								<WorkExperienceFormItem 
-									key={experience.id} 
-									form={form} 
-									index={index} 
-									remove={remove} 
-								/>
-							))
+							fields.map((experience, index) => <WorkExperienceFormItem key={experience.id} form={form} index={index} remove={remove} />)
 						)}
 					</div>
 				)}
 
-				<Button 
-					loading={isPending} 
-					type="submit" 
-					className="w-full h-11 font-medium mt-6 transition-all hover:shadow-md"
-				>
+				<Button loading={isPending} type="submit" className="w-full h-11 font-medium mt-6 transition-all hover:shadow-md">
 					{isPending ? "Saving..." : "Save Changes"}
 				</Button>
 			</form>

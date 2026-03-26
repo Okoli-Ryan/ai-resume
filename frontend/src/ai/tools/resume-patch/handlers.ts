@@ -97,7 +97,6 @@ export const handleWorkExperiencePatch = async (
 					workType: payload.workType,
 					startDate: payload.startDate,
 					endDate: payload.endDate,
-					isOngoing: payload.isOngoing,
 					location: payload.location,
 					bulletPoints: payload.bulletPoints?.map((bp, index) => ({
 						text: bp.text,
@@ -147,7 +146,6 @@ export const handleWorkExperiencePatch = async (
 					workType: payload.workType,
 					startDate: payload.startDate,
 					endDate: payload.endDate,
-					isOngoing: payload.isOngoing,
 					location: payload.location,
 				});
 
@@ -379,7 +377,6 @@ export const handleEducationPatch = async (
 					degree: payload.degree,
 					fieldOfStudy: payload.fieldOfStudy,
 					location: payload.location,
-					isOngoing: payload.isOngoing,
 					startDate: payload.startDate,
 					endDate: payload.endDate,
 					bulletPoints: payload.bulletPoints?.map((bp, index) => ({
@@ -428,7 +425,6 @@ export const handleEducationPatch = async (
 					degree: payload.degree,
 					fieldOfStudy: payload.fieldOfStudy,
 					location: payload.location,
-					isOngoing: payload.isOngoing,
 					startDate: payload.startDate,
 					endDate: payload.endDate,
 				});

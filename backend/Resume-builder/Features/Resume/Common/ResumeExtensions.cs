@@ -147,7 +147,6 @@ public static class ResumeExtensions
                 Degree = x.Degree,
                 FieldOfStudy = x.FieldOfStudy,
                 Location = x.Location,
-                IsOngoing = x.IsOngoing,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
                 ResumeId = resume.Id,
@@ -171,7 +170,6 @@ public static class ResumeExtensions
                 Title = x.Title,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
-                IsOngoing = x.IsOngoing,
                 Location = x.Location,
                 WorkType = x.WorkType
             };

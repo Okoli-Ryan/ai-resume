@@ -10,9 +10,8 @@ const patchUpdateEducationSchema = z.object({
 	degree: z.string().optional().describe("The degree obtained or pursued"),
 	fieldOfStudy: z.string().optional().describe("The field of study or major"),
 	location: z.string().optional().describe("The location of the school"),
-	isOngoing: z.boolean().optional().describe("Whether the education is currently ongoing"),
 	startDate: z.string().optional().describe("Start date of the education (ISO format)"),
-	endDate: z.string().optional().describe("End date of the education (ISO format, null if ongoing)"),
+	endDate: z.string().optional().describe("End date of the education (ISO format, null if ongoing)").nullable(),
 });
 
 export const patchUpdateEducationTool = () =>

@@ -9,8 +9,7 @@ export type CreateWorkExperienceRequest = {
 	title?: string;
 	workType?: string;
 	startDate?: string;
-	endDate?: string;
-	isOngoing?: boolean;
+	endDate?: string | null;
 	location?: string;
 	bulletPoints?: Omit<BulletPointDto, "id" | "activeStatus" | "createdAt" | "updatedAt">[];
 };

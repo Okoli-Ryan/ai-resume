@@ -35,7 +35,7 @@ public class EducationSection : IComponent
                             .FontSize(10)
                             .Bold();
 
-                        var dateRange = FormatDateRange(education.StartDate, education.EndDate, education.IsOngoing);
+                        var dateRange = FormatDateRange(education.StartDate, education.EndDate);
                         row.RelativeItem().AlignRight().Text(dateRange)
                             .FontSize(10)
                             .Italic();
@@ -75,10 +75,10 @@ public class EducationSection : IComponent
         });
     }
 
-    private static string FormatDateRange(DateTime? startDate, DateTime? endDate, bool isOngoing)
+    private static string FormatDateRange(DateTime? startDate, DateTime? endDate)
     {
         var start = startDate?.ToString("MMM yyyy") ?? string.Empty;
-        var end = isOngoing ? "Present" : endDate?.ToString("MMM yyyy") ?? string.Empty;
+        var end = !endDate.HasValue ? "Present" : endDate?.ToString("MMM yyyy") ?? string.Empty;
         return $"{start} - {end}";
     }
 }

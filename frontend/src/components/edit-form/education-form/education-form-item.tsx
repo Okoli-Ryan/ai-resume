@@ -19,9 +19,9 @@ type EducationFormItemProps = {
 };
 
 const EducationFormItem = ({ index, remove, form }: EducationFormItemProps) => {
-	const { control, watch } = form;
+	const { control, watch, setValue } = form;
 
-	const isOngoing = watch(`education.${index}.isOngoing`);
+	const isOngoing = watch(`education.${index}.endDate`) === null;
 
 	return (
 		<div className="space-y-5 p-5 border border-border/50 rounded-lg bg-card shadow-sm">
@@ -128,27 +128,21 @@ const EducationFormItem = ({ index, remove, form }: EducationFormItemProps) => {
 					<DateFormItem disabled={isOngoing} name={`education.${index}.endDate`} control={control} label="End Date" />
 				</div>
 
-				<FormField
-					control={control}
-					name={`education.${index}.isOngoing`}
-					render={({ field }) => (
-						<FormItem className="flex items-center gap-3 space-y-0 p-3 bg-muted/30 rounded-md">
-							<FormControl>
-								<Checkbox 
-									id={`education-${index}-isOngoing`}
-									checked={field.value} 
-									onCheckedChange={field.onChange} 
-								/>
-							</FormControl>
-							<FormLabel 
-								htmlFor={`education-${index}-isOngoing`}
-								className="font-normal cursor-pointer"
-							>
-								I am currently studying here
-							</FormLabel>
-						</FormItem>
-					)}
-				/>
+				<div className="flex items-center gap-3 p-3 bg-muted/30 rounded-md">
+					<Checkbox
+						id={`education-${index}-isOngoing`}
+						checked={isOngoing}
+						onCheckedChange={(checked) => {
+							setValue(`education.${index}.endDate`, checked ? null : "");
+						}}
+					/>
+					<label
+						htmlFor={`education-${index}-isOngoing`}
+						className="text-sm font-normal cursor-pointer"
+					>
+						I am currently studying here
+					</label>
+				</div>
 			</div>
 
 			{/* Achievements */}

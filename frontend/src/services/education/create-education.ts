@@ -8,9 +8,8 @@ export type CreateEducationRequest = {
 	degree?: string;
 	fieldOfStudy?: string;
 	location?: string;
-	isOngoing?: boolean;
 	startDate?: string;
-	endDate?: string;
+	endDate?: string | null;
 	bulletPoints?: Omit<BulletPointDto, "id" | "activeStatus" | "createdAt" | "updatedAt">[];
 };
 

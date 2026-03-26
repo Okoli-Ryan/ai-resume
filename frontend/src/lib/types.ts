@@ -26,14 +26,13 @@ export type TProject = {
 };
 
 export type TEducation = {
-    schoolName: string;
-    degree: string;
-    major: string;
-    location: string;
-    isOngoing: boolean;
-    startDate: string;
-    endDate?: string;
-    bulletPoints: string[];
+	schoolName: string;
+	degree: string;
+	major: string;
+	location: string;
+	startDate: string;
+	endDate?: string | null;
+	bulletPoints: string[];
 };
 
 export type TSkill = {

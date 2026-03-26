@@ -21,7 +21,6 @@ public class PatchUpdateEducationHandler(
         { nameof(PatchUpdateEducationRequest.Degree), nameof(EducationEntity.Degree) },
         { nameof(PatchUpdateEducationRequest.FieldOfStudy), nameof(EducationEntity.FieldOfStudy) },
         { nameof(PatchUpdateEducationRequest.Location), nameof(EducationEntity.Location) },
-        { nameof(PatchUpdateEducationRequest.IsOngoing), nameof(EducationEntity.IsOngoing) },
         { nameof(PatchUpdateEducationRequest.StartDate), nameof(EducationEntity.StartDate) },
         { nameof(PatchUpdateEducationRequest.EndDate), nameof(EducationEntity.EndDate) },
     };
@@ -44,18 +43,6 @@ public class PatchUpdateEducationHandler(
 
         // Apply patch update using the helper
         var hasUpdates = PatchUpdateHelper.ApplyPatch(request, education, PropertyMappings);
-
-        // Custom logic: if EndDate is present in the request, set IsOngoing accordingly
-        if (request.EndDate != null)
-        {
-            education.IsOngoing = false;
-            hasUpdates = true;
-        }
-        else if (request.EndDate == null && request.EndDate != education.EndDate)
-        {
-            education.IsOngoing = true;
-            hasUpdates = true;
-        }
 
         if (hasUpdates)
         {

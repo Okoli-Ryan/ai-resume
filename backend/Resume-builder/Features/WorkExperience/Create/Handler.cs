@@ -32,9 +32,6 @@ public class CreateWorkExperienceHandler(AppDbContext db, IClaimsService claimsS
             BulletPoints = command.BulletPoints.Select(x => x.ToEntity()).ToList()
         };
 
-        // Custom logic: if EndDate is present, set IsOngoing accordingly
-        workExperience.IsOngoing = command.EndDate == null;
-
         db.WorkExperience.Add(workExperience);
 
         await db.SaveChangesAsync(cancellationToken);

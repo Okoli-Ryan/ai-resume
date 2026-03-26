@@ -35,9 +35,6 @@ public class CreateEducationHandler(AppDbContext db, IClaimsService claimsServic
             }).ToList()
         };
 
-        // Custom logic: if EndDate is present, set IsOngoing accordingly
-        education.IsOngoing = request.EndDate == null;
-
         db.Education.Add(education);
         await db.SaveChangesAsync(cancellationToken);
 

@@ -39,16 +39,6 @@ public class UpdateWorkExperienceHandler(AppDbContext db, IClaimsService claimsS
         workExperience.UpdatedAt = DateTime.UtcNow;
         workExperience.BulletPoints = request.BulletPoints.Select(x => x.ToEntity()).ToList();
 
-        // Custom logic: if EndDate is present, set IsOngoing accordingly
-        if (request.EndDate != null)
-        {
-            workExperience.IsOngoing = false;
-        }
-        else
-        {
-            workExperience.IsOngoing = true;
-        }
-
         db.WorkExperience.Update(workExperience);
 
         await db.SaveChangesAsync(cancellationToken);

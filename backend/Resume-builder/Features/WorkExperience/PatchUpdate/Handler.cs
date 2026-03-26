@@ -23,7 +23,6 @@ public class PatchUpdateWorkExperienceHandler(
         { nameof(PatchUpdateWorkExperienceRequest.WorkType), nameof(WorkExperienceEntity.WorkType) },
         { nameof(PatchUpdateWorkExperienceRequest.StartDate), nameof(WorkExperienceEntity.StartDate) },
         { nameof(PatchUpdateWorkExperienceRequest.EndDate), nameof(WorkExperienceEntity.EndDate) },
-        { nameof(PatchUpdateWorkExperienceRequest.IsOngoing), nameof(WorkExperienceEntity.IsOngoing) },
         { nameof(PatchUpdateWorkExperienceRequest.Location), nameof(WorkExperienceEntity.Location) },
     };
 
@@ -45,18 +44,6 @@ public class PatchUpdateWorkExperienceHandler(
 
         // Apply patch update using the helper
         var hasUpdates = PatchUpdateHelper.ApplyPatch(request, workExperience, PropertyMappings);
-
-        // Custom logic: if EndDate is present in the request, set IsOngoing accordingly
-        if (request.EndDate != null)
-        {
-            workExperience.IsOngoing = false;
-            hasUpdates = true;
-        }
-        else if (request.EndDate == null && request.EndDate != workExperience.EndDate)
-        {
-            workExperience.IsOngoing = true;
-            hasUpdates = true;
-        }
 
         if (hasUpdates)
         {

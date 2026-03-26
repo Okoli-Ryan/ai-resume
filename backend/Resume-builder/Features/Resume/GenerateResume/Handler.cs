@@ -86,7 +86,6 @@ public class GenerateResumeHandler(
             Degree = x.Degree,
             FieldOfStudy = x.FieldOfStudy,
             Location = x.Location,
-            IsOngoing = x.IsOngoing,
             StartDate = x.StartDate,
             EndDate = x.EndDate,
             ResumeId = newResume.Id,
@@ -106,7 +105,6 @@ public class GenerateResumeHandler(
             Title = x.Role,
             StartDate = x.StartTime,
             EndDate = x.EndTime,
-            IsOngoing = x.IsOngoing,
             Location = x.Location,
             WorkType = x.WorkType
         }).ToList();

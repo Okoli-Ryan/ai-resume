@@ -8,7 +8,6 @@ public class PatchUpdateEducationRequest
     public string? Degree { get; set; }
     public string? FieldOfStudy { get; set; }
     public string? Location { get; set; }
-    public bool? IsOngoing { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
 }

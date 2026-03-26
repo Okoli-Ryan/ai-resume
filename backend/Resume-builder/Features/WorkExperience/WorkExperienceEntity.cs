@@ -16,7 +16,6 @@ public class WorkExperienceEntity : BaseEntity
     [MaxLength(128)] public string? Title { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public bool IsOngoing { get; set; } = true;
     [MaxLength(128)] public string? Location { get; set; }
     [MaxLength(32)] public string? WorkType { get; set; }
     

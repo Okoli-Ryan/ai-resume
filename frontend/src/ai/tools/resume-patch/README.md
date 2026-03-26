@@ -551,7 +551,6 @@ export type CreateWorkExperienceRequest = {
     workType?: string;
     startDate?: string;
     endDate?: string;
-    isOngoing?: boolean;
     location?: string;
 };
 

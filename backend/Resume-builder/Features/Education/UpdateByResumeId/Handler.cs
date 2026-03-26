@@ -39,7 +39,6 @@ public class UpdateEducationByResumeIdHandler(AppDbContext db, IClaimsService cl
                 Degree = dto.Degree,
                 FieldOfStudy = dto.FieldOfStudy,
                 Location = dto.Location,
-                IsOngoing = dto.IsOngoing,
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
                 UserId = userId,

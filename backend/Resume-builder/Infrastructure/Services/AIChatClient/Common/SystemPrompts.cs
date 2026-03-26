@@ -155,7 +155,7 @@ public static class SystemPrompts
                                                   
                                                   For any field that has startDate and endDates, 
                                                   - startDate (must be set to iso string)
-                                                  - endDate (if isOngoing is true, set to any iso string date, else convert set date to iso string)
+                                                  - endDate (if null, return null, else convert set date to iso string)
 
                                                   Output only a valid JSON object matching this schema. Do not include explanations, markdown, or commentary.
 

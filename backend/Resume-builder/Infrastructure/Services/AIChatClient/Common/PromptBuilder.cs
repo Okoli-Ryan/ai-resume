@@ -172,8 +172,7 @@ public static class PromptBuilder
                 inputPrompt.Append($"Company Name: {workExperience.CompanyName};");
                 inputPrompt.Append($"Start Time: {workExperience.StartDate:MMMM yyyy};");
                 inputPrompt.Append(
-                    $"End Time: {(workExperience.IsOngoing ? "Present" : workExperience.EndDate?.ToString("MMMM yyyy"))};");
-                inputPrompt.Append($"Is Ongoing: {workExperience.IsOngoing.ToString()}");
+                    $"End Time: {(!workExperience.EndDate.HasValue ? "Present" : workExperience.EndDate?.ToString("MMMM yyyy"))};");
                 inputPrompt.Append($"WorkType: {workExperience.WorkType}");
                 inputPrompt.Append($"CompanyLink: {workExperience.CompanyLink}");
                 inputPrompt.Append($"Location: {workExperience.Location}");

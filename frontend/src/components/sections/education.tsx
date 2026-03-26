@@ -22,7 +22,7 @@ const Education = ({ resume }: { resume: Partial<TResume> }) => {
 									</span>
 									<span className="italic font-times text-[10px]">
 										{format(new Date(education.startDate as string), "MMM yyyy")} -{" "}
-										{education.isOngoing ? "Present" : format(new Date(education.endDate as string), "MMM yyyy")}
+										{!education.endDate ? "Present" : format(new Date(education.endDate as string), "MMM yyyy")}
 									</span>
 								</Row>
 								<Row>

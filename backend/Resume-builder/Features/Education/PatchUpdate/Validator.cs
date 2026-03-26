@@ -25,7 +25,7 @@ public class PatchUpdateEducationValidator : BaseValidator<PatchUpdateEducationR
 
         RuleFor(x => x.StartDate)
             .LessThanOrEqualTo(x => x.EndDate)
-            .When(x => x.StartDate != null && x.EndDate != null && x.IsOngoing != true)
+            .When(x => x.StartDate != null && x.EndDate != null)
             .WithMessage("Start date must be before or equal to end date");
         
     }

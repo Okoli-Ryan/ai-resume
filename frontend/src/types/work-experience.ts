@@ -7,8 +7,7 @@ export type WorkExperienceDto = {
 	companyLink?: string;
 	title?: string;
 	startDate?: string;
-	endDate?: string;
-	isOngoing: boolean;
+	endDate?: string | null;
 	location?: string;
 	workType?: string;
 	userId?: string;

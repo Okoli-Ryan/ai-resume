@@ -10,8 +10,5 @@ public class CreateEducationValidator : BaseValidator<CreateEducationCommand>
         RuleFor(x => x.ResumeId)
             .NotEmpty();
 
-        RuleFor(x => x.EndDate)
-            .NotEmpty()
-            .When(x => !x.IsOngoing);
     }
 }

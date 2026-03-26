@@ -28,7 +28,7 @@ const WorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 									</span>
 									<span className="italic font-times text-[10px]">
 										{format(new Date(experience.startDate as string), "MMM yyyy")} -{" "}
-										{experience.isOngoing ? "Present" : format(new Date(experience.endDate as string), "MMM yyyy")}
+										{!experience.endDate ? "Present" : format(new Date(experience.endDate as string), "MMM yyyy")}
 									</span>
 								</Row>
 							</div>

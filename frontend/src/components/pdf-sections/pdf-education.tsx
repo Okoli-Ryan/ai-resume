@@ -18,8 +18,8 @@ const PDFEducation = ({ resume }: { resume: Partial<TResume> }) => {
 						<View style={styles.row}>
 							<Text style={styles.companyName}>{education.schoolName}</Text>
 							<Text style={styles.italic}>
-								{format(new Date(education.startDate as string), 'MMM yyyy')} -{' '}
-								{education.isOngoing ? 'Present' : format(new Date(education.endDate as string), 'MMM yyyy')}
+								{format(new Date(education.startDate as string), "MMM yyyy")} -{" "}
+								{!education.endDate ? "Present" : format(new Date(education.endDate as string), "MMM yyyy")}
 							</Text>
 						</View>
 						<View style={styles.row}>

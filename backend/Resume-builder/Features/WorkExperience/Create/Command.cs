@@ -10,7 +10,6 @@ public class CreateWorkExperienceCommand
     public string? Title { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public bool IsOngoing { get; set; } = true;
     public string? Location { get; set; }
     public string? WorkType { get; set; }
     public List<BulletPointDto> BulletPoints { get; set; } = [];

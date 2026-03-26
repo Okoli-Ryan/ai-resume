@@ -71,7 +71,6 @@ public class DuplicateResumeHandler(
             Degree = x.Degree,
             FieldOfStudy = x.FieldOfStudy,
             Location = x.Location,
-            IsOngoing = x.IsOngoing,
             StartDate = x.StartDate,
             EndDate = x.EndDate,
             ResumeId = x.ResumeId,
@@ -106,7 +105,6 @@ public class DuplicateResumeHandler(
             Title = x.Title,
             StartDate = x.StartDate,
             EndDate = x.EndDate,
-            IsOngoing = x.IsOngoing,
             Location = x.Location,
             WorkType = x.WorkType,
             BulletPoints = x.BulletPoints.Select(bp => new BulletPointDto

@@ -7,8 +7,7 @@ export type PatchUpdateWorkExperienceRequest = {
 	title?: string;
 	workType?: string;
 	startDate?: string;
-	endDate?: string;
-	isOngoing?: boolean;
+	endDate?: string | null;
 	location?: string;
 };
 

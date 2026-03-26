@@ -25,8 +25,8 @@ const PDFWorkExperience = ({ resume }: { resume: Partial<TResume> }) => {
 								{experience.workType && ` (${experience.workType})`}
 							</Text>
 							<Text style={styles.italic}>
-								{format(new Date(experience.startDate as string), 'MMM yyyy')} -{' '}
-								{experience.isOngoing ? 'Present' : format(new Date(experience.endDate as string), 'MMM yyyy')}
+								{format(new Date(experience.startDate as string), "MMM yyyy")} -{" "}
+								{!experience.endDate ? "Present" : format(new Date(experience.endDate as string), "MMM yyyy")}
 							</Text>
 						</View>
 						{experience.bulletPoints.length > 0 && (

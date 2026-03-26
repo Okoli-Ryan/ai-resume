@@ -17,16 +17,15 @@ export const UpdateWorkExperienceListSchema = z.array(
 		location: z.string().nullable().optional(),
 		startDate: z.string().optional(),
 		workType: z.string().nullable().optional(),
-		endDate: z.string().optional(),
-		isOngoing: z.boolean().default(false),
+		endDate: z.string().nullable().optional(),
 		bulletPoints: z
 			.array(
 				z.object({
 					text: z.string(),
 					order: z.number().default(0),
 					workExperienceId: z.string().optional(),
-				})
+				}),
 			)
 			.optional(),
-	})
+	}),
 );

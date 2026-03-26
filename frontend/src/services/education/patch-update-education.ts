@@ -6,9 +6,8 @@ export type PatchUpdateEducationRequest = {
 	degree?: string;
 	fieldOfStudy?: string;
 	location?: string;
-	isOngoing?: boolean;
 	startDate?: string;
-	endDate?: string;
+	endDate?: string | null;
 };
 
 export const patchUpdateEducation = async (educationId: string, payload: PatchUpdateEducationRequest) => {

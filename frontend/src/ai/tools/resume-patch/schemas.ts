@@ -35,8 +35,7 @@ export const WorkExperiencePatchSchema = z.object({
 			title: z.string().optional().describe("Job title or position held"),
 			workType: z.string().optional().describe("Type of work (e.g., Full-time, Part-time, Contract, Remote)"),
 			startDate: z.string().optional().describe("Start date of the position (ISO format: YYYY-MM-DD)"),
-			endDate: z.string().optional().describe("End date of the position (ISO format: YYYY-MM-DD). Null if ongoing."),
-			isOngoing: z.boolean().optional().describe("Whether the position is currently ongoing"),
+			endDate: z.string().optional().nullable().describe("End date of the position (ISO format: YYYY-MM-DD). Null if ongoing."),
 			location: z.string().optional().describe("Location of the work (e.g., city, state, or remote)"),
 			bulletPoints: z.array(BulletPointPatchSchema).optional().describe("List of bullet points describing responsibilities and achievements"),
 		})
@@ -78,9 +77,8 @@ export const EducationPatchSchema = z.object({
 			degree: z.string().optional().describe("The degree obtained or being pursued (e.g., Bachelor's, Master's, PhD)"),
 			fieldOfStudy: z.string().optional().describe("The field of study or major"),
 			location: z.string().optional().describe("Location of the school"),
-			isOngoing: z.boolean().optional().describe("Whether the education is currently ongoing"),
 			startDate: z.string().optional().describe("Start date of the education (ISO format: YYYY-MM-DD)"),
-			endDate: z.string().optional().describe("End date of the education (ISO format: YYYY-MM-DD). Null if ongoing."),
+			endDate: z.string().optional().nullable().describe("End date of the education (ISO format: YYYY-MM-DD). Null if ongoing."),
 			bulletPoints: z.array(BulletPointPatchSchema).optional().describe("List of bullet points describing achievements, coursework, etc."),
 		})
 		.optional()

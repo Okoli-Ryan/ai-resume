@@ -68,7 +68,6 @@ public class GenerateFromPromptHandler(
                 Degree = x.Degree,
                 FieldOfStudy = x.FieldOfStudy,
                 Location = x.Location,
-                IsOngoing = x.IsOngoing,
                 StartDate = x.StartDate is not null ? DateTimeOffset.Parse(x.StartDate).UtcDateTime : null,
                 EndDate = x.EndDate is not null ? DateTimeOffset.Parse(x.EndDate).UtcDateTime : null,
                 ResumeId = newResume.Id,
@@ -90,7 +89,6 @@ public class GenerateFromPromptHandler(
                 Title = x.Title,
                 StartDate = x.StartDate is not null ? DateTimeOffset.Parse(x.StartDate).UtcDateTime : null,
                 EndDate = x.EndDate is not null ? DateTimeOffset.Parse(x.EndDate).UtcDateTime : null,
-                IsOngoing = x.IsOngoing,
                 Location = x.Location,
                 WorkType = x.WorkType
             };

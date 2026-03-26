@@ -21,8 +21,8 @@ type WorkExperienceFormItemProps = {
 };
 
 const WorkExperienceFormItem = ({ form, index, remove }: WorkExperienceFormItemProps) => {
-	const { control, watch } = form;
-	const isOngoing = watch(`workExperience.${index}.isOngoing`);
+	const { control, watch, setValue } = form;
+	const isOngoing = watch(`workExperience.${index}.endDate`) === null;
 
 	return (
 		<FormLayout>
@@ -159,27 +159,21 @@ const WorkExperienceFormItem = ({ form, index, remove }: WorkExperienceFormItemP
 						<DateFormItem disabled={isOngoing} name={`workExperience.${index}.endDate`} control={control} label="End Date" />
 					</div>
 
-					<FormField
-						control={control}
-						name={`workExperience.${index}.isOngoing`}
-						render={({ field }) => (
-							<FormItem className="flex items-center gap-3 space-y-0 p-3 bg-muted/30 rounded-md">
-								<FormControl>
-									<Checkbox 
-										id={`workExperience-${index}-isOngoing`}
-										checked={field.value} 
-										onCheckedChange={field.onChange} 
-									/>
-								</FormControl>
-								<FormLabel 
-									htmlFor={`workExperience-${index}-isOngoing`}
-									className="font-normal cursor-pointer"
-								>
-									I currently work here
-								</FormLabel>
-							</FormItem>
-						)}
-					/>
+					<div className="flex items-center gap-3 p-3 bg-muted/30 rounded-md">
+						<Checkbox
+							id={`workExperience-${index}-isOngoing`}
+							checked={isOngoing}
+							onCheckedChange={(checked) => {
+								setValue(`workExperience.${index}.endDate`, checked ? null : "");
+							}}
+						/>
+						<label
+							htmlFor={`workExperience-${index}-isOngoing`}
+							className="text-sm font-normal cursor-pointer"
+						>
+							I currently work here
+						</label>
+					</div>
 				</div>
 
 				{/* Responsibilities */}

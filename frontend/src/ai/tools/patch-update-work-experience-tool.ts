@@ -11,8 +11,7 @@ const patchUpdateWorkExperienceSchema = z.object({
 	title: z.string().optional().describe("Job title or position"),
 	workType: z.string().optional().describe("Type of work (e.g., Full-time, Part-time, Contract)"),
 	startDate: z.string().optional().describe("Start date of the position (ISO format)"),
-	endDate: z.string().optional().describe("End date of the position (ISO format, null if ongoing)"),
-	isOngoing: z.boolean().optional().describe("Whether the position is currently ongoing"),
+	endDate: z.string().optional().describe("End date of the position (ISO format, null if ongoing)").nullable(),
 	location: z.string().optional().describe("Location of the work"),
 });
 

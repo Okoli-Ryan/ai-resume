@@ -12,7 +12,6 @@ public class WorkExperienceDto : BaseEntity
     public string? WorkType { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
-    public bool IsOngoing { get; set; }
     public string? Location { get; set; }
     public string UserId { get; set; }
     public List<BulletPointDto>? BulletPoints { get; set; }
