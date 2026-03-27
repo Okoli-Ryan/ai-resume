@@ -16,7 +16,7 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
 	try {
-		const { messages, resumeId }: { messages: UIMessage[]; resumeId: string } = await req.json();
+		const { messages, resumeId, jobDescription }: { messages: UIMessage[]; resumeId: string; jobDescription?: string } = await req.json();
 
 		// Convert UI messages to model messages format
 		const modelMessages = await convertToModelMessages(messages);
@@ -60,7 +60,14 @@ For any modifications to the resume, use the unified resume_patch tool which sup
 - UPDATE operations for summary, resume info, and section order
 - Batch operations to make multiple changes at once
 
-The user is currently editing resume ID: ${resumeId}. Provide helpful, professional, and encouraging feedback while being precise about any updates you make.`;
+The user is currently editing resume ID: ${resumeId}. Provide helpful, professional, and encouraging feedback while being precise about any updates you make.${
+					jobDescription
+						? `
+
+TARGET JOB DESCRIPTION (use this as context for all suggestions and updates):
+${jobDescription}`
+						: ""
+				}`;
 
 		const result = streamText({
 			model: openai("gpt-4o-mini"),

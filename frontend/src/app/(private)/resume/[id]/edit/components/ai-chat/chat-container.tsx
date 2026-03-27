@@ -9,6 +9,7 @@ import ChatInput from "./chat-input";
 import ChatMessages from "./chat-messages";
 import { getResumeById } from "@/queries/use-resume-by-id";
 import { useResumeStore } from "@/store/resume-store";
+import { useResumeContext } from "@/components/edit-form/resume-info-form/context/resume-context";
 
 interface ChatContainerProps {
 	resumeId: string;
@@ -16,14 +17,16 @@ interface ChatContainerProps {
 
 const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 	const { update } = useResumeStore();
+	const { additionalInfo } = useResumeContext();
+	const jobDescription = additionalInfo.jobDescription;
 
 	const transport = useMemo(
 		() =>
 			new DefaultChatTransport({
 				api: "/api/chat",
-				body: { resumeId },
+				body: { resumeId, jobDescription },
 			}),
-		[resumeId]
+		[resumeId, jobDescription],
 	);
 
 	const { messages, status, sendMessage } = useChat({

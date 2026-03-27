@@ -2,9 +2,10 @@
 fix fetch failed on google auth stlil entering dashboard section
 certificate section
 Get Project, work experience ... by resume id, add enhancement controller and tool
+Fix bug where updating from info banner clears user name, summary and details
 
 #######Future#######
-Upload to cloudinary feature, get link
+Upload to Uploadthing feature, get link
 Convert to side-by-side view on desktop, sidebar view on mobile
 Homepage query by tags, name
 delete resume feature
