@@ -44,6 +44,14 @@ CRITICAL INSTRUCTIONS FOR UPDATES:
 - Do not fill in missing information based on context or assumptions
 - Always confirm what specific changes the user wants before making updates
 
+BULLET POINT UPDATE RULES (highest priority):
+- When updating bullet points for workExperience, project, or education entries, ALWAYS use the "update" operation and include the complete, final bullet points list in payload.bulletPoints
+- This triggers the "update by field ID" endpoint which REPLACES all bullet points for that entry atomically — this approach takes precedence over any attempt to add or delete individual bullet points
+- You MUST include ALL bullet points in the list (both unchanged and modified ones), not just the ones being edited — omitting an existing bullet point will delete it
+- To add a new bullet point, include all existing bullet points plus the new one in the payload
+- To remove a bullet point, include all bullet points EXCEPT the one being removed
+- To reorder bullet points, include all bullet points in the desired new order
+
 IMPORTANT FOR ID FIELDS:
 - If you need an ID (e.g., workExperienceId, educationId, projectId, certificationId, etc.), use one of the available tools to fetch the relevant data by resumeId and derive the required ID from the response. Do not guess or invent IDs.
 

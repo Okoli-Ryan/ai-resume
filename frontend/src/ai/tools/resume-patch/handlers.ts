@@ -32,6 +32,10 @@ import { createSkill } from "@/services/skills/create-skill";
 import { updateSkill } from "@/services/skills/update-skill";
 import { deleteSkill } from "@/services/skills/delete-skill";
 
+// Service imports - Bullet Points
+import { updateBulletPointsByFieldId } from "@/services/bullet-points/update-bullet-points-by-field";
+import type { FieldType } from "@/services/bullet-points/update-bullet-points-by-field";
+
 // Service imports - Links
 import { createLink } from "@/services/links/create-link";
 import { updateLink } from "@/services/links/update-link";
@@ -66,6 +70,46 @@ export type PatchResult = {
 	operation: string;
 	message: string;
 	error?: string;
+};
+
+// ============================================================================
+// Bullet Points By Field Handler
+// ============================================================================
+export const handleBulletPointsByFieldPatch = async (
+	fieldType: FieldType,
+	fieldId: string,
+	bulletPoints: { text: string }[]
+): Promise<PatchResult> => {
+	try {
+		const response = await updateBulletPointsByFieldId(fieldType, fieldId, {
+			bulletPoints: bulletPoints.map((bp) => ({ text: bp.text })),
+		});
+
+		if (isCustomError(response)) {
+			return {
+				success: false,
+				section: "bulletPoints",
+				operation: "update",
+				message: `Failed to update bullet points for ${fieldType} (${fieldId})`,
+				error: response.message,
+			};
+		}
+
+		return {
+			success: true,
+			section: "bulletPoints",
+			operation: "update",
+			message: `Successfully updated bullet points for ${fieldType} (${fieldId})`,
+		};
+	} catch (error) {
+		return {
+			success: false,
+			section: "bulletPoints",
+			operation: "update",
+			message: "An error occurred while updating bullet points by field",
+			error: error instanceof Error ? error.message : "Unknown error",
+		};
+	}
 };
 
 // ============================================================================
@@ -157,6 +201,19 @@ export const handleWorkExperiencePatch = async (
 						message: "Failed to update work experience",
 						error: updateResponse.message,
 					};
+				}
+
+				if (payload.bulletPoints && payload.bulletPoints.length > 0) {
+					const bpResult = await handleBulletPointsByFieldPatch("WorkExperience", target.id, payload.bulletPoints);
+					if (!bpResult.success) {
+						return {
+							success: false,
+							section: "workExperience",
+							operation,
+							message: "Updated work experience but failed to update bullet points",
+							error: bpResult.error,
+						};
+					}
 				}
 
 				return {
@@ -293,6 +350,19 @@ export const handleProjectPatch = async (
 						message: "Failed to update project",
 						error: updateResponse.message,
 					};
+				}
+
+				if (payload.bulletPoints && payload.bulletPoints.length > 0) {
+					const bpResult = await handleBulletPointsByFieldPatch("Project", target.id, payload.bulletPoints);
+					if (!bpResult.success) {
+						return {
+							success: false,
+							section: "project",
+							operation,
+							message: "Updated project but failed to update bullet points",
+							error: bpResult.error,
+						};
+					}
 				}
 
 				return {
@@ -437,6 +507,19 @@ export const handleEducationPatch = async (
 						message: "Failed to update education",
 						error: updateResponse.message,
 					};
+				}
+
+				if (payload.bulletPoints && payload.bulletPoints.length > 0) {
+					const bpResult = await handleBulletPointsByFieldPatch("Education", target.id, payload.bulletPoints);
+					if (!bpResult.success) {
+						return {
+							success: false,
+							section: "education",
+							operation,
+							message: "Updated education but failed to update bullet points",
+							error: bpResult.error,
+						};
+					}
 				}
 
 				return {
