@@ -1,8 +1,6 @@
 using Carter;
-using Microsoft.EntityFrameworkCore;
-using Resume_builder.Features.Resume;
-using Resume_builder.Features.Resume.Common;
-using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Common;
+using Resume_builder.Features.PdfGeneration.GeneratePDF;
 using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
 
@@ -16,37 +14,19 @@ public class PdfGenerationModule : CarterModule
             .RequireAuthorization();
 
         endpoint.MapGet("{resumeId}/pdf", async (
-            AppDbContext db,
             string resumeId,
             IResumeRepository resumeRepository,
             IClaimsService claimsService,
             IPdfGenerationService pdfService,
             CancellationToken cancellationToken) =>
         {
-            var userId = claimsService.GetUserId();
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Results.Unauthorized();
-            }
+            var handler = new GeneratePdfHandler(resumeRepository, claimsService, pdfService);
+            var response = await handler.Handle(new GeneratePdfCommand(resumeId), cancellationToken);
 
-            var resume = await resumeRepository.GetResumeByUserAndResumeId(userId, resumeId, cancellationToken);
+            if (!response.IsSuccess || response.Data is null)
+                return response.GetResult();
 
-            if (resume == null)
-            {
-                return Results.NotFound("Resume not found");
-            }
-
-            // Convert to DTO
-            var resumeDto = resume.ToDto();
-
-            // Generate PDF
-            var pdfBytes = pdfService.GeneratePdf(resumeDto);
-
-            var filename = !string.IsNullOrEmpty(resume.ResumeName)
-                ? $"{resume.ResumeName}.pdf"
-                : $"resume-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
-
-            return Results.File(pdfBytes, "application/pdf", filename);
+            return (IResult)Results.File(response.Data.PdfBytes, "application/pdf", response.Data.Filename);
         });
     }
 }
