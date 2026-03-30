@@ -71,6 +71,8 @@ class FetchClient {
 
 			// Handle response codes
 			if (response.status === 401) {
+                const error = await response.json();
+				console.log(`${url}`, error);
 				return customError(ErrorMessage.Unauthorized);
 			}
 

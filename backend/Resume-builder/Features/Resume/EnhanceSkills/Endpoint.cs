@@ -2,18 +2,20 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Resume.Common;
 
-namespace Resume_builder.Features.Resume.GenerateFromPrompt;
+namespace Resume_builder.Features.Resume.EnhanceSkills;
 
-public class GenerateResumeFromPromptEndpoint : ICarterModule
+public class EnhanceSkillsEndpoint : ICarterModule
 {
+    
     public void AddRoutes(IEndpointRouteBuilder app)
     {
+        
         var endpoint = app.MapGroup(ResumeConstants.ResumeMapGroupName).WithTags(ResumeConstants.ResumeMapGroupTag)
-            .RequireAuthorization();
-
-        endpoint.MapPost("/generate-from-prompt", async (
-            GenerateFromPromptCommand command,
-            GenerateFromPromptHandler handler,
+            .RequireAuthorization();  
+        
+        endpoint.MapPost("enhance/skills", async (
+            EnhanceSkillsCommand command,
+            EnhanceSkillsHandler handler,
             CancellationToken cancellationToken
         ) =>
         {

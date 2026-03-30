@@ -4,7 +4,7 @@ using Resume_builder.Features.Resume.Common;
 using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
 
-namespace Resume_builder.Features.PdfGeneration.GeneratePDF;
+namespace Resume_builder.Features.PdfGeneration.GeneratePdf;
 
 public class GeneratePdfHandler(
     IResumeRepository resumeRepository,

@@ -1,4 +1,4 @@
-namespace Resume_builder.Features.PdfGeneration.GeneratePDF;
+namespace Resume_builder.Features.PdfGeneration.GeneratePdf;
 
 public record GeneratePdfCommand(string ResumeId);
 

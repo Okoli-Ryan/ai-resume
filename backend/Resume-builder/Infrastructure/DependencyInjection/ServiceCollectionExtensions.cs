@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
             .AddQuestPDFFont()
             .AddPersistence(config)
             .AddRepositories()
+            .AddHandlers()
             .AddServices()
             .AddAuth(config)
             .AddHttpContextAccessor()
@@ -42,6 +43,26 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IResumeRepository, ResumeRepository>();
+
+        return services;
+    }
+
+
+    private static IServiceCollection AddHandlers(this IServiceCollection services)
+    {
+        var handlerTypes = typeof(Program).Assembly.DefinedTypes
+            .Where(type => type is { IsClass: true, IsAbstract: false } && type.Name.EndsWith("Handler", StringComparison.Ordinal));
+
+        foreach (var handlerType in handlerTypes)
+        {
+            services.AddScoped(handlerType.AsType());
+
+            var responseHandlerInterfaces = handlerType.ImplementedInterfaces
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IResponseHandler<,>));
+
+            foreach (var responseHandlerInterface in responseHandlerInterfaces)
+                services.AddScoped(responseHandlerInterface, handlerType.AsType());
+        }
 
         return services;
     }
