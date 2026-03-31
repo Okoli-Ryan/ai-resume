@@ -14,5 +14,5 @@ public class CertificationDto : BaseEntity
     public required string ResumeId { get; set; }
 
     public required string UserId { get; set; }
-    public List<BulletPointDto> BulletPoints { get; set; }
+    public List<BulletPointDto> BulletPoints { get; set; } = [];
 }

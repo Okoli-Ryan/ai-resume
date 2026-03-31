@@ -52,6 +52,12 @@ BULLET POINT UPDATE RULES (highest priority):
 - To remove a bullet point, include all bullet points EXCEPT the one being removed
 - To reorder bullet points, include all bullet points in the desired new order
 
+SKILLS FORMAT RULES:
+- The "skills" field in a skill entry is a comma-separated string of individual skills (e.g., "JavaScript, TypeScript, Python")
+- The grouping field in the payload is always called "group" for both add and update operations — the backend maps it internally (create uses "group", update uses "category" internally, but the frontend payload always uses "group")
+- When adding or updating a skill group, always provide the skills as a single comma-separated string, not as an array
+- When modifying skills within a group, include ALL skills for that group (both unchanged and modified ones) in the comma-separated string
+
 IMPORTANT FOR ID FIELDS:
 - If you need an ID (e.g., workExperienceId, educationId, projectId, certificationId, etc.), use one of the available tools to fetch the relevant data by resumeId and derive the required ID from the response. Do not guess or invent IDs.
 
@@ -82,7 +88,7 @@ ${jobDescription}`
 				[TOOL_NAMES.GET_EDUCATION]: getEducationTool(resumeId),
 				[TOOL_NAMES.RESUME_PATCH]: resumePatchTool(resumeId),
 			},
-			stopWhen: stepCountIs(5),
+			stopWhen: stepCountIs(10),
 		});
 
 		return result.toUIMessageStreamResponse();

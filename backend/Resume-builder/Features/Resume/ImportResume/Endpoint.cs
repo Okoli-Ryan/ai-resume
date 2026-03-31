@@ -2,7 +2,7 @@ using Carter;
 using Resume_builder.Common;
 using Resume_builder.Features.Resume.Common;
 
-namespace Resume_builder.Features.Resume.Import_Resume;
+namespace Resume_builder.Features.Resume.ImportResume;
 
 public class Endpoint : ICarterModule
 {

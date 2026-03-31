@@ -38,7 +38,7 @@ public class CertificationsSection : IComponent
                                 .Text(certification.CertificationName?.ToUpper() ?? string.Empty)
                                 .FontSize(10)
                                 .Bold()
-                                .FontColor("#0066cc");
+                                .FontColor("#2563eb");
                         }
                         else
                         {

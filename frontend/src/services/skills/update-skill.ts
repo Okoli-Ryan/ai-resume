@@ -7,5 +7,5 @@ export type UpdateSkillRequest = {
 };
 
 export const updateSkill = async (skillId: string, payload: UpdateSkillRequest) => {
-	return FetchClient.post<SkillDto, UpdateSkillRequest>(`/skills/${skillId}`, payload);
+	return FetchClient.post<SkillDto, UpdateSkillRequest>(`/skill/${skillId}`, payload);
 };

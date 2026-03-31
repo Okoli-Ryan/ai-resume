@@ -113,7 +113,8 @@ public partial class OpenAiChatClient
         };
     }
 
-    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, ResumeAdditionalInfo additionalInfo,
+    public async Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText,
+        ResumeAdditionalInfo? additionalInfo,
         CancellationToken cancellationToken)
     {
         var inputPrompt = PromptBuilder.BuildParseResumePrompt(rawText, additionalInfo);
@@ -137,8 +138,9 @@ public partial class OpenAiChatClient
             Response = response.Result
         };
     }
-    
-    public async Task<AIResponse<ParsedResumeResponse>> GenerateResumeFromPrompt(string prompt, ResumeAdditionalInfo additionalInfo,
+
+    public async Task<AIResponse<ParsedResumeResponse>> GenerateResumeFromPrompt(string prompt,
+        ResumeAdditionalInfo? additionalInfo,
         CancellationToken cancellationToken)
     {
         var inputPrompt = PromptBuilder.BuildGenerateResumeFromPrompt(prompt, additionalInfo);

@@ -4,6 +4,8 @@ certificate section
 Get Project, work experience ... by resume id, add enhancement controller and tool
 Fix bug where updating from info banner clears user name, summary and details
 Add "https://" to links on the prompt, or update links validation without https
+Add save state / duplicate feature
+make certification bulletpoints nullable
 
 #######Future#######
 Upload to Uploadthing feature, get link

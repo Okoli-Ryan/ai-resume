@@ -116,11 +116,15 @@ export const SkillsPatchSchema = z.object({
 	}),
 	payload: z
 		.object({
-			category: z.string().optional().describe("The category name for grouping skills (e.g., Programming Languages, Frameworks, Tools)"),
-			skills: z.string().optional().describe("Comma-separated list of skills in this category (e.g., 'JavaScript, TypeScript, Python')"),
+			group: z
+				.string()
+				.describe("The category name for grouping skills (e.g., Programming Languages, Frameworks, Tools). Required for add/update operations."),
+			skills: z
+				.string()
+				.describe("Comma-separated list of skills in this category (e.g., 'JavaScript, TypeScript, Python'). Required for add/update operations."),
 		})
 		.optional()
-		.describe("The payload containing the fields to update. Required for add/update operations."),
+		.describe("The payload containing the fields to update. Required for add/update operations. Both group and skills are required when provided."),
 });
 
 // ============================================================================

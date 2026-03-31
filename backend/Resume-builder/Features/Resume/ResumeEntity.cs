@@ -26,7 +26,7 @@ public class ResumeEntity : BaseEntity
 
     [MaxLength(200)] public string? UserAddress { get; set; } = string.Empty;
 
-    [Phone] [MaxLength(20)] public string? UserPhoneNumber { get; set; }
+    [Phone] [MaxLength(50)] public string? UserPhoneNumber { get; set; }
 
     [Url] [MaxLength(50)] public string? LinkedinUrl { get; set; }
 

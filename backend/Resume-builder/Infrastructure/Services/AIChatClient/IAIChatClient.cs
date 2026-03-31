@@ -25,7 +25,7 @@ public interface IAIChatClient : IChatClient
 
     Task<AIResponse<ParsedResumeResponse>> ParseResume(string rawText, ResumeAdditionalInfo? additionalInfo,
         CancellationToken cancellationToken);
-    
+
     Task<AIResponse<ParsedResumeResponse>> GenerateResumeFromPrompt(string prompt, ResumeAdditionalInfo? additionalInfo,
         CancellationToken cancellationToken);
 }

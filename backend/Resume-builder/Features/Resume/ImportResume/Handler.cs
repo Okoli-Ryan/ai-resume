@@ -11,7 +11,7 @@ using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.ClaimService;
 using Resume_builder.Utils;
 
-namespace Resume_builder.Features.Resume.Import_Resume;
+namespace Resume_builder.Features.Resume.ImportResume;
 
 public class ImportResumeHandler(
     IClaimsService claimsService,
@@ -41,7 +41,7 @@ public class ImportResumeHandler(
         var response = await chatClient.ParseResume(rawText, command.additionalInfo, cancellationToken);
 
         if (response.Response is null)
-            return Response<ResumeDto>.Fail(HttpStatusCode.NotFound, "Unable to parse resume.");
+            return Response<ResumeDto>.Fail(HttpStatusCode.BadRequest, "Unable to parse resume.");
 
         var resume = response.Response;
 

@@ -1,5 +1,4 @@
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Resume_builder.Features.Resume.Common;
 
@@ -7,7 +6,7 @@ namespace Resume_builder.Features.PdfGeneration.Components;
 
 public class PersonalInfoSection : IComponent
 {
-    private static readonly string HyperlinkColor = Colors.Blue.Medium; // Bright blue
+    private static readonly string HyperlinkColor = "#2563eb"; // Bright blue
     private readonly ResumeDto _resume;
 
     public PersonalInfoSection(ResumeDto resume)

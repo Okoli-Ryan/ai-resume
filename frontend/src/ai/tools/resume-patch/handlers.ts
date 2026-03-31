@@ -735,18 +735,18 @@ export const handleSkillsPatch = async (
 						message: "Payload is required for add operation",
 					};
 				}
-				if (!payload.category || !payload.skills) {
+				if (!payload.group || !payload.skills) {
 					return {
 						success: false,
 						section: "skills",
 						operation,
-						message: "Category and skills are required for add operation",
+						message: "Group and skills are required for add operation",
 					};
 				}
 
 				const createResponse = await createSkill({
 					resumeId,
-					group: payload.category,
+					group: payload.group,
 					skills: payload.skills,
 				});
 
@@ -764,7 +764,7 @@ export const handleSkillsPatch = async (
 					success: true,
 					section: "skills",
 					operation,
-					message: `Successfully created skill category "${payload.category}"`,
+					message: `Successfully created skill category "${payload.group}"`,
 				};
 
 			case "update":
@@ -784,17 +784,17 @@ export const handleSkillsPatch = async (
 						message: "Payload is required for update operation",
 					};
 				}
-				if (!payload.category || !payload.skills) {
+				if (!payload.group || !payload.skills) {
 					return {
 						success: false,
 						section: "skills",
 						operation,
-						message: "Category and skills are required for update operation",
+						message: "Group (category) and skills are required for update operation",
 					};
 				}
 
 				const updateResponse = await updateSkill(target.id, {
-					category: payload.category,
+					category: payload.group,
 					skills: payload.skills,
 				});
 
@@ -812,7 +812,7 @@ export const handleSkillsPatch = async (
 					success: true,
 					section: "skills",
 					operation,
-					message: `Successfully updated skill category "${payload.category}"`,
+					message: `Successfully updated skill category "${payload.group}"`,
 				};
 
 			case "delete":

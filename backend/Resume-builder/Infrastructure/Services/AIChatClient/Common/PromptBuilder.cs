@@ -5,8 +5,7 @@ namespace Resume_builder.Infrastructure.Services.AIChatClient.Common;
 
 public static class PromptBuilder
 {
-
-    private static void AppendAdditionalInfo(StringBuilder inputPrompt, ResumeAdditionalInfo additionalInfo)
+    private static void AppendAdditionalInfo(StringBuilder inputPrompt, ResumeAdditionalInfo? additionalInfo)
     {
         if (!string.IsNullOrEmpty(additionalInfo?.JobDescription))
         {
@@ -29,7 +28,7 @@ public static class PromptBuilder
             inputPrompt.AppendLine();
         }
     }
-    
+
     public static string BuildEnhanceSkillsPrompt(List<string> skills, ResumeAdditionalInfo? additionalInfo)
     {
         var inputPrompt = new StringBuilder();
@@ -85,7 +84,7 @@ public static class PromptBuilder
         return inputPrompt.ToString();
     }
 
-    public static string BuildParseResumePrompt(string rawText, ResumeAdditionalInfo additionalInfo)
+    public static string BuildParseResumePrompt(string rawText, ResumeAdditionalInfo? additionalInfo)
     {
         var inputPrompt = new StringBuilder();
 
@@ -96,8 +95,8 @@ public static class PromptBuilder
 
         return inputPrompt.ToString();
     }
-    
-    public static string BuildGenerateResumeFromPrompt(string prompt, ResumeAdditionalInfo additionalInfo)
+
+    public static string BuildGenerateResumeFromPrompt(string prompt, ResumeAdditionalInfo? additionalInfo)
     {
         var inputPrompt = new StringBuilder();
 
@@ -108,7 +107,7 @@ public static class PromptBuilder
 
         return inputPrompt.ToString();
     }
-    
+
     public static string BuildEnhanceWorkExperienceBulletPointPrompt(EnhanceBulletPointsRequest request)
     {
         var inputPrompt = new StringBuilder();
