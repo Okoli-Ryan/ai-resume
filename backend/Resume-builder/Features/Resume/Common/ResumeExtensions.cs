@@ -188,7 +188,8 @@ public static class ResumeExtensions
             {
                 Text = bullet.Text,
                 Order = bullet.Order,
-                WorkExperienceId = workExperienceList[index].Id
+                WorkExperienceId = workExperienceList[index].Id,
+                ResumeId = resume.Id
             });
         }
     }
@@ -205,7 +206,8 @@ public static class ResumeExtensions
             {
                 Text = bullet.Text,
                 Order = bullet.Order,
-                EducationId = educationList[index].Id
+                EducationId = educationList[index].Id,
+                ResumeId = resume.Id
             });
         }
     }
@@ -221,7 +223,8 @@ public static class ResumeExtensions
             {
                 Text = bullet.Text,
                 Order = bullet.Order,
-                ProjectId = projectList[index].Id
+                ProjectId = projectList[index].Id,
+                ResumeId = resume.Id
             });
         }
     }

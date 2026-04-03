@@ -6,7 +6,7 @@ using Resume_builder.Features.Users;
 
 namespace Resume_builder.Features.Certification;
 
-public class CertificationEntity : BaseEntity
+public class CertificationEntity : BaseEntity, IResumeScoped
 {
     [MaxLength(200)] public string? CertificationName { get; set; }
 

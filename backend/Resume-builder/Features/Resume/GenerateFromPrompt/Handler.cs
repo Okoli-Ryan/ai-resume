@@ -16,7 +16,6 @@ namespace Resume_builder.Features.Resume.GenerateFromPrompt;
 public class GenerateFromPromptHandler(
     IClaimsService claimsService,
     IAIChatClient chatClient,
-    IHostEnvironment env,
     AppDbContext db) : IResponseHandler<GenerateFromPromptCommand, ResumeDto>
 {
     public async Task<Response<ResumeDto>> Handle(GenerateFromPromptCommand command,
@@ -35,9 +34,6 @@ public class GenerateFromPromptHandler(
             return Response<ResumeDto>.Fail(HttpStatusCode.NotFound, "Unable to parse resume.");
 
         var resume = response.Response;
-
-        await using var transaction =
-            env.IsProduction() ? await db.Database.BeginTransactionAsync(cancellationToken) : null;
 
         var newResume = new ResumeEntity
         {
@@ -170,7 +166,6 @@ public class GenerateFromPromptHandler(
 
         await db.SaveChangesAsync(cancellationToken);
 
-        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
         return Response<ResumeDto>.Success(newResume.ToDto());
     }
 }

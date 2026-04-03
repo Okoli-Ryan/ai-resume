@@ -16,7 +16,6 @@ namespace Resume_builder.Features.Resume.ImportResume;
 public class ImportResumeHandler(
     IClaimsService claimsService,
     IAIChatClient chatClient,
-    IHostEnvironment env,
     AppDbContext db) : IResponseHandler<ImportResumeCommand, ResumeDto>
 {
     public async Task<Response<ResumeDto>> Handle(ImportResumeCommand command,
@@ -44,9 +43,6 @@ public class ImportResumeHandler(
             return Response<ResumeDto>.Fail(HttpStatusCode.BadRequest, "Unable to parse resume.");
 
         var resume = response.Response;
-
-        await using var transaction =
-            env.IsProduction() ? await db.Database.BeginTransactionAsync(cancellationToken) : null;
 
         var newResume = new ResumeEntity
         {
@@ -144,7 +140,8 @@ public class ImportResumeHandler(
             {
                 Text = bulletPoint,
                 Order = index,
-                WorkExperienceId = workExperienceList[index].Id
+                WorkExperienceId = workExperienceList[index].Id,
+                ResumeId = newResume.Id
             });
         }
 
@@ -158,7 +155,8 @@ public class ImportResumeHandler(
             {
                 Text = bulletPoint,
                 Order = index,
-                EducationId = educationList[index].Id
+                EducationId = educationList[index].Id,
+                ResumeId = newResume.Id
             });
         }
 
@@ -172,14 +170,14 @@ public class ImportResumeHandler(
             {
                 Text = bulletPoint,
                 Order = index,
-                ProjectId = projectList[index].Id
+                ProjectId = projectList[index].Id,
+                ResumeId = newResume.Id
             });
         }
 
 
         await db.SaveChangesAsync(cancellationToken);
 
-        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
         return Response<ResumeDto>.Success(newResume.ToDto());
     }
 }

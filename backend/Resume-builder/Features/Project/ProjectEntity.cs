@@ -6,7 +6,7 @@ using Resume_builder.Features.Users;
 
 namespace Resume_builder.Features.Project;
 
-public class ProjectEntity : BaseEntity
+public class ProjectEntity : BaseEntity, IResumeScoped
 {
     [MaxLength(100)] public string? ProjectName { get; set; } = string.Empty;
 

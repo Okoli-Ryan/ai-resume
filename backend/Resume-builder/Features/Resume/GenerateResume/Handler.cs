@@ -18,7 +18,6 @@ namespace Resume_builder.Features.Resume.GenerateResume;
 public class GenerateResumeHandler(
     AppDbContext db,
     IClaimsService claimsService,
-    IHostEnvironment env,
     IResumeRepository resumeRepository,
     IAIChatClient chatClient)
     : IResponseHandler<GenerateResumeCommand, ResumeDto>
@@ -49,9 +48,6 @@ public class GenerateResumeHandler(
 
         var newResume = CreateResumeEntity(resume, aiResponse, userId);
 
-        await using var transaction =
-            env.IsProduction() ? await db.Database.BeginTransactionAsync(cancellationToken) : null;
-
         db.Add(newResume);
         await db.SaveChangesAsync(cancellationToken);
 
@@ -72,8 +68,6 @@ public class GenerateResumeHandler(
         AssignBulletPointsToEducation(resume);
 
         await db.SaveChangesAsync(cancellationToken);
-
-        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
 
         return Response<ResumeDto>.Success(newResume.ToDto());
     }

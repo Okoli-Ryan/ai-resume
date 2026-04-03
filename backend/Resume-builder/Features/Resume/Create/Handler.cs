@@ -9,7 +9,6 @@ namespace Resume_builder.Features.Resume.Create;
 
 public class CreateResumeHandler(
     AppDbContext db,
-    IHostEnvironment env,
     IClaimsService claimsService
 )
     : IResponseHandler<CreateResumeCommand, ResumeDto>
@@ -22,9 +21,6 @@ public class CreateResumeHandler(
             return Response<ResumeDto>.Fail(HttpStatusCode.Unauthorized, "Unauthorized");
 
         var resume = CreateResumeEntity(request, userId);
-
-        await using var transaction =
-            env.IsProduction() ? await db.Database.BeginTransactionAsync(cancellationToken) : null;
 
         db.Resume.Add(resume);
         await db.SaveChangesAsync(cancellationToken);
@@ -47,7 +43,6 @@ public class CreateResumeHandler(
 
         await db.SaveChangesAsync(cancellationToken);
 
-        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
         return Response<ResumeDto>.Success(resume.ToDto());
     }
 }

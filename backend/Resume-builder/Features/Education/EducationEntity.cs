@@ -7,7 +7,7 @@ using Resume_builder.Features.Users;
 
 namespace Resume_builder.Features.Education;
 
-public class EducationEntity : BaseEntity
+public class EducationEntity : BaseEntity, IResumeScoped
 {
     [MaxLength(100)] public string? SchoolName { get; set; }
 

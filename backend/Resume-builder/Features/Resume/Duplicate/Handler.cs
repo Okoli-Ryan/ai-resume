@@ -18,8 +18,7 @@ namespace Resume_builder.Features.Resume.Duplicate;
 public class DuplicateResumeHandler(
     AppDbContext db,
     IClaimsService claimsService,
-    IResumeRepository resumeRepository,
-    IHostEnvironment env) : IResponseHandler<DuplicateResumeCommand, ResumeDto>
+    IResumeRepository resumeRepository) : IResponseHandler<DuplicateResumeCommand, ResumeDto>
 {
     public async Task<Response<ResumeDto>> Handle(DuplicateResumeCommand command, CancellationToken cancellationToken)
     {
@@ -124,9 +123,6 @@ public class DuplicateResumeHandler(
         }).ToList();
 
 
-        await using var transaction =
-            env.IsProduction() ? await db.Database.BeginTransactionAsync(cancellationToken) : null;
-
         db.Resume.Add(newResumeEntity);
         await db.SaveChangesAsync(cancellationToken);
 
@@ -148,7 +144,6 @@ public class DuplicateResumeHandler(
 
         await db.SaveChangesAsync(cancellationToken);
 
-        if (env.IsProduction()) await transaction!.CommitAsync(cancellationToken);
         return Response<ResumeDto>.Success(newResumeEntity.ToDto());
     }
 }

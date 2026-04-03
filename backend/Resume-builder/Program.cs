@@ -1,5 +1,6 @@
 using Carter;
 using Resume_builder.Infrastructure.DependencyInjection;
+using Resume_builder.Infrastructure.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<TransactionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

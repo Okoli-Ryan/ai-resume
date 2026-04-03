@@ -6,7 +6,7 @@ using Resume_builder.Features.Users;
 
 namespace Resume_builder.Features.WorkExperience;
 
-public class WorkExperienceEntity : BaseEntity
+public class WorkExperienceEntity : BaseEntity, IResumeScoped
 {
     public required string ResumeId { get; set; }
     public required string UserId { get; set; }

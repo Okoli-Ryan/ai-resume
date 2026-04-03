@@ -5,7 +5,7 @@ using Resume_builder.Features.Users;
 
 namespace Resume_builder.Features.Skills;
 
-public class SkillEntity : BaseEntity
+public class SkillEntity : BaseEntity, IResumeScoped
 {
     public string Group { get; set; } = string.Empty;
     public string Skills { get; set; } = string.Empty;

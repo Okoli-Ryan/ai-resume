@@ -26,23 +26,71 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<CertificationEntity> Certification { get; set; }
     public DbSet<FileUploadEntity> FileUpload { get; set; }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var entries = ChangeTracker.Entries<BaseEntity>();
+        var entries = ChangeTracker.Entries<BaseEntity>().ToList();
+        var now = DateTime.UtcNow;
 
         foreach (var entry in entries)
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    entry.Entity.CreatedAt = now;
+                    entry.Entity.UpdatedAt = now;
                     entry.Entity.ActiveStatus = true;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
+                    entry.Entity.UpdatedAt = now;
                     break;
             }
 
-        return base.SaveChangesAsync(cancellationToken);
+        // Gather resume IDs touched by this unit of work
+        var resumeIds = new HashSet<string>();
+
+        foreach (var entry in entries)
+        {
+            if (entry.State is not (EntityState.Added or EntityState.Modified or EntityState.Deleted))
+                continue;
+
+            switch (entry.Entity)
+            {
+                case ResumeEntity resume:
+                    resumeIds.Add(resume.Id);
+                    break;
+                case IResumeScoped scoped when !string.IsNullOrEmpty(scoped.ResumeId):
+                    resumeIds.Add(scoped.ResumeId);
+                    break;
+            }
+        }
+
+        // Bump version on tracked resumes; defer untracked ones
+        var untrackedResumeIds = new List<string>();
+
+        foreach (var resumeId in resumeIds)
+        {
+            var tracked = ChangeTracker.Entries<ResumeEntity>()
+                .FirstOrDefault(e => e.Entity.Id == resumeId);
+
+            if (tracked is not null)
+            {
+                tracked.Entity.Version++;
+                if (tracked.State == EntityState.Unchanged)
+                    tracked.State = EntityState.Modified;
+            }
+            else
+            {
+                untrackedResumeIds.Add(resumeId);
+            }
+        }
+
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        // Bump version for resumes that weren't loaded in this context
+        if (untrackedResumeIds.Count > 0)
+            await Resume
+                .Where(r => untrackedResumeIds.Contains(r.Id))
+                .ExecuteUpdateAsync(s => s.SetProperty(r => r.Version, r => r.Version + 1), cancellationToken);
+
+        return result;
     }
 }

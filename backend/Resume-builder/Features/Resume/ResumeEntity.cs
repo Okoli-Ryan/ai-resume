@@ -35,6 +35,7 @@ public class ResumeEntity : BaseEntity
     [Url] [MaxLength(100)] public string? PortfolioUrl { get; set; }
     public string? Tags { get; set; } = string.Empty;
     public string? Order { get; set; } = string.Empty;
+    public int Version { get; set; }
 
     [Required] public string UserId { get; set; } = string.Empty;
 
