@@ -11,7 +11,7 @@ export type ExtendedRequestInit = RequestInit & {
 	hasAuthorization?: boolean;
 	isFormdata?: boolean;
 	hasCustomResponse?: boolean;
-	responseFormat?: "json" | "text" | "blob";
+	responseFormat?: "json" | "text" | "blob" | "buffer" | "base64";
 };
 
 class FetchClient {
@@ -44,14 +44,18 @@ class FetchClient {
 		}
 
 		let headers: HeadersInit = { "Content-Type": "application/json" };
-		console.log(url, options.body);
 
 		if (options.isFormdata) {
 			const formData = new FormData();
 
-			Object.keys(options.body as BodyInit).forEach((key) => {
+			Object.keys(options.body as unknown as Record<string, unknown>).forEach((key) => {
 				if (options.body) {
-					formData.append(key, (options.body as BodyInit)[key as keyof BodyInit]);
+					const val = (options.body as unknown as Record<string, unknown>)[key];
+					if (val instanceof File || val instanceof Blob) {
+						formData.append(key, val);
+					} else if (val !== undefined && val !== null) {
+						formData.append(key, String(val));
+					}
 				}
 			});
 
@@ -89,6 +93,11 @@ class FetchClient {
 
 			if (options.responseFormat === "text") return response.text() as Response;
 			if (options.responseFormat === "blob") return response.blob() as Response;
+			if (options.responseFormat === "buffer") return response.arrayBuffer() as Response;
+			if (options.responseFormat === "base64") {
+				const buf = await response.arrayBuffer();
+				return Buffer.from(buf).toString("base64") as Response;
+			}
 
 			const data: Response = await response.json();
 

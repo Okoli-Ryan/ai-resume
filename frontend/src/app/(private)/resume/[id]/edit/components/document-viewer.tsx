@@ -9,9 +9,6 @@ import Projects from "@/components/sections/projects";
 import Skills from "@/components/sections/skills";
 import { DEFAULT_RESUME_ORDER } from "@/lib/constants";
 import { useResumeStore } from "@/store/resume-store";
-import { useCallback } from "react";
-import { useParams } from "next/navigation";
-import { downloadPDF } from "@/lib/utils";
 
 import DownloadModal from "./download-modal";
 
@@ -67,27 +64,9 @@ const ResumeDocument = () => {
 };
 
 export const DocumentViewer = () => {
-	const resume = useResumeStore((state) => state.resume);
-	const params = useParams();
-	const resumeId = params.id as string;
-	const filename = (resume?.resumeName || Date.now()).toString() + ".pdf";
-
-	const toPDF = useCallback(async () => {
-		if (!resumeId) {
-			console.error("No resume ID available");
-			return;
-		}
-
-		try {
-			await downloadPDF(resumeId, filename);
-		} catch (error) {
-			console.error("Error downloading PDF:", error);
-		}
-	}, [filename, resumeId]);
-
 	return (
 		<>
-			<DownloadModal toPDF={toPDF} />
+			<DownloadModal />
 			<div className="overflow-auto h-[100dvh] mt-[1.5rem] bg-gray-100">
 				<div className="resume-document">
 					<ResumeDocument />
