@@ -8,6 +8,7 @@ using Resume_builder.Features.Project;
 using Resume_builder.Features.Resume;
 using Resume_builder.Features.Skills;
 using Resume_builder.Features.Users;
+using Resume_builder.Features.FileUpload;
 using Resume_builder.Features.WorkExperience;
 
 namespace Resume_builder.Infrastructure.Persistence.Data;
@@ -23,6 +24,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<SkillEntity> Skill { get; set; }
     public DbSet<LinkEntity> Link { get; set; }
     public DbSet<CertificationEntity> Certification { get; set; }
+    public DbSet<FileUploadEntity> FileUpload { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {

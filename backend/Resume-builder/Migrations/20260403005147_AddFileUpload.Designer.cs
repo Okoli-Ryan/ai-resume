@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -11,9 +12,11 @@ using Resume_builder.Infrastructure.Persistence.Data;
 namespace Resume_builder.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260403005147_AddFileUpload")]
+    partial class AddFileUpload
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,16 +191,10 @@ namespace Resume_builder.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Version")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("FileUpload");
                 });
@@ -548,17 +545,6 @@ namespace Resume_builder.Migrations
                         .IsRequired();
 
                     b.Navigation("Resume");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Resume_builder.Features.FileUpload.FileUploadEntity", b =>
-                {
-                    b.HasOne("Resume_builder.Features.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
