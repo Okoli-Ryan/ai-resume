@@ -14,6 +14,7 @@ public static class FileUploadExtensions
             CoverLetterId = entity.CoverLetterId,
             Version = entity.Version,
             Url = entity.Url,
+            FileKey = entity.FileKey,
             UserId = entity.UserId
         };
     }

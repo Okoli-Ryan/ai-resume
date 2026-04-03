@@ -13,6 +13,7 @@ using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.AIChatClient;
 using Resume_builder.Infrastructure.Services.AIChatClient.OpenAI;
 using Resume_builder.Infrastructure.Services.ClaimService;
+using Resume_builder.Infrastructure.Services.FileStorageService;
 using Resume_builder.Infrastructure.Services.PasswordService;
 using Resume_builder.Infrastructure.Services.TokenService;
 
@@ -86,6 +87,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IClaimsService, ClaimsService>();
         services.AddScoped<IAIChatClient>(sp => (IAIChatClient)sp.GetRequiredService<IChatClient>());
+        services.AddScoped<IFileStorageService, UploadThingFileStorageService>();
         services.AddSingleton<IPdfGenerationService, PdfGenerationService>();
 
         return services;

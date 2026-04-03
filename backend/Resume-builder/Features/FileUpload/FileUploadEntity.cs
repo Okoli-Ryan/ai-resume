@@ -16,6 +16,9 @@ public class FileUploadEntity : BaseEntity
     [MaxLength(2048)]
     public string Url { get; set; } = string.Empty;
 
+    [MaxLength(512)]
+    public string FileKey { get; set; } = string.Empty;
+
     [Required]
     public string UserId { get; set; } = string.Empty;
 

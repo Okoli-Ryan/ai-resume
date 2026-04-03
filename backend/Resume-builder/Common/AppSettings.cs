@@ -6,6 +6,8 @@ public class AppSettings
     public string? GoogleClientID { get; set; } = string.Empty;
     public string? OpenAIKey { get; set; } = string.Empty;
     public string? DbConnectionString { get; set; } = string.Empty;
+    public string? UploadThingToken { get; set; } = string.Empty;
+    public string? UploadThingApiKey { get; set; } = string.Empty;
 }
 
 public class JwtSettings
