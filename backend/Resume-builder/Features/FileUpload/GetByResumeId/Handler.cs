@@ -2,26 +2,67 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Resume_builder.Common;
 using Resume_builder.Features.FileUpload.Common;
+using Resume_builder.Features.PdfGeneration;
+using Resume_builder.Features.Resume.Common;
 using Resume_builder.Infrastructure.Persistence.Data;
+using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
+using Resume_builder.Infrastructure.Services.FileStorageService;
 
 namespace Resume_builder.Features.FileUpload.GetByResumeId;
 
-public class GetFileUploadsByResumeIdHandler(AppDbContext db, IClaimsService claimsService)
-    : IResponseHandler<GetFileUploadsByResumeIdQuery, List<FileUploadDto>>
+public class GetFileUploadsByResumeIdHandler(
+    AppDbContext db,
+    IClaimsService claimsService,
+    IResumeRepository resumeRepository,
+    IPdfGenerationService pdfService,
+    IFileStorageService fileStorageService)
+    : IResponseHandler<GetFileUploadsByResumeIdQuery, FileUploadDto?>
 {
-    public async Task<Response<List<FileUploadDto>>> Handle(GetFileUploadsByResumeIdQuery query,
+    public async Task<Response<FileUploadDto?>> Handle(GetFileUploadsByResumeIdQuery query,
         CancellationToken cancellationToken)
     {
         var userId = claimsService.GetUserId();
 
         if (userId is null)
-            return Response<List<FileUploadDto>>.Fail(HttpStatusCode.Unauthorized, "Unauthorized");
+            return Response<FileUploadDto?>.Fail(HttpStatusCode.Unauthorized, "Unauthorized");
 
-        var entities = await db.FileUpload
-            .Where(x => x.ResumeId == query.ResumeId && x.UserId == userId)
-            .ToListAsync(cancellationToken);
+        var resume = await resumeRepository.GetResumeByUserAndResumeId(userId, query.ResumeId, cancellationToken);
 
-        return Response<List<FileUploadDto>>.Success(entities.Select(x => x.ToDto()).ToList());
+        if (resume is null)
+            return Response<FileUploadDto?>.Fail(HttpStatusCode.NotFound, "Resume not found");
+
+        var entity = await db.FileUpload
+            .FirstOrDefaultAsync(
+                x => x.ResumeId == query.ResumeId && x.Version == resume.Version && x.UserId == userId,
+                cancellationToken);
+
+        if (entity is not null)
+            return Response<FileUploadDto?>.Success(entity.ToDto());
+
+        var pdfBytes = pdfService.GeneratePdf(resume.ToDto());
+
+        var fileName = !string.IsNullOrEmpty(resume.ResumeName)
+            ? $"{resume.ResumeName}.pdf"
+            : $"resume-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
+
+        var uploadResult = await fileStorageService.UploadAsync(pdfBytes, fileName, "application/pdf", cancellationToken);
+
+        if (uploadResult is null)
+            return Response<FileUploadDto?>.Fail(HttpStatusCode.InternalServerError, "File upload failed");
+
+        var newEntity = new FileUploadEntity
+        {
+            ResumeId = query.ResumeId,
+            Version = resume.Version,
+            Url = uploadResult.Url,
+            FileKey = uploadResult.Key,
+            UserId = userId
+        };
+
+        db.FileUpload.Add(newEntity);
+        await db.SaveChangesAsync(cancellationToken);
+
+        return Response<FileUploadDto?>.Success(newEntity.ToDto());
     }
 }

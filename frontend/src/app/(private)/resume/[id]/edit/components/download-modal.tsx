@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import { useResumeStore } from "@/store/resume-store";
 import { downloadPDF } from "@/lib/utils";
 import { toast } from "sonner";
-import { uploadResumeFileAction } from "@/app/actions/upload-resume-file-action";
+import { getResumeFileAction } from "@/app/actions/get-resume-file-action";
 
 const DownloadModal = () => {
 	const [open, setOpen] = useState(false);
@@ -42,9 +42,9 @@ const DownloadModal = () => {
 
 	function handleUpload() {
 		startUpload(async () => {
-			const result = await uploadResumeFileAction(resumeId, filename);
+			const result = await getResumeFileAction(resumeId);
 			if (!result.success) {
-				toast.error(result.message || "Failed to upload file");
+				toast.error(result.message || "Failed to get file link");
 				return;
 			}
 			setFileUrl(result.data.url);

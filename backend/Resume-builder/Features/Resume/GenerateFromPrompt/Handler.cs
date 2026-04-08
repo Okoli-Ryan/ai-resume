@@ -21,7 +21,6 @@ public class GenerateFromPromptHandler(
     public async Task<Response<ResumeDto>> Handle(GenerateFromPromptCommand command,
         CancellationToken cancellationToken)
     {
-
         var userId = claimsService.GetUserId();
 
         if (userId is null)
@@ -97,7 +96,7 @@ public class GenerateFromPromptHandler(
             var project = new ProjectEntity
             {
                 ProjectName = x.ProjectName,
-                ProjectUrl = x.ProjectName,
+                ProjectUrl = x.ProjectUrl,
                 ResumeId = newResume.Id,
                 UserId = userId
             };

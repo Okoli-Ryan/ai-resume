@@ -17,6 +17,11 @@ services:
       - AppSettings__Jwt__ExpiryMinutes=${JWT_EXPIRY_MINUTES}
       - AppSettings__Jwt__Audience=${JWT_AUDIENCE}
       - AppSettings__GoogleClientID=${GOOGLE_CLIENT_ID}
+      - AppSettings__OpenAIKey=${OPENAI_KEY}
+      - AppSettings__UploadThingToken=${UPLOAD_THING_TOKEN}
+      - AppSettings__UploadThingApiKey=${UPLOAD_THING_API_KEY}
+      - AppSettings__UploadCarePublicKey=${UPLOAD_CARE_PUBLIC_KEY}
+      - AppSettings__UploadCareSecretKey=${UPLOAD_CARE_SECRET_KEY}
       - AppSettings__DbConnectionString=Host=postgres;Port=5432;Database=resume_db;Username=postgres;Password=postgres
     networks:
       - ollama-net

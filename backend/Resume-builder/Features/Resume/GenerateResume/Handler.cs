@@ -1,5 +1,4 @@
 using System.Net;
-using Microsoft.EntityFrameworkCore;
 using Resume_builder.Common;
 using Resume_builder.Features.BulletPoint;
 using Resume_builder.Features.Education;
@@ -151,18 +150,6 @@ public class GenerateResumeHandler(
         return newResume;
     }
 
-    private static void CreateSkillsEntity(AIResponse<GenerateResumeResponse?> aiResponse, ResumeEntity newResume,
-        string userId)
-    {
-        foreach (var skillCategory in aiResponse.Response.Skills)
-            newResume.Skills = aiResponse.Response.Skills.Select(x => new SkillEntity
-            {
-                Group = skillCategory.Category,
-                Skills = skillCategory.Skills,
-                UserId = userId,
-                ResumeId = newResume.Id
-            }).ToList();
-    }
 
     private static void AssignBulletPointsToEducation(ResumeEntity resume)
     {

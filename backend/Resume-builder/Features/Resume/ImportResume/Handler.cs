@@ -73,8 +73,8 @@ public class ImportResumeHandler(
                 Degree = x.Degree,
                 FieldOfStudy = x.FieldOfStudy,
                 Location = x.Location,
-                StartDate = x.StartDate is not null ? DateTimeOffset.Parse(x.StartDate).UtcDateTime : null,
-                EndDate = x.EndDate is not null ? DateTimeOffset.Parse(x.EndDate).UtcDateTime : null,
+                StartDate = DateTimeOffset.TryParse(x.StartDate, out var start) ? start.UtcDateTime : null,
+                EndDate = DateTimeOffset.TryParse(x.EndDate, out var end) ? end.UtcDateTime : null,
                 ResumeId = newResume.Id,
                 UserId = userId
             };
@@ -106,7 +106,7 @@ public class ImportResumeHandler(
             var project = new ProjectEntity
             {
                 ProjectName = x.ProjectName,
-                ProjectUrl = x.ProjectName,
+                ProjectUrl = x.ProjectUrl,
                 ResumeId = newResume.Id,
                 UserId = userId
             };

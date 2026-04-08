@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 using Resume_builder.Common;
 using Resume_builder.Features.FileUpload.Common;
 using Resume_builder.Infrastructure.Persistence.Data;
@@ -25,13 +26,21 @@ public class UploadFileHandler(
         if (result is null)
             return Response<FileUploadDto>.Fail(HttpStatusCode.InternalServerError, "File upload failed");
 
+        var version = 0;
+        if (command.ResumeId is not null)
+            version = await db.Resume
+                .Where(r => r.Id == command.ResumeId)
+                .Select(r => r.Version)
+                .FirstOrDefaultAsync(cancellationToken);
+
         var entity = new FileUploadEntity
         {
             Url = result.Url,
             FileKey = result.Key,
             ResumeId = command.ResumeId,
             CoverLetterId = command.CoverLetterId,
-            UserId = userId
+            UserId = userId,
+            Version = version
         };
 
         db.FileUpload.Add(entity);

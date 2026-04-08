@@ -87,9 +87,16 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         // Bump version for resumes that weren't loaded in this context
         if (untrackedResumeIds.Count > 0)
-            await Resume
+        {
+            var untrackedResumes = await Resume
                 .Where(r => untrackedResumeIds.Contains(r.Id))
-                .ExecuteUpdateAsync(s => s.SetProperty(r => r.Version, r => r.Version + 1), cancellationToken);
+                .ToListAsync(cancellationToken);
+
+            foreach (var resume in untrackedResumes)
+                resume.Version++;
+
+            await base.SaveChangesAsync(cancellationToken);
+        }
 
         return result;
     }

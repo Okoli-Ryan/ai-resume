@@ -52,7 +52,8 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddHandlers(this IServiceCollection services)
     {
         var handlerTypes = typeof(Program).Assembly.DefinedTypes
-            .Where(type => type is { IsClass: true, IsAbstract: false } && type.Name.EndsWith("Handler", StringComparison.Ordinal));
+            .Where(type => type is { IsClass: true, IsAbstract: false } &&
+                           type.Name.EndsWith("Handler", StringComparison.Ordinal));
 
         foreach (var handlerType in handlerTypes)
         {
@@ -87,7 +88,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IClaimsService, ClaimsService>();
         services.AddScoped<IAIChatClient>(sp => (IAIChatClient)sp.GetRequiredService<IChatClient>());
-        services.AddScoped<IFileStorageService, UploadThingFileStorageService>();
+        services.AddScoped<IFileStorageService, UploadCareFileStorageService>();
         services.AddSingleton<IPdfGenerationService, PdfGenerationService>();
 
         return services;

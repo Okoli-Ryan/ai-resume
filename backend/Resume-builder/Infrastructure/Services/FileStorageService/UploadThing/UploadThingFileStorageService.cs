@@ -1,6 +1,7 @@
-using System.Net.Http.Json;
+using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 using Resume_builder.Common;
+using Resume_builder.Utils;
 
 namespace Resume_builder.Infrastructure.Services.FileStorageService;
 
@@ -15,11 +16,14 @@ public class UploadThingFileStorageService(IOptions<AppSettings> appSettings, IH
         if (string.IsNullOrWhiteSpace(apiKey))
             return null;
 
-        var presigned = await GetPresignedUrlAsync(apiKey, file, cancellationToken);
+        var presigned =
+            await GetPresignedUrlAsync(apiKey, file.FileName, file.Length, file.ContentType, cancellationToken);
         if (presigned is null)
             return null;
 
-        var putResult = await UploadToPresignedUrlAsync(apiKey, presigned.Url, file, cancellationToken);
+        await using var stream = file.OpenReadStream();
+        var putResult = await UploadToPresignedUrlAsync(apiKey, presigned.Url, stream, file.FileName, file.ContentType,
+            cancellationToken);
         if (putResult is null)
             return null;
 
@@ -32,26 +36,53 @@ public class UploadThingFileStorageService(IOptions<AppSettings> appSettings, IH
         };
     }
 
+    public async Task<FileStorageResult?> UploadAsync(byte[] bytes, string fileName, string contentType,
+        CancellationToken cancellationToken)
+    {
+        var apiKey = appSettings.Value.UploadThingApiKey;
+        if (string.IsNullOrWhiteSpace(apiKey))
+            return null;
+
+        var presigned = await GetPresignedUrlAsync(apiKey, fileName, bytes.Length, contentType, cancellationToken);
+        if (presigned is null)
+            return null;
+
+        using var stream = new MemoryStream(bytes);
+        var putResult =
+            await UploadToPresignedUrlAsync(apiKey, presigned.Url, stream, fileName, contentType, cancellationToken);
+        if (putResult is null)
+            return null;
+
+        return new FileStorageResult
+        {
+            Key = presigned.Key,
+            Url = putResult.UfsUrl,
+            Name = fileName,
+            Size = bytes.Length
+        };
+    }
+
     private async Task<PresignedUrlData?> GetPresignedUrlAsync(
         string apiKey,
-        IFormFile file,
+        string fileName,
+        long fileSize,
+        string contentType,
         CancellationToken cancellationToken)
     {
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Add("x-uploadthing-api-key", apiKey);
-        client.DefaultRequestHeaders.Add("x-uploadthing-be-adapter", "dotnet");
+        // client.DefaultRequestHeaders.Add("x-uploadthing-be-adapter", "dotnet");
 
-        var request = new PrepareUploadRequest
+        var request = new PrepareUploadFileInput
         {
-            Files =
-            [
-                new PrepareUploadFileInput
-                {
-                    Name = file.FileName,
-                    Size = file.Length,
-                    Type = file.ContentType
-                }
-            ]
+            Name = fileName,
+            Size = fileSize,
+            Type = contentType,
+            CustomId = RandomStringGenerator.Generate(32),
+            Acl = "public-read",
+            Slug = "resume",
+            ContentDisposition = "attachment",
+            ExpiresIn = 3600
         };
 
         var response = await client.PostAsJsonAsync(PrepareUploadUrl, request, cancellationToken);
@@ -59,27 +90,26 @@ public class UploadThingFileStorageService(IOptions<AppSettings> appSettings, IH
         if (!response.IsSuccessStatusCode)
             return null;
 
-        var result = await response.Content.ReadFromJsonAsync<PrepareUploadResponse>(cancellationToken);
-        return result?.Data?.FirstOrDefault();
+        var result = await response.Content.ReadFromJsonAsync<PresignedUrlData>(cancellationToken);
+        return result;
     }
 
     private async Task<UploadPutResult?> UploadToPresignedUrlAsync(
         string apiKey,
         string presignedUrl,
-        IFormFile file,
+        Stream stream,
+        string fileName,
+        string contentType,
         CancellationToken cancellationToken)
     {
         var client = httpClientFactory.CreateClient();
 
         using var content = new MultipartFormDataContent();
-        await using var stream = file.OpenReadStream();
         using var streamContent = new StreamContent(stream);
-        streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
-        content.Add(streamContent, "file", file.FileName);
+        streamContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        content.Add(streamContent, "file", fileName);
 
         using var request = new HttpRequestMessage(HttpMethod.Put, presignedUrl) { Content = content };
-        request.Headers.TryAddWithoutValidation("x-uploadthing-api-key", apiKey);
-        request.Headers.TryAddWithoutValidation("Range", "bytes=0-");
 
         var response = await client.SendAsync(request, cancellationToken);
 
