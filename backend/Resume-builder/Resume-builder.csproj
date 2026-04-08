@@ -36,7 +36,7 @@
     <ItemGroup>
         <Folder Include="Infrastructure\Repositories\"/>
     </ItemGroup>
-    
+
     <Target Name="QuestPDF_DoNotIncludeLatoFont_AfterBuild" AfterTargets="Build">
         <RemoveDir Directories="$(OutDir)/LatoFont"/>
     </Target>
@@ -47,9 +47,6 @@
 
     <ItemGroup>
         <Content Include="Resources/Fonts/**/*.ttf">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Resources/Test.pdf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
