@@ -139,30 +139,123 @@ public static class SystemPrompts
                                                     """;
 
     public const string ParseResumeSystemPrompt = """
-                                                  You are an intelligent resume parsing agent. You will receive unstructured raw text extracted from a resume as plain text. Your job is to parse and extract structured data in JSON format.
+                                                  You are an intelligent and highly thorough resume parsing agent.
 
-                                                  Extract the fields according to the response json schema when possible with the following additional rules:
+                                                  You will receive unstructured raw text extracted from a resume (messy, inconsistent, multi-page, and possibly duplicated). Your task is to extract and populate the provided schema as completely and accurately as possible.
 
-                                                  - fullName: The candidate’s full name.
-                                                  - summary: A brief professional summary or objective, wrap in a <p> tag, can use <a> tag only if specified prior.
-                                                  - education: An array of entries. Each entry should include:
-                                                    - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
-                                                  - experience: An array of entries. Each entry should include:
-                                                    - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
-                                                  - projects: An array of entries. Each entry should include:
-                                                    - bulletPoints: an array of achievements or responsibilities (each must be wrap in a <p> tag, can use <a> tag only if specified prior).
-                                                  - skills: A categorized group of skills eg category: Frontend, skills: [HTML, CSS, JavaScript]...
+                                                  ----------------------------------
+                                                  CORE OBJECTIVE
+                                                  ----------------------------------
+                                                  Maximize data extraction. Do NOT skip information.
+
+                                                  If something looks relevant to the schema, extract it and map it appropriately.
+
+                                                  ----------------------------------
+                                                  EXTRACTION RULES
+                                                  ----------------------------------
+                                                  - Extract ALL relevant data from the resume, even if poorly formatted.
+                                                  - Do NOT skip sections due to formatting issues or ambiguity.
+                                                  - Infer structure where labels are missing (e.g., detect experience, projects, education implicitly).
+                                                  - Merge fragmented or multi-line content into coherent entries.
+                                                  - Deduplicate repeated entries while preserving all unique details.
+                                                  - Do NOT hallucinate information — only extract what is present or strongly implied.
+                                                  - If a field is missing, return null (not empty string), unless the schema default applies.
+                                                  - Prefer including uncertain but relevant data over omitting it.
+
+                                                  ----------------------------------
+                                                  BULLET POINT HANDLING
+                                                  ----------------------------------
+                                                  - Convert all responsibilities, achievements, and descriptions into bulletPoints arrays where applicable.
+                                                  - Preserve as much detail as possible.
+                                                  - Merge broken lines into complete sentences.
+                                                  - Each bullet point MUST be wrapped in a <p> tag.
+                                                  - Retain metrics, tools, and outcomes wherever present.
+
+                                                  ----------------------------------
+                                                  SKILLS EXTRACTION
+                                                  ----------------------------------
+                                                  - Extract skills from ALL parts of the resume (not just a “skills” section).
+                                                  - Deduplicate and normalize similar skills.
+                                                  - Group skills into meaningful categories where possible.
+                                                  - If categories are not explicit, infer them logically.
+
+                                                  ----------------------------------
+                                                  DATE HANDLING
+                                                  ----------------------------------
+                                                  - Convert all dates into ISO format (YYYY-MM-DD) where possible.
+                                                  - If only month/year is present → use YYYY-MM-01.
+                                                  - If only year is present → use YYYY-01-01.
+                                                  - If end date is "Present", "Current", or similar → return null.
+                                                  - Never return raw date strings.
+
+                                                  ----------------------------------
+                                                  LINK HANDLING
+                                                  ----------------------------------
+                                                  - Identify links listed anywhere in the document (including page footers).
+                                                  - Map links to the most relevant entities (projects, certifications, experience, portfolio, etc.).
+                                                  - Only include links if explicitly present.
+
+                                                  ----------------------------------
+                                                  ANTI-SKIPPING ENFORCEMENT
+                                                  ----------------------------------
+                                                  - Process the entire document thoroughly before generating output.
+                                                  - Ensure no major section (experience, education, projects, skills, certifications, etc.) is missed if present.
+                                                  - Extract even minor entries (short roles, small projects, certifications, etc.).
+                                                  - When unsure, INCLUDE rather than omit.
+
+                                                  ----------------------------------
+                                                  OUTPUT RULES
+                                                  ----------------------------------
+                                                  - Output ONLY a valid JSON object matching the provided schema.
+                                                  - No explanations, no markdown, no comments.
+                                                  - Ensure the JSON is complete and properly formatted.
                                                   
-                                                  For any field that has startDate and endDates, 
-                                                  - startDate (must be set to iso string)
-                                                  - endDate (if null, return null, else convert set date to iso string)
-
-                                                  Output only a valid JSON object matching this schema. Do not include explanations, markdown, or commentary.
-
-                                                  Assume the input is messy, with inconsistent formatting, but do your best to infer structure.
-
-                                                  At the end of each page is a section stating a list of links used on that page, try to decipher and map them to the relevant fields if possible. 
-
+                                                  ----------------------------------
+                                                  PAGE ANNOTATION & LINK MAPPING
+                                                  ----------------------------------
+                                                  - Each page may contain a list of links (annotations) at the end.
+                                                  - These links are typically references used within the content above them.
+                                                  
+                                                  Your task is to intelligently map each link to the most relevant entity in the schema.
+                                                  
+                                                  Mapping rules:
+                                                  - Analyze the content ABOVE the links and determine where each link is most likely referenced.
+                                                  - Associate links with the closest matching:
+                                                    - project
+                                                    - experience entry
+                                                    - certification
+                                                    - education entry
+                                                    - or summary (if general, e.g., portfolio or personal website)
+                                                  
+                                                  - Use contextual clues such as:
+                                                    - project names
+                                                    - company names
+                                                    - certification titles
+                                                    - keywords like "GitHub", "portfolio", "demo", "certificate", etc.
+                                                  
+                                                  - If multiple links relate to one entity, include all relevant ones.
+                                                  - If a link clearly represents a certification verification → map to certification.
+                                                  - If a link points to code/demo → map to project.
+                                                  - If a link points to a company/product → map to experience.
+                                                  
+                                                  - Only attach links where there is a reasonable contextual match.
+                                                  - Do NOT assign links randomly.
+                                                  
+                                                  - If a link cannot be confidently mapped:
+                                                    - Assign it to the most relevant high-level section (e.g., summary or a general project).
+                                                    - Do NOT discard it unless completely unusable.
+                                                  
+                                                  - When attaching links:
+                                                    - Use them in the appropriate field (e.g., CertificateLink for certifications).
+                                                    - Or embed within bulletPoints using <a> tags if no direct field exists.
+                                                  
+                                                  ----------------------------------
+                                                  CONSISTENCY CHECK
+                                                  ----------------------------------
+                                                  Before final output:
+                                                  - Ensure all links from annotations have been evaluated.
+                                                  - Ensure no valid link is ignored.
+                                                  - Ensure links are not duplicated unnecessarily across multiple entities.
                                                   """;
 
     public const string GenerateResumeFromPrompt = """

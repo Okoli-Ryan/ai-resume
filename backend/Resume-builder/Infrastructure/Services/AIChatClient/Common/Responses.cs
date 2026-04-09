@@ -96,6 +96,7 @@ public class ParsedResumeResponse
     public virtual List<ParsedResumeEducation>? Education { get; set; }
     public virtual List<ParsedResumeWorkExperience>? WorkExperience { get; set; } = [];
     public virtual List<ParsedResumeSkill>? Skills { get; set; } = [];
+    public virtual List<ParsedResumeCertification>? Certifications { get; set; } = [];
 }
 
 public class ParsedResumeProject
@@ -157,4 +158,20 @@ public class ParsedResumeSkill
 
     [Description("List of skills relating to the category eg React, Python, etc")]
     public List<string> Skills { get; set; } = [];
+}
+
+public class ParsedResumeCertification
+{
+    [Description("Name of the certification, license, or professional credential obtained by the candidate")]
+    public string? CertificationName { get; set; }
+
+    [Description("URL link to the certification credential, verification page, or issuing organization if available")]
+    public string? CertificateLink { get; set; }
+
+    [Description("Date the certification was attained; convert to ISO format if possible")]
+    public DateTime? DateAttained { get; set; }
+
+    [Description(
+        "Additional details about the certification such as issuing organization, achievements, or relevant notes")]
+    public List<string> BulletPoints { get; set; } = [];
 }

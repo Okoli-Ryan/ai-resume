@@ -19,4 +19,3 @@ Handle empty skill category
 Create job feature, where job can have 1 resume, tie job desc to resume for additional info
 Be able to generate tags from job
 Add redirect to log in on expired session
-Save imported resumes in cloudinary for AI reference

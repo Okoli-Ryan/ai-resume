@@ -4,7 +4,7 @@ using iText.Kernel.Pdf.Annot;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
-namespace Resume_builder.Utils;
+namespace Resume_builder.Utils.PDF;
 
 public static class PdfLinkExtractor
 {
@@ -13,17 +13,17 @@ public static class PdfLinkExtractor
         if (!IsValidBase64(base64Pdf))
             throw new ArgumentException("Invalid Base64 string");
 
-        byte[] pdfBytes = Convert.FromBase64String(base64Pdf);
+        var pdfBytes = Convert.FromBase64String(base64Pdf);
         var output = new StringBuilder();
 
         using var reader = new PdfReader(new MemoryStream(pdfBytes));
         using var pdf = new PdfDocument(reader);
 
-        for (int i = 1; i <= pdf.GetNumberOfPages(); i++)
+        for (var i = 1; i <= pdf.GetNumberOfPages(); i++)
         {
             var page = pdf.GetPage(i);
             var strategy = new LocationTextExtractionStrategy();
-            string pageText = PdfTextExtractor.GetTextFromPage(page, strategy);
+            var pageText = PdfTextExtractor.GetTextFromPage(page, strategy);
 
             output.AppendLine(pageText.Trim());
 
@@ -31,7 +31,6 @@ public static class PdfLinkExtractor
             var annotations = page.GetAnnotations();
 
             foreach (var annot in annotations)
-            {
                 if (annot.GetSubtype().Equals(PdfName.Link))
                 {
                     var linkAnnot = (PdfLinkAnnotation)annot;
@@ -39,11 +38,10 @@ public static class PdfLinkExtractor
 
                     if (action != null && action.Get(PdfName.URI) != null)
                     {
-                        string uri = action.GetAsString(PdfName.URI).ToString();
+                        var uri = action.GetAsString(PdfName.URI).ToString();
                         output.AppendLine($"[Link → {uri}]");
                     }
                 }
-            }
 
 
             output.AppendLine(); // separate pages
