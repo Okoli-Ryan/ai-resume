@@ -1,21 +1,16 @@
 ########Critical######
 fix fetch failed on google auth stlil entering dashboard section
-certificate section
 Get Project, work experience ... by resume id, add enhancement controller and tool
 Fix bug where updating from info banner clears user name, summary and details
-Add "https://" to links on the prompt, or update links validation without https
 Add save state / duplicate feature
-make certification bulletpoints nullable
 
 #######Future#######
 Add "Get URL" link to home page
-implement url shortner api
 Convert to side-by-side view on desktop, sidebar view on mobile
 Homepage query by tags, name
 delete resume feature
 Add loading state to log in button
 Add user context option for AI enhancements
-Handle empty skill category
 Create job feature, where job can have 1 resume, tie job desc to resume for additional info
 Be able to generate tags from job
 Add redirect to log in on expired session

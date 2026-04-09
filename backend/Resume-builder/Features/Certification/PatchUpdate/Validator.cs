@@ -30,8 +30,10 @@ public class PatchUpdateCertificationValidator : BaseValidator<PatchUpdateCertif
     {
         if (string.IsNullOrEmpty(url))
             return true;
-        
-        return Uri.TryCreate(url, UriKind.Absolute, out var result) &&
-               (result.Scheme == Uri.UriSchemeHttp || result.Scheme == Uri.UriSchemeHttps);
+
+        if (Uri.TryCreate(url, UriKind.Absolute, out _))
+            return true;
+
+        return Uri.TryCreate("https://" + url, UriKind.Absolute, out _);
     }
 }

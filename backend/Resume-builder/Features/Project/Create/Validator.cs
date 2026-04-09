@@ -14,9 +14,20 @@ public class CreateProjectValidator : BaseValidator<CreateProjectCommand>
             .WithMessage("Name must be less than 100 characters long.");
         
         RuleFor(x => x.Link)
-            .Must(uri => string.IsNullOrEmpty(uri) || Uri.TryCreate(uri, UriKind.Absolute, out _))
+            .Must(BeAValidUrl)
             .WithMessage("URL must be in valid format")
             .MaximumLength(256)
             .WithMessage("Url must be less than 256 characters long.");
+    }
+
+    private static bool BeAValidUrl(string? url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return true;
+
+        if (Uri.TryCreate(url, UriKind.Absolute, out _))
+            return true;
+
+        return Uri.TryCreate("https://" + url, UriKind.Absolute, out _);
     }
 }

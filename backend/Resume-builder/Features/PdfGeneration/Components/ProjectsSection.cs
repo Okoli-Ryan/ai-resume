@@ -33,9 +33,9 @@ public class ProjectsSection : IComponent
                     {
                         var projectName = project.Name?.ToUpper() ?? string.Empty;
 
-                        if (!string.IsNullOrEmpty(project.Link) && IsValidLink(project.Link))
+                        if (!string.IsNullOrEmpty(project.Link) && TryNormalizeUrl(project.Link, out var normalizedUrl))
                         {
-                            row.RelativeItem().Hyperlink(project.Link).Text(projectName)
+                            row.RelativeItem().Hyperlink(normalizedUrl!).Text(projectName)
                                 .FontSize(10)
                                 .Bold()
                                 .FontColor("#2563eb")
@@ -65,9 +65,16 @@ public class ProjectsSection : IComponent
         });
     }
 
-    private static bool IsValidLink(string url)
+    private static bool TryNormalizeUrl(string url, out string? normalized)
     {
-        return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
-               && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+        if (string.IsNullOrWhiteSpace(url)) { normalized = null; return false; }
+
+        if (Uri.TryCreate(url, UriKind.Absolute, out _)) { normalized = url; return true; }
+
+        var withScheme = "https://" + url;
+        if (Uri.TryCreate(withScheme, UriKind.Absolute, out _)) { normalized = withScheme; return true; }
+
+        normalized = null;
+        return false;
     }
 }

@@ -31,18 +31,29 @@ public class CreateResumeValidator : BaseValidator<CreateResumeCommand>
             .MaximumLength(20);
 
         RuleFor(x => x.LinkedinUrl)
-            .Must(uri => string.IsNullOrEmpty(uri) || Uri.TryCreate(uri, UriKind.Absolute, out _))
+            .Must(BeAValidUrl)
             .WithMessage("LinkedIn URL must be in valid format")
             .MaximumLength(200);
 
         RuleFor(x => x.GithubUrl)
-            .Must(uri => string.IsNullOrEmpty(uri) || Uri.TryCreate(uri, UriKind.Absolute, out _))
+            .Must(BeAValidUrl)
             .WithMessage("GitHub URL must be in valid format")
             .MaximumLength(200);
 
         RuleFor(x => x.PortfolioUrl)
-            .Must(uri => string.IsNullOrEmpty(uri) || Uri.TryCreate(uri, UriKind.Absolute, out _))
+            .Must(BeAValidUrl)
             .WithMessage("Portfolio URL must be in valid format")
             .MaximumLength(200);
+    }
+
+    private static bool BeAValidUrl(string? url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return true;
+
+        if (Uri.TryCreate(url, UriKind.Absolute, out _))
+            return true;
+
+        return Uri.TryCreate("https://" + url, UriKind.Absolute, out _);
     }
 }
