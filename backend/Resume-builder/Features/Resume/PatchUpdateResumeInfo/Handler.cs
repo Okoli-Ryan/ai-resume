@@ -24,6 +24,7 @@ public class PatchUpdateResumeInfoHandler(
         { nameof(PatchUpdateResumeInfoRequest.Role), nameof(ResumeEntity.JobRole) },
         { nameof(PatchUpdateResumeInfoRequest.Address), nameof(ResumeEntity.UserAddress) },
         { nameof(PatchUpdateResumeInfoRequest.PhoneNumber), nameof(ResumeEntity.UserPhoneNumber) },
+        { nameof(PatchUpdateResumeInfoRequest.Tags), nameof(ResumeEntity.Tags) },
     };
 
     public async Task<Response<ResumeDto>> Handle(PatchUpdateResumeInfoCommand command, CancellationToken cancellationToken)

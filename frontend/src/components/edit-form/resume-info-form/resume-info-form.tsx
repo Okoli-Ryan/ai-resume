@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { FileText, Tag, Briefcase } from "lucide-react";
 
 import FormLayout from "@/app/layouts/form-layout";
-import { updateResumeInfoAction } from "./actions/update-resume-info-action";
+import { patchResumeInfoAction } from "./actions/patch-resume-info-action";
 import { useResumeContext } from "./context/resume-context";
 
 const ResumeInfoForm = () => {
@@ -36,7 +36,7 @@ const ResumeInfoForm = () => {
 	const { mutate: updateResumeInfo, isPending } = useMutation({
 		mutationKey: ["updateResumeInfo"],
 		mutationFn: async (data: Partial<TResume>) => {
-			const response = await updateResumeInfoAction(data, id);
+			const response = await patchResumeInfoAction(data, id);
 
 			if (!response.success) throw new Error(response.message);
 

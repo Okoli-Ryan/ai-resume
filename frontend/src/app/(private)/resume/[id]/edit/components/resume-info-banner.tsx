@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import TagsInputForm from "@/components/tags-input-form";
 import { useResumeStore } from "@/store/resume-store";
 import { TResume } from "@/types/resume";
-import { updateResumeInfoAction } from "@/components/edit-form/resume-info-form/actions/update-resume-info-action";
+import { patchResumeInfoAction } from "@/components/edit-form/resume-info-form/actions/patch-resume-info-action";
 import { useResumeContext } from "@/components/edit-form/resume-info-form/context/resume-context";
 
 import { cn } from "@/lib/utils";
@@ -50,7 +50,7 @@ export const ResumeInfoBanner = () => {
 	const { mutate: updateResumeInfo, isPending } = useMutation({
 		mutationKey: ["updateResumeInfo"],
 		mutationFn: async (data: Partial<TResume>) => {
-			const response = await updateResumeInfoAction(data, id);
+			const response = await patchResumeInfoAction(data, id);
 
 			if (!response.success) throw new Error(response.message);
 
