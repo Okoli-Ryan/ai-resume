@@ -10,6 +10,8 @@ import ChatMessages from "./chat-messages";
 import { getResumeById } from "@/queries/use-resume-by-id";
 import { useResumeStore } from "@/store/resume-store";
 import { useResumeContext } from "@/components/edit-form/resume-info-form/context/resume-context";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 interface ChatContainerProps {
 	resumeId: string;
@@ -29,7 +31,7 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 		[resumeId, jobDescription],
 	);
 
-	const { messages, status, sendMessage } = useChat({
+	const { messages, status, sendMessage, setMessages } = useChat({
 		id: `resume-${resumeId}`,
 		transport,
 		onFinish: async (response) => {
@@ -53,6 +55,10 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 
 	const isLoading = isChatLoading(status as ChatStatus);
 
+	const onClear = useCallback(() => {
+		setMessages([]);
+	}, [setMessages]);
+
 	const onSubmit = useCallback(
 		(content: string) => {
 			if (content.trim()) {
@@ -67,6 +73,17 @@ const ChatContainer = ({ resumeId }: ChatContainerProps) => {
 
 	return (
 		<div className="flex flex-col h-full">
+			<div className="flex items-center justify-end px-3 py-1 border-b">
+				<Button
+					variant="ghost"
+					size="sm"
+					disabled={isLoading || messages.length === 0}
+					onClick={onClear}
+					className="text-muted-foreground hover:text-destructive">
+					<Trash2 className="h-4 w-4 mr-1" />
+					Clear chat
+				</Button>
+			</div>
 			<ChatMessages messages={messages} status={status as ChatStatus} />
 			<ChatInput isLoading={isLoading} onSubmit={onSubmit} resumeId={resumeId} />
 		</div>

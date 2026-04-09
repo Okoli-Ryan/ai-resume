@@ -48,16 +48,6 @@ const ChatMessages = ({ messages, status }: ChatMessagesProps) => {
 					Ask me anything about your resume! I can help you improve content, suggest better phrasing, or provide tips for making your resume stand
 					out.
 				</p>
-				<div className="mt-6 space-y-2">
-					<p className="text-xs text-muted-foreground">Try asking:</p>
-					<div className="flex flex-wrap gap-2 justify-center">
-						{["How can I improve my summary?", "Suggest better action verbs", "Review my experience section"].map((suggestion) => (
-							<span key={suggestion} className="text-xs bg-muted px-3 py-1.5 rounded-full text-muted-foreground">
-								{suggestion}
-							</span>
-						))}
-					</div>
-				</div>
 			</div>
 		);
 	}
