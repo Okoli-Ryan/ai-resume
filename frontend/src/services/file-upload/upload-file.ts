@@ -5,6 +5,7 @@ export type FileUploadDto = BaseEntity & {
 	resumeId?: string;
 	coverLetterId?: string;
 	version: number;
+	shortenedUrl: string;
 	url: string;
 	fileKey: string;
 	userId: string;

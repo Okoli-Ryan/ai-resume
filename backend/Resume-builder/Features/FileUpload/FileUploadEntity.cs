@@ -12,15 +12,13 @@ public class FileUploadEntity : BaseEntity
 
     public int Version { get; set; }
 
-    [Required]
-    [MaxLength(2048)]
-    public string Url { get; set; } = string.Empty;
+    [Required] [MaxLength(2048)] public string Url { get; set; } = string.Empty;
 
-    [MaxLength(512)]
-    public string FileKey { get; set; } = string.Empty;
+    [MaxLength(1024)] public string ShortenedUrl { get; set; } = string.Empty;
 
-    [Required]
-    public string UserId { get; set; } = string.Empty;
+    [MaxLength(512)] public string FileKey { get; set; } = string.Empty;
+
+    [Required] public string UserId { get; set; } = string.Empty;
 
     public virtual User? User { get; set; }
 }

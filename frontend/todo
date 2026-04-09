@@ -8,7 +8,8 @@ Add save state / duplicate feature
 make certification bulletpoints nullable
 
 #######Future#######
-Upload to Uploadthing feature, get link
+Add "Get URL" link to home page
+implement url shortner api
 Convert to side-by-side view on desktop, sidebar view on mobile
 Homepage query by tags, name
 delete resume feature

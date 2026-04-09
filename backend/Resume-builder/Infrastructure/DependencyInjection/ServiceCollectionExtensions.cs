@@ -16,6 +16,8 @@ using Resume_builder.Infrastructure.Services.ClaimService;
 using Resume_builder.Infrastructure.Services.FileStorageService;
 using Resume_builder.Infrastructure.Services.PasswordService;
 using Resume_builder.Infrastructure.Services.TokenService;
+using Resume_builder.Infrastructure.Services.UrlShortenerService.Common;
+using Resume_builder.Infrastructure.Services.UrlShortenerService.ShortIo;
 
 namespace Resume_builder.Infrastructure.DependencyInjection;
 
@@ -90,6 +92,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAIChatClient>(sp => (IAIChatClient)sp.GetRequiredService<IChatClient>());
         services.AddScoped<IFileStorageService, UploadCareFileStorageService>();
         services.AddSingleton<IPdfGenerationService, PdfGenerationService>();
+        services.AddHttpClient<IUrlShortenerService, ShortIoService>();
 
         return services;
     }

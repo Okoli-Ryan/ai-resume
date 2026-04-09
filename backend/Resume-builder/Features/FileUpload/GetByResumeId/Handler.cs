@@ -8,6 +8,7 @@ using Resume_builder.Infrastructure.Persistence.Data;
 using Resume_builder.Infrastructure.Repositories.ResumeRepository;
 using Resume_builder.Infrastructure.Services.ClaimService;
 using Resume_builder.Infrastructure.Services.FileStorageService;
+using Resume_builder.Infrastructure.Services.UrlShortenerService.Common;
 
 namespace Resume_builder.Features.FileUpload.GetByResumeId;
 
@@ -16,7 +17,9 @@ public class GetFileUploadsByResumeIdHandler(
     IClaimsService claimsService,
     IResumeRepository resumeRepository,
     IPdfGenerationService pdfService,
-    IFileStorageService fileStorageService)
+    IFileStorageService fileStorageService,
+    IUrlShortenerService urlShortenerService,
+    IHostEnvironment hostEnvironment)
     : IResponseHandler<GetFileUploadsByResumeIdQuery, FileUploadDto?>
 {
     public async Task<Response<FileUploadDto?>> Handle(GetFileUploadsByResumeIdQuery query,
@@ -46,16 +49,22 @@ public class GetFileUploadsByResumeIdHandler(
             ? $"{resume.ResumeName}.pdf"
             : $"resume-{DateTime.UtcNow:yyyyMMddHHmmss}.pdf";
 
-        var uploadResult = await fileStorageService.UploadAsync(pdfBytes, fileName, "application/pdf", cancellationToken);
+        var uploadResult =
+            await fileStorageService.UploadAsync(pdfBytes, fileName, "application/pdf", cancellationToken);
 
         if (uploadResult is null)
             return Response<FileUploadDto?>.Fail(HttpStatusCode.InternalServerError, "File upload failed");
+
+        var shortenedUrl = hostEnvironment.IsDevelopment()
+            ? uploadResult.Url
+            : await urlShortenerService.Shorten(uploadResult.Url, cancellationToken);
 
         var newEntity = new FileUploadEntity
         {
             ResumeId = query.ResumeId,
             Version = resume.Version,
             Url = uploadResult.Url,
+            ShortenedUrl = shortenedUrl,
             FileKey = uploadResult.Key,
             UserId = userId
         };

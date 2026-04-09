@@ -47,7 +47,7 @@ const DownloadModal = () => {
 				toast.error(result.message || "Failed to get file link");
 				return;
 			}
-			setFileUrl(result.data.url);
+			setFileUrl(result.data.shortenedUrl);
 		});
 	}
 

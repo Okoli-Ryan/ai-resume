@@ -19,7 +19,7 @@ public class UploadCareFileStorageService(IOptions<AppSettings> appSettings, IHt
             return null;
 
         await using var stream = file.OpenReadStream();
-        return await UploadToUploadCareAsync(pubKey, file.FileName, stream, file.ContentType, resumeId: null, cancellationToken);
+        return await UploadToUploadCareAsync(pubKey, file.FileName, stream, file.ContentType, null, cancellationToken);
     }
 
     public async Task<FileStorageResult?> UploadAsync(byte[] bytes, string fileName, string contentType,
@@ -30,7 +30,7 @@ public class UploadCareFileStorageService(IOptions<AppSettings> appSettings, IHt
             return null;
 
         using var stream = new MemoryStream(bytes);
-        return await UploadToUploadCareAsync(pubKey, fileName, stream, contentType, resumeId: null, cancellationToken);
+        return await UploadToUploadCareAsync(pubKey, fileName, stream, contentType, null, cancellationToken);
     }
 
     private async Task<FileStorageResult?> UploadToUploadCareAsync(
@@ -104,8 +104,8 @@ public class UploadCareFileStorageService(IOptions<AppSettings> appSettings, IHt
     }
 
     /// <summary>
-    /// Builds the Uploadcare HMAC/SHA1 Authorization header value.
-    /// Sign string: "{method}\n{md5body}\n{contentType}\n{date}\n{uri}"
+    ///     Builds the Uploadcare HMAC/SHA1 Authorization header value.
+    ///     Sign string: "{method}\n{md5body}\n{contentType}\n{date}\n{uri}"
     /// </summary>
     private static string BuildAuthorizationHeader(
         string method,

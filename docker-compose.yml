@@ -22,6 +22,7 @@ services:
       - AppSettings__UploadThingApiKey=${UPLOAD_THING_API_KEY}
       - AppSettings__UploadCarePublicKey=${UPLOAD_CARE_PUBLIC_KEY}
       - AppSettings__UploadCareSecretKey=${UPLOAD_CARE_SECRET_KEY}
+      - AppSettings__ShortIoApiKey=${SHORT_IO_API_KEY}
       - AppSettings__DbConnectionString=Host=postgres;Port=5432;Database=resume_db;Username=postgres;Password=postgres
     networks:
       - ollama-net

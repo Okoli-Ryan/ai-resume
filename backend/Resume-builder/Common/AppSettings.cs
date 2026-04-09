@@ -10,6 +10,7 @@ public class AppSettings
     public string? UploadThingApiKey { get; set; } = string.Empty;
     public string? UploadCarePublicKey { get; set; } = string.Empty;
     public string? UploadCareSecretKey { get; set; } = string.Empty;
+    public string? ShortIoApiKey { get; set; } = string.Empty;
 }
 
 public class JwtSettings
