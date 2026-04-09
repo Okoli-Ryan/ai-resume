@@ -1,7 +1,5 @@
 ########Critical######
-fix fetch failed on google auth stlil entering dashboard section
 Get Project, work experience ... by resume id, add enhancement controller and tool
-Fix bug where updating from info banner clears user name, summary and details
 Add save state / duplicate feature
 
 #######Future#######

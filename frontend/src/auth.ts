@@ -64,7 +64,7 @@ export const authConfig = {
 			};
 		},
 		authorized({ auth, request: { nextUrl } }) {
-			const isLoggedIn = !!auth?.user;
+			const isLoggedIn = !!auth?.user && !!auth?.authToken && !auth?.error;
 
 			const publicPaths = ["/sign-in", "/", "/sign-up"];
 			const isPublicPath = publicPaths.some((path) => nextUrl.pathname === path || nextUrl.pathname.startsWith(path + "/"));
