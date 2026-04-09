@@ -23,6 +23,7 @@ export { patchUpdateCertificationTool } from "./patch-update-certification-tool"
 export { patchUpdateEducationTool } from "./patch-update-education-tool";
 export { patchUpdateProjectTool } from "./patch-update-project-tool";
 export { patchUpdateWorkExperienceTool } from "./patch-update-work-experience-tool";
+export { getUploadedResumeTool } from "./get-uploaded-resume-tool";
 
 // Unified patch tool - consolidates CRUD operations for all resume sections
 export { resumePatchTool } from "./resume-patch";
@@ -58,6 +59,7 @@ export const TOOL_NAMES = {
 	PATCH_UPDATE_WORK_EXPERIENCE: "patch_update_work_experience",
 	// Unified patch tool
 	RESUME_PATCH: "resume_patch",
+	GET_UPLOADED_RESUME: "get_uploaded_resume",
 } as const;
 
 /**

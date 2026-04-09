@@ -5,6 +5,7 @@ import {
 	getSkillsTool,
 	getWorkExperienceTool,
 	getEducationTool,
+	getUploadedResumeTool,
 	resumePatchTool,
 	TOOL_NAMES,
 } from "@/ai/tools";
@@ -61,6 +62,9 @@ SKILLS FORMAT RULES:
 IMPORTANT FOR ID FIELDS:
 - If you need an ID (e.g., workExperienceId, educationId, projectId, certificationId, etc.), use one of the available tools to fetch the relevant data by resumeId and derive the required ID from the response. Do not guess or invent IDs.
 
+UPLOADED RESUME PDF RULES:
+- When the user asks for their uploaded resume URL/file/PDF, ALWAYS call the get_uploaded_resume tool — never reuse a URL seen earlier in the conversation, as the file may have been updated since then
+
 For any modifications to the resume, use the unified resume_patch tool which supports:
 - ALL CRUD operations (add, update, delete) for work experience, projects, education, certifications, skills, and links
 - UPDATE operations for summary, resume info, and section order
@@ -86,6 +90,7 @@ ${jobDescription}`
 				[TOOL_NAMES.GET_SKILLS]: getSkillsTool(resumeId),
 				[TOOL_NAMES.GET_WORK_EXPERIENCE]: getWorkExperienceTool(resumeId),
 				[TOOL_NAMES.GET_EDUCATION]: getEducationTool(resumeId),
+				[TOOL_NAMES.GET_UPLOADED_RESUME]: getUploadedResumeTool(resumeId),
 				[TOOL_NAMES.RESUME_PATCH]: resumePatchTool(resumeId),
 			},
 			stopWhen: stepCountIs(10),
