@@ -11,6 +11,8 @@ import EmptyState from "@/components/empty-state";
 import DuplicateResumeButton from "./duplicate-resume-button";
 import DownloadResumeButton from "./download-resume-button";
 import EditResumeButton from "./edit-resume-button";
+import DeleteResumeButton from "./delete-resume-button";
+import CopyResumeLinkButton from "./copy-resume-link-button";
 
 interface ResumeTableProps {
 	resumes: Partial<TResume>[];
@@ -103,14 +105,8 @@ export default function ResumeTable({ resumes, isLoading }: ResumeTableProps) {
 												<EditResumeButton resumeId={resume.id!} />
 												<DuplicateResumeButton resumeId={resume.id!} />
 												<DownloadResumeButton resumeId={resume.id!} resumeName={resume.resumeName} role={resume.role} />
-
-												{/* <Button
-												variant="ghost"
-												size="sm"
-												className="text-red-600 hover:text-red-800"
-                                                >
-												<Trash2 className="w-4 h-4" />
-											</Button> */}
+												<CopyResumeLinkButton resumeId={resume.id!} />
+												<DeleteResumeButton resumeId={resume.id!} />
 											</div>
 										</TableCell>
 									</TableRow>

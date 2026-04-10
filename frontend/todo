@@ -3,10 +3,8 @@ Get Project, work experience ... by resume id, add enhancement controller and to
 Add save state / duplicate feature
 
 #######Future#######
-Add "Get URL" link to home page
 Convert to side-by-side view on desktop, sidebar view on mobile
 Homepage query by tags, name
-delete resume feature
 Add loading state to log in button
 Add user context option for AI enhancements
 Create job feature, where job can have 1 resume, tie job desc to resume for additional info
