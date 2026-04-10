@@ -64,7 +64,7 @@ public class GetFileUploadsByResumeIdHandler(
             ResumeId = query.ResumeId,
             Version = resume.Version,
             Url = uploadResult.Url,
-            ShortenedUrl = shortenedUrl,
+            ShortenedUrl = string.IsNullOrEmpty(shortenedUrl) ? uploadResult.Url : shortenedUrl,
             FileKey = uploadResult.Key,
             UserId = userId
         };

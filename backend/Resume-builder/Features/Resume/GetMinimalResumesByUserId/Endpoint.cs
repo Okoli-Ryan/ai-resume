@@ -12,12 +12,16 @@ public class GetMinimalResumesByUserIdEndpoint : ICarterModule
             .WithTags(ResumeConstants.ResumeMapGroupTag)
             .RequireAuthorization();
 
-        endpoint.MapGet("{userId}/minimal", async (
-            string userId,
+        endpoint.MapGet("minimal", async (
+            string? resumeName,
+            string? tags,
+            DateTime? dateFrom,
+            DateTime? dateTo,
+            bool? isFavourite,
             GetMinimalResumesByUserIdHandler handler,
             CancellationToken cancellationToken) =>
         {
-            var response = await handler.Handle(userId, cancellationToken);
+            var response = await handler.Handle(resumeName, tags, dateFrom, dateTo, isFavourite, cancellationToken);
             return response.GetResult();
         });
     }

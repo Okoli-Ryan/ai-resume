@@ -166,12 +166,12 @@ const CreateResumeButton = () => {
 					Create Resume
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[525px]">
+			<DialogContent className="sm:max-w-[525px] flex flex-col max-h-[90vh]">
 				<DialogHeader>
 					<DialogTitle>Create Resume</DialogTitle>
 					<DialogDescription>Choose how you want to create your resume.</DialogDescription>
 				</DialogHeader>
-				<div className="space-y-4 py-4">
+				<div className="space-y-4 py-4 overflow-y-auto flex-1">
 					{/* Radio Group */}
 					<div className="space-y-3">
 						<Label>Creation Mode</Label>

@@ -1,15 +1,10 @@
-import { auth } from "@/auth";
 import { isCustomError } from "@/lib/utils";
-import { getMinimalResumesByUserId } from "@/services/resume/get-minimal-resume-list";
+import { getMinimalResumes } from "@/services/resume/get-minimal-resume-list";
 
-import CreateResumeButton from "./components/create-resume-button";
-import ResumeTable from "./components/resume-table";
+import DashboardContent from "./components/dashboard-content";
 
 const Home = async () => {
-	const session = await auth();
-	const userId = session!.user.id;
-
-	const resumes = await getMinimalResumesByUserId(userId);
+	const resumes = await getMinimalResumes();
 
 	if (isCustomError(resumes)) return <div className="text-red-500">Error loading resumes: {resumes.message}</div>;
 
@@ -19,12 +14,7 @@ const Home = async () => {
 				<h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
 				<p className="text-gray-600">Manage your resumes and create professional CVs</p>
 			</div>
-			<div className="flex flex-col sm:flex-row gap-4 mb-8">
-				<CreateResumeButton />
-			</div>
-			<div className="w-full overflow-x-auto">
-				<ResumeTable resumes={resumes} isLoading={false} />
-			</div>
+			<DashboardContent initialResumes={resumes} />
 		</div>
 	);
 };

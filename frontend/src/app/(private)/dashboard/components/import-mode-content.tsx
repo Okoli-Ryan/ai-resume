@@ -38,6 +38,9 @@ const ImportModeContent = ({ form, file, setFile }: Props) => {
 
 	return (
 		<div className="space-y-4 py-4">
+			<p className="text-xs text-muted-foreground bg-muted rounded-md px-3 py-2">
+				Imported content is AI-generated and may not be 100% accurate. Please review and edit before use.
+			</p>
 			{/* File Drop Area */}
 			<div
 				onDrop={handleDrop}
@@ -80,12 +83,7 @@ const ImportModeContent = ({ form, file, setFile }: Props) => {
 			/>
 
 			{/* Tags */}
-			<TagsInputForm<ImportResumeRequest>
-				form={form}
-				name="additionalInfo.tags"
-				label="Tags (optional)"
-				placeholder="Add tags (press Enter)"
-			/>
+			<TagsInputForm<ImportResumeRequest> form={form} name="additionalInfo.tags" label="Tags (optional)" placeholder="Add tags (press Enter)" />
 		</div>
 	);
 };

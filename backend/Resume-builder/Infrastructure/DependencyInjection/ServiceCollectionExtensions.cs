@@ -112,14 +112,14 @@ public static class ServiceCollectionExtensions
             .GetSection("AppSettings")
             .Get<AppSettings>()!;
 
-        var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        // var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        //
+        // if (isDevelopment)
+        //
+        //     services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("LocalTestDb"); });
+        // else
 
-        if (isDevelopment)
-
-            services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("LocalTestDb"); });
-        else
-
-            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(appSettings.DbConnectionString));
+        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(appSettings.DbConnectionString));
 
         return services;
     }
