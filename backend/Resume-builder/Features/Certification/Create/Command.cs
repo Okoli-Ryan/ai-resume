@@ -12,5 +12,5 @@ public class CreateCertificationCommand
 
     public required string ResumeId { get; set; }
 
-    public List<BulletPointDto> BulletPoints { get; set; }
+    public List<BulletPointDto>? BulletPoints { get; set; } = [];
 }

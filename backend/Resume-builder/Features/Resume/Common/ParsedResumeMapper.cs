@@ -64,7 +64,7 @@ public static class ParsedResumeMapper
             };
         }).ToList();
 
-        newResume.Projects = resume.Projects.Select(x =>
+        newResume.Projects = resume.Projects?.Select(x =>
         {
             return new ProjectEntity
             {

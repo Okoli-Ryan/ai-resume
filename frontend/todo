@@ -9,3 +9,5 @@ Add user context option for AI enhancements
 Create job feature, where job can have 1 resume, tie job desc to resume for additional info
 Be able to generate tags from job
 Add redirect to log in on expired session
+
+Be able to query best resume on dashboard page based on job description, and all available resumest through vector embeddings

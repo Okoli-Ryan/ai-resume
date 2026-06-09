@@ -92,7 +92,7 @@ public class ParsedResumeResponse
         "generate a list of tags describing the kind of jobs the resume can be used eg frontend, backend, leadership, fintech, AI, etc")]
     public List<string> Tags { get; set; } = [];
 
-    public virtual List<ParsedResumeProject> Projects { get; set; } = [];
+    public virtual List<ParsedResumeProject>? Projects { get; set; } = [];
     public virtual List<ParsedResumeEducation>? Education { get; set; }
     public virtual List<ParsedResumeWorkExperience>? WorkExperience { get; set; } = [];
     public virtual List<ParsedResumeSkill>? Skills { get; set; } = [];

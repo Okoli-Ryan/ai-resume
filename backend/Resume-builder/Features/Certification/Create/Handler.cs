@@ -25,7 +25,7 @@ public class CreateCertificationHandler(AppDbContext db, IClaimsService claimsSe
             DateAttained = request.DateAttained,
             ResumeId = request.ResumeId,
             UserId = userId,
-            BulletPoints = request.BulletPoints.Select(x => new BulletPointEntity
+            BulletPoints = request.BulletPoints?.Select(x => new BulletPointEntity
             {
                 Text = x.Text,
                 Order = x.Order
