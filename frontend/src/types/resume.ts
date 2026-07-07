@@ -21,6 +21,7 @@ export type TResume = {
 	githubUrl: string;
 	portfolioUrl: string;
 	userId: string;
+	status?: string;
 	workExperience: WorkExperienceDto[];
 	education: EducationDto[];
 	projects: ProjectDto[];
