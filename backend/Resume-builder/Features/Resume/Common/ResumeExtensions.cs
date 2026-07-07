@@ -34,6 +34,7 @@ public static class ResumeExtensions
             PortfolioUrl = resumeEntity.PortfolioUrl,
             Order = resumeEntity.Order,
             Tags = resumeEntity.Tags,
+            Status = resumeEntity.Status,
             Id = resumeEntity.Id,
             ActiveStatus = resumeEntity.ActiveStatus,
             CreatedAt = resumeEntity.CreatedAt,

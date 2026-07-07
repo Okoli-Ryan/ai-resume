@@ -24,6 +24,7 @@ public class ResumeDto : BaseEntity
     public string? Order { get; set; } = string.Empty;
     public string UserId { get; set; } = string.Empty;
     public bool IsFavourite { get; set; }
+    public string? Status { get; set; }
 
     public virtual List<ProjectDto>? Projects { get; set; }
     public virtual List<EducationDto>? Education { get; set; }

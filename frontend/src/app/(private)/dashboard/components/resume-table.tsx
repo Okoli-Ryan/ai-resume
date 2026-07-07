@@ -1,4 +1,5 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Routes } from "@/lib/routes";
@@ -86,12 +87,15 @@ export default function ResumeTable({ resumes, isLoading }: ResumeTableProps) {
 								resumes.map((resume) => (
 									<TableRow key={resume.id} className="hover:bg-gray-50 transition-colors">
 										<TableCell className=" max-w-60">
-											<div className="flex items-center">
+											<div className="flex items-center gap-2">
 												<Link href={Routes.editResume(resume.id!)}>
 													<div className="text-sm font-medium text-gray-900 hover:text-primary transition-colors duration-200 hover:underline">
 														{resume.resumeName}
 													</div>
 												</Link>
+												{resume.status === 'Draft' && (
+													<Badge variant="secondary" className="text-xs shrink-0">Draft</Badge>
+												)}
 											</div>
 										</TableCell>
 										<TableCell className="text-sm text-gray-900">{resume.role}</TableCell>
