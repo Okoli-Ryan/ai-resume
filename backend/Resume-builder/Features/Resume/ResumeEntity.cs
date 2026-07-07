@@ -23,6 +23,7 @@ public class ResumeEntity : BaseEntity
     [MaxLength(100)] public string? JobRole { get; set; } = string.Empty;
     public bool IsFavourite { get; set; }
 
+    public string Status { get; set; } = "Published";
 
     [MaxLength(200)] public string? UserAddress { get; set; } = string.Empty;
 
